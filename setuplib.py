@@ -1,0 +1,1 @@
+../smallvectors/setuplib.py

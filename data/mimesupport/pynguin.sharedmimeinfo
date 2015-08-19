@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/x-pynguin">
+<mime-type type="application/x-pynguin">
+  <comment xml:lang="en">Pynguin</comment>
+  <glob pattern="*.pyn"/>
+</mime-type>
+</mime-info>

@@ -1,0 +1,4 @@
+#!/usr/bin/python3
+from pytuga import run_console
+
+run_console()

@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bem vindo à documentação do pytuguês! &mdash; pytuguês 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="pytuguês 0.1a1 documentation" href="#" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bem-vindo-a-documentacao-do-pytugues">
+<h1>Bem vindo à documentação do pytuguês!<a class="headerlink" href="#bem-vindo-a-documentacao-do-pytugues" title="Permalink to this headline">¶</a></h1>
+<p>Conteúdo:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="indice-e-tabelas">
+<h1>Índice e tabelas<a class="headerlink" href="#indice-e-tabelas" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+<div class="section" id="especificacao-da-linguagem">
+<h1>Especificação da linguagem<a class="headerlink" href="#especificacao-da-linguagem" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="execucao-condicional">
+<h2>Execução condicional<a class="headerlink" href="#execucao-condicional" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="docutils">
+<dt>se &lt;condição&gt; então:</dt>
+<dd>&lt;BLOCO DE CÓDIGO&gt;</dd>
+<dt>ou então se &lt;condição&gt;:</dt>
+<dd>&lt;BLOCO DE CÓDIGO&gt;</dd>
+<dt>senão:</dt>
+<dd>&lt;BLOCO DE CÓDIGO&gt;</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="lacos-e-repeticoes">
+<h2>Laços e repetições<a class="headerlink" href="#lacos-e-repeticoes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="repetir">
+<h3>repetir<a class="headerlink" href="#repetir" title="Permalink to this headline">¶</a></h3>
+<p>Existem várias estruturas de repetição em pytuguês. A mais simples de todas
+é o comando <code class="docutils literal"><span class="pre">repetir</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">repetir</span> <span class="mi">3</span> <span class="n">vezes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">mostre</span><span class="p">(</span><span class="s">&quot;olá!&quot;</span><span class="p">)</span>
+<span class="go">olá!</span>
+<span class="go">olá!</span>
+<span class="go">olá!</span>
+</pre></div>
+</div>
+<p>O comando repetir simplesmente executa o bloco de código seguinte pelo
+número especificado de vezes. É importante tomar cuidado com os espaços em
+branco pois o início e o fim do bloco que será executado é definido pelo nível
+de indentação.</p>
+<p>A sintaxe do comando repetir é muito simples:</p>
+<div class="highlight-python"><div class="highlight"><pre>repetir &lt;número&gt; vezes:
+    &lt;BLOCO DE CÓDIGO&gt;
+</pre></div>
+</div>
+<p>onde o número de vezes pode ser uma constante inteira ou uma variável com valor
+do tipo inteiro.</p>
+</div>
+<div class="section" id="enquanto">
+<h3>enquanto<a class="headerlink" href="#enquanto" title="Permalink to this headline">¶</a></h3>
+<p>O comando <code class="docutils literal"><span class="pre">enquanto</span></code> executa um bloco de código enquanto uma determinada
+condição for verdadeira:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enquanto</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="n">faça</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">mostre</span><span class="p">(</span><span class="s">&#39;olá&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="go">olá!</span>
+<span class="go">olá!</span>
+<span class="go">olá!</span>
+</pre></div>
+</div>
+<p>A sintaxe geral é:</p>
+<div class="highlight-python"><div class="highlight"><pre>enquanto &lt;condição&gt; faça:
+    &lt;BLOCO DE CÓDIGO&gt;
+</pre></div>
+</div>
+<p>e faz com que o bloco de código seja executado enquanto a condição dada for
+verdadeira. A palavra chave &#8220;faça&#8221; é opcional, de forma que o código acima
+também possui a sintaxe alternativa:</p>
+<div class="highlight-python"><div class="highlight"><pre>enquanto &lt;condição&gt;:
+    &lt;BLOCO DE CÓDIGO&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="para-cada">
+<h3>para cada ...<a class="headerlink" href="#para-cada" title="Permalink to this headline">¶</a></h3>
+<p>...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">para</span> <span class="n">cada</span> <span class="n">x</span> <span class="n">de</span> <span class="mi">0</span> <span class="n">até</span> <span class="mi">2</span> <span class="n">faça</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">mostre</span><span class="p">(</span><span class="s">&#39;olá&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sintaxe geral:</p>
+<div class="highlight-python"><div class="highlight"><pre>para cada &lt;nome&gt; de &lt;início&gt; até &lt;fim&gt; faça:
+    &lt;BLOCO DE CÓDIGO&gt;
+
+para cada &lt;nome&gt; de &lt;início&gt; até &lt;fim&gt; a cada &lt;passo&gt; faça:
+    &lt;BLOCO DE CÓDIGO&gt;
+
+
+&gt;&gt;&gt; para cada x em [0, 1, 2] faça:
+...     mostre(&#39;olá&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="funcoes">
+<h2>Funções<a class="headerlink" href="#funcoes" title="Permalink to this headline">¶</a></h2>
+<p>Definimos uma função com a sintaxe</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>definir função &lt;nome&gt;(...):</dt>
+<dd>&lt;DEFINIÇÃO&gt;</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bem vindo à documentação do pytuguês!</a></li>
+<li><a class="reference internal" href="#indice-e-tabelas">Índice e tabelas</a></li>
+<li><a class="reference internal" href="#especificacao-da-linguagem">Especificação da linguagem</a><ul>
+<li><a class="reference internal" href="#execucao-condicional">Execução condicional</a></li>
+<li><a class="reference internal" href="#lacos-e-repeticoes">Laços e repetições</a><ul>
+<li><a class="reference internal" href="#repetir">repetir</a></li>
+<li><a class="reference internal" href="#enquanto">enquanto</a></li>
+<li><a class="reference internal" href="#para-cada">para cada ...</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#funcoes">Funções</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

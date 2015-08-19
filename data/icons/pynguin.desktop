@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+MimeType=application/x-pynguin;
+Exec=pynguin %U
+Icon=pynguin
+Comment=Python turtle graphics
+Terminal=false
+Name=Pynguin
+GenericName=Python turtle graphics
+Categories=Education;ComputerScience;
