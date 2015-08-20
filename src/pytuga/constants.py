@@ -7,7 +7,9 @@ TOKEN_TRANSLATIONS = dict(
     enquanto='while',
     # para cada='for',
     termine='break',
+    terminar='break',
     # continue='continue',
+    continuar='break',
 
     # Condicionais
     se='if',
@@ -35,10 +37,13 @@ TOKEN_TRANSLATIONS = dict(
     # Funções
     função='def',
     retorne='return',
+    retornar='return',
     gere='yield',
+    gerar='yield',
 
     # Tratamento de erros
     tente='try',
+    tentar='try',
     exceção='except',
     finalmente='finally',
     # jogue erro='raise'
@@ -49,6 +54,7 @@ TOKEN_TRANSLATIONS = dict(
     # global='global'
     classe='class',
     importe='import',
+    importar='import',
     abrir='with',
 )
 

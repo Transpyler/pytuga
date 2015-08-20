@@ -7,9 +7,14 @@ usuário.
 '''
 
 import math as _math
+import random as _random
 pi = _math.pi
+neperiano = _math.exp(1)
 
 
+#
+# Funções elementares e usadas em cálculo científico
+#
 def raiz(x):
     '''Retorna a raiz quadrada de x.
 
@@ -124,6 +129,10 @@ def log10(x):
     '''
     return _math.log10(x)
 
+#
+# Controle de arredondamento e sinal dos números
+#
+
 
 def módulo(x):
     '''Retorna o módulo de x.
@@ -138,6 +147,26 @@ def módulo(x):
     '''
 
     return abs(x)
+
+
+def sinal(x):
+    '''Retorna 1, -1 ou 0, dependendo do sinal de x.
+
+
+    Exemplo
+    -------
+
+    >>> sinal(-32.0)
+    -1
+    '''
+    if x == 0:
+        return 0
+    elif x > 0:
+        return 1
+    elif x < 0:
+        return -1
+    else:
+        raise ValueError('argumento não possui sinal definido')
 
 
 def arredondar(x):
@@ -172,6 +201,9 @@ def truncar(x):
 trunque = truncar
 
 
+#
+# Funções em listas de números
+#
 def máximo(lista):
     '''Retorna o maior valor da lista dada.
 
@@ -224,6 +256,29 @@ def produto(números):
     for x in números:
         prod *= x
     return prod
+
+
+#
+# Números aleatórios
+#
+def aleatório():
+    '''Retorna um número aleatório no intervalo [0, 1]'''
+
+    return _random.random()
+
+
+def inteiro_aleatório(início, fim):
+    '''Retorna um inteiro aleatório dentro do intervalo [início, fim]'''
+
+    return _random.randint(início, fim)
+
+
+def lance_dado():
+    '''Retorna um número aleatório entre 1 e 6, como num lance de dados
+    comuns'''
+
+    return _random.randint(1, 6)
+lançar_dado = lance_dado
 
 
 if __name__ == '__main__':
