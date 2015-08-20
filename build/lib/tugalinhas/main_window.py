@@ -9,7 +9,7 @@ from pytuga import compile
 from bidict import bidict
 from PyQt4 import QtGui, QtCore, uic
 from PyQt4.Qt import QHBoxLayout
-from tugalinhas import LOG, UI_FILES_PATH, BUG_URL, BACKUP_FILENAME, NODEFAULT
+from tugalinhas import LOG, UI_DIR, BUG_URL, BACKUP_FILENAME, NODEFAULT
 from tugalinhas.pen import Pen, INTERPRETER_PROTECT
 from tugalinhas.thread import CmdThread, WatcherThread
 from tugalinhas.util import SvgRenderer, plist
@@ -49,7 +49,7 @@ class MainWindow(QtGui.QMainWindow):
         self._modified = False
 
         self._mainthread = QtCore.QThread.currentThread()
-        uipath = os.path.join(UI_FILES_PATH, 'tugalinhas.ui')
+        uipath = os.path.join(UI_DIR, 'tugalinhas.ui')
         MWClass, _ = uic.loadUiType(uipath)
 
         QtGui.QMainWindow.__init__(self)
@@ -1921,7 +1921,7 @@ Carrying on trying to recover if possible...
         '''
         iwidth = self.pen.drawable.pen.width()
         uifile = 'penwidth.ui'
-        uipath = os.path.join(UI_FILES_PATH, uifile)
+        uipath = os.path.join(UI_DIR, uifile)
         DClass, _ = uic.loadUiType(uipath)
         dc = DClass()
         d = QtGui.QDialog(self)

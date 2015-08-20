@@ -1,4 +1,1 @@
-recursive-include doc/build/html *.*
-include setuplib.py
 include README.rst
-include requirements.txt

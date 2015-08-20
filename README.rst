@@ -56,6 +56,12 @@ Aos poucos podemos construir interações complexas utilizando estes blocos
 básicos e os recursos comuns de programação como repetições, execução 
 condicional, interação com o usuário, etc.
 
+Teste
+.....
+
+Faça um programa que desenhe figuras regulares como quadrado, triângulo,
+pentágono, etc.
+
 Executando
 ----------
 
@@ -97,13 +103,84 @@ do tipo::
 não é uma falsidade matemática. Na realidade, estamos atribuindo um novo valor
 a ``x`` que é igual ao valor anterior adicionado de ``1``.
 
+Teste
+.....
+
+Calcule 42 ** 42. Muito provavelmente valor é maior que o que cabe na sua 
+calculadora!
+
 
 Interação com o usuário
 -----------------------
 
+Em um programa de computador muitas vezes queremos perguntar algum tipo de 
+informação ao usuário. O Pytuguês oferece algumas funções para salvar valores
+digitados pelo usuário em variáveis. Os principais métodos de entrada são as
+funções "leia_texto(msg)", "leia_número(msg)"  e "leia_arquivo(arquivo)". O 
+código a seguir, por exemplo, pergunta o nome e a idade do usuário::
 
-Repetições
-----------
+    >>> nome = leia_texto("Qual é o seu nome? ")
+    >>> idade = leia_número("Qual é a sua idade? ")
+    
+A variável ``nome`` contêm o texto que o usuário digitou como sendo o nome e a
+variável ``idade`` guarda a idade em formato numérico. A diferença entre 
+``leia_número(msg)`` e ``leia_texto(msg)`` está em que a primeira salva o 
+resultado em formato numérico e obriga o usuário a digitar um número válido. A segunda 
+conterá sempre um texto, mesmo quando o usuário digitar um número.
+
+As funções mencionadas acima são conhecidas como "funções de entrada", já que
+permitem que o usuário do programa dê a entrada em alguns valores que serão 
+utilizados pelo programa. As "funções de saída" são aquelas que fornecem 
+informação de volta para o usuário. A mais importante é a função ``mostre(valor)``, 
+que mostra o conteúdo do argumento na tela. Podemos fazer a saída na forma
+de um arquivo, utilizando a função `salve_arquivo(arquivo, valor)`.
+
+Teste
+.....
+
+Crie uma função que pergunte o ano de nascimento do usuário e calcule a sua 
+idade.
+
+  
+
+Repetições: "repetir"
+---------------------
+
+Muitas tarefas que um programa realiza envovem um grande número de repetições 
+de tarefas mais simples. Na realidade computadores são muito bons nisso: podem 
+repetir a exata mesma sequência de passos uma quantidade gigantesca de vezes sem
+ficarem cansados, errarem e reclamarem. O comando mais básico de repetição do 
+Pytuguês é o comando ``repetir``. Ele simplesmente repete um bloco de instruções
+pelo número dado de vezes::
+
+    >>> repetir 3 vezes:
+    ...     frente(100)
+    ...     esquerda(120)
+    
+No exemplo acima ele repete os comandos "frente(100)" e "esquerda(120)" três 
+vezes, nesta ordem. De modo mais abstrato, podemos descrever o comando repetir
+como::
+    
+    repetir <número> vezes:
+        <bloco de instruções>
+
+Onde o campo <número> representa qualquer número inteiro ou variável numérica e 
+<bloco de instruções> é uma sequência de instruções como a "frente(100)/esquerda(90)"
+dada anteriormente. Devemos nos atentar na definição do bloco de instruções para
+os espaços em branco. São eles que delimitam o bloco e dizem para o Pytuguês 
+quando as instruções dentro do bloco de repetição terminam.
+
+O código abaixo, por exemplo, é muito semelhate ao anterior, mas o comando 
+"esquerda(120)" està alinhado ao início da linha. Isto fáz com que apenas a 
+parte "frente(100)" seja executada as três vezes. O comando esquerda está fora 
+do bloco "repetir" e portanto é executado apenas uma única vez após o bloco 
+terminar.
+
+    >>> repetir 3 vezes:
+    ...     frente(100)
+    >>> esquerda(120)
+        
+
 
 
 

@@ -68,11 +68,7 @@ ler_arquivo = leia_arquivo
 
 
 def salve_arquivo(arquivo, texto):
-    '''Salva o conteúdo de texto no arquivo indicado, apagando qualquer
-    conteúdo anterior.
-
-    CUIDADO! Caso o arquivo dado exista, esta função sobrescreverá seu conteúdo
-    sem perguntar nada!
+    '''Salva o conteúdo de texto no arquivo indicado.
 
     Exemplo
     -------
@@ -81,5 +77,5 @@ def salve_arquivo(arquivo, texto):
     '''
 
     with open(arquivo) as F:
-        F.write(str(texto))
+        F.write(texto)
 salvar_arquivo = salve_arquivo

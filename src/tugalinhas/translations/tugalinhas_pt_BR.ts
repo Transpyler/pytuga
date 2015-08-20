@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt_BR" sourcelanguage="en">
+<TS version="2.0" language="pt" sourcelanguage="en">
 <context>
     <name>Dialog</name>
     <message>
@@ -239,7 +239,7 @@
     <message>
         <location filename="data/ui/pynguin.ui" line="14"/>
         <source>pynguin [*]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tugalinhas [*]</translation>
     </message>
     <message>
         <location filename="data/ui/pynguin.ui" line="535"/>
@@ -249,7 +249,7 @@
     <message>
         <location filename="data/ui/pynguin.ui" line="543"/>
         <source>Test / Run</source>
-        <translation type="unfinished">Testar / Rodar</translation>
+        <translation type="unfinished">Testar / Executar</translation>
     </message>
     <message>
         <location filename="data/ui/pynguin.ui" line="148"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="data/ui/pynguin.ui" line="296"/>
         <source>New</source>
-        <translation type="unfinished">No</translation>
+        <translation type="unfinished">Novo</translation>
     </message>
     <message>
         <location filename="data/ui/pynguin.ui" line="301"/>
@@ -687,7 +687,7 @@
     <message>
         <location filename="data/ui/about.ui" line="14"/>
         <source>About pynguin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sobre tugalinhas</translation>
     </message>
     <message>
         <location filename="data/ui/about.ui" line="61"/>

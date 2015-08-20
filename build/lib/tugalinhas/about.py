@@ -2,7 +2,7 @@ import os
 
 from PyQt4 import QtGui, QtCore, uic
 
-from tugalinhas import UI_FILES_PATH
+from tugalinhas import UI_DIR
 from tugalinhas import util
 from tugalinhas import FULL_NAME
 
@@ -13,7 +13,7 @@ class AboutDialog(QtGui.QDialog):
 
     def __init__(self, app):
         QtGui.QDialog.__init__(self)
-        uipath = os.path.join(UI_FILES_PATH, 'about.ui')
+        uipath = os.path.join(UI_DIR, 'about.ui')
         self.ui = uic.loadUi(uipath, self)
 
         svgrenderer = util.SvgRenderer(app)

@@ -1,9 +1,14 @@
+# TODO: criar classe de token e de token_list(ou o que valha)
+# mover boa parte das funções para estas classes e implementar operadores
+# matemáticos mais expressivos (e.g.: tk >> 2 move 2 casas para direita)
+
 from collections import deque
 import tokenize
 from tokenize import TokenInfo
 from tokenize import (
     COLON, COMMA, DEDENT, ENDMARKER, LPAR, RPAR, NAME, OP, NUMBER)
 from pytuga import constants as cte
+from coverage.files import sep
 
 __all__ = ['transpile', 'compile', 'exec']
 

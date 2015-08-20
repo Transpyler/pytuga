@@ -1,12 +1,21 @@
 import os
-from distutils.core import setup
-import setuplib
+from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.1a'
-REQUIRES = ['PyQt4']
+VERSION = '0.3a0'
+REQUIRES = ['PyQt4', 'PyQt4.Qsci', 'bidict', 'turtle']
+
+
+# Rewrite __version__.py in tugalib
+base, _ = os.path.split(__file__)
+version_file = os.path.join(base, 'src', 'tugalib', 'version.py')
+with open(version_file, 'w') as F:
+    F.write('__version__ = %r\n' % VERSION)
 
 setup(
+    #
+    # Basic meta
+    #
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
@@ -25,8 +34,9 @@ setup(
     Este pacote possui alguns programas:
     
         * pytuga: o interpretador de Pytuguês.
-        * tugalinhas: programa educativo para ensinar programação visualmente,
-          controlando o desenho de um personagem no espírito da linguagem LOGO.
+        * tugalinhas: programa educativo que permite ensinar programação
+          visualmente, controlando o movimento de um personagem no espírito da
+          linguagem LOGO.
     '''),
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -34,9 +44,35 @@ setup(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: POSIX',
         'Programming Language :: Python',
-        'Topic :: Software Development :: Libraries',
+        #'Topic :: Software Development :: Libraries',
     ],
+
+    #
+    # Packages and depencies
+    #
     package_dir={'': 'src'},
-    packages=setuplib.get_packages(),
+    packages=find_packages('src'),
     requires=REQUIRES,
+
+    #
+    # Scripts
+    #
+    entry_points={
+        # Stand alone tugalinhas?
+        #'eggexecutable': [
+        #    'pytuga = tugalinhas.main:run',,
+        #],
+        'console_scripts': [
+            'pytuga = pytuga.main:run',         # Main interpreter
+            # 'tugashell = tugashell.main:run',   # A better shell, TBR
+        ],
+        'gui_scripts': [
+            'tugalinhas = tugalinhas.main:run',  # Graphical environment
+        ]
+    },
+
+    #
+    # Data files
+    #
+    include_package_data=True,
 )

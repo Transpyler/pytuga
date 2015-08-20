@@ -1,7 +1,7 @@
 import os
 
 from PyQt4 import QtCore, QtGui, uic
-from tugalinhas import UI_FILES_PATH, BACKUP_FILENAME, DEFAULT_BGCOLOR, DEFAULT_COLOR,\
+from tugalinhas import UI_DIR, BACKUP_FILENAME, DEFAULT_BGCOLOR, DEFAULT_COLOR,\
     DEFAULT_FILLCOLOR
 
 
@@ -10,7 +10,7 @@ class Settings(QtGui.QDialog):
     def __init__(self, parent):
         self.parent = parent
         QtGui.QDialog.__init__(self)
-        uipath = os.path.join(UI_FILES_PATH, 'settings.ui')
+        uipath = os.path.join(UI_DIR, 'settings.ui')
         SClass, _ = uic.loadUiType(uipath)
         self.ui = SClass()
         self.ui.setupUi(self)
