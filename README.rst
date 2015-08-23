@@ -2,13 +2,6 @@
 Pytuguês
 ========
 
-A syntaxe da linguagem de programação Python muitas vezes é comparada a um
-pseudocódigo ou algorítimo executável. Ainda que existam alguns recursos 
-avançados que certamente violam esta simplicidade, Python ainda é uma das 
-linguagens de programação de uso geral com a sintaxe mais próxima de uma
-descrição em linguagem natural. É claro que isto é verdade somente somente se 
-você fala inglês.  
-
 Pytuguês é uma versão da linguagem de programação Python que tenta se aproximar
 o máximo possível da descrição de algorítimos em português. A motivação é 
 fornecer uma ajuda para programadores iniciantes que tenham dificuldade com 
@@ -17,13 +10,69 @@ semelhantes como o Portugol é que a transição para uma linguagem de programa�
 de verdade é bastante suave, já que é possível misturar código Python 
 e Pytuguês no mesmo programa. O interpretador de Pytuguês, o ``pytuga``,
 possui alguns recursos que ajudam na conversão de código em Pytuguês para 
-Python (mentira, ainda não tem! :P).
+Python (mentira, ainda não tem, mas vai ter! :P).
+
+A syntaxe da linguagem de programação Python muitas vezes é comparada a um
+pseudocódigo ou algorítimo executável. Ainda que existam alguns recursos 
+avançados que certamente violam esta simplicidade, Python ainda é uma das 
+linguagens de programação de uso geral com a sintaxe mais próxima de uma
+linguagem natural. É claro que isto só pode ser verdade se você fala inglês.  
 
 Assim como o Python, o Pytuguês é uma linguagem dinâmica que não precisa ser
 compilada. O código é executado diretamente pelo interpretador ou ainda pode
 ser criado em modo interativo no estilo REPL (read/eval/print/loop, do inglês 
 loop de ler, avaliar e imprimir). Neste modo, o interpretador executa 
 imediatamente os comandos digitados pelo usuário e já mostra o resultado.
+
+
+Instalação
+==========
+
+Pytuguês se baseia e é implementado em Python 3. Para a instalação completa do 
+Pytuguês, é necessário instalar algumas bibliotecas adicionais que 
+disponibilizam alguns recursos necessários para o seu funcionamento. As 
+instruções de instalação diferem ligeiramente em cada plataforma.
+
+
+-----
+Linux
+-----
+
+Você precisa do Python3 e do PyQt4. Existe uma chance razoável que ambos 
+estejam instalados. Se sua distribuição for baseada no Debian/Ubuntu,
+o comando abaixo garante que todas as bibliotecas necessárias serão 
+instaladas::
+
+    $ sudo apt-get install python3-pyqt4 python3-pip
+    
+Depois de instalar as dependências, instale o Pytuguês utilizando o PIP:
+
+    $ sudo pip3 install pytuga --upgrade 
+    
+Se quiser apenas fazer a instalação local, o comando fica
+
+    $ pip3 install pytuga --upgrade --user
+
+
+-------
+Windows
+-------
+
+É necessário baixar e instalar manualmente os pacote com o Python3.4 e o PyQt4.
+Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:
+
+32 bits::
+    * https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi
+    * http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x32.exe
+    
+64 bits::
+    * https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi
+    * http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe
+
+Depois disto abra o terminal (Win+R e digite "cmd") e digite o comando::
+    
+    $ pip3 install pytuga --upgrade --user
+    
 
 Tutorial
 ========
@@ -75,8 +124,7 @@ podemos construir interações complexas e interessantes utilizando estes blocos
 básicos e os recursos comuns de programação como repetições, execução 
 condicional, interação com o usuário, etc.
 
-Desafio!
-........
+*Desafio!*
 
 Faça um programa que desenhe figuras regulares como quadrado, triângulo,
 pentágono, etc.
@@ -128,8 +176,7 @@ não é uma falsidade matemática. Na realidade, estamos atribuindo um novo valo
 
 
 
-Desafio!
-........
+*Desafio!*
 
 Calcule 42 ** 42. Muito provavelmente este resultado é maior que o que cabe na 
 sua calculadora! Confira. 
@@ -230,8 +277,8 @@ terminar.
         frente(100)
     esquerda(120)
         
-Desafio!
-........
+*Desafio!*
+
 
 Faça uma estrela de 5 pontas utilizando o comando repetir. Depois tente fazer
 a estrela de Davi (neste caso pode ser necessário usar 2 repetições).
@@ -291,8 +338,8 @@ Finalmente, podemos omitir o passo na segunda versão do comando caso ele seja
 igual à 1.
 
 
-Desafio!
-........
+*Desafio!*
+
 
 Desenhe uma espiral quadrada de 10 braços em que o tamanho de cada avanço varie 
 segundo o padrão 10px, 20px, 30px, ..., 100px. A forma ingênua criar este 
@@ -351,7 +398,7 @@ do comando "repetir"::
         esquerda(120)
         n_iterações = n_iterações + 1
         
-Desafio!
+*Desafio!*
 --------
 
 A função ``aleatório()`` produz um número aleatório entre 0 e 1. O programa 
@@ -459,8 +506,7 @@ selecionada pois aparece primeiro no bloco condicional. Para executarmos o bloco
 apresentadas. Neste caso, qualquer um dos valores 3, 5, 7 e 9 funcionam.
 
 
-Desafio!
-........
+*Desafio!*
   
 Pergunte a idade do usuário e imprima uma das mensagens abaixo dependendo da
 faixa em que ele se situa::

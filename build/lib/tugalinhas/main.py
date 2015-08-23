@@ -5,8 +5,9 @@ tugalinhas program.
 
 import os
 import sys
+import warnings
 from PyQt4 import QtGui, QtCore
-
+from tugalinhas import TRANSLATIONS_PATH
 from tugalinhas.main_window import MainWindow
 from tugalinhas.splash import Splash
 
@@ -47,13 +48,25 @@ def setup_logging(level='debug'):
     logger.critical('Logging started at level "%s".' % level)
 
 
-def run(pynfile=None):
+def dumpfile():
+    fp = sys.argv[-1]
+    app = QtGui.QApplication(sys.argv)
+    win = MainWindow(app)
+    sys.stdout = win.interpretereditor.save_stdout
+    sys.stderr = win.interpretereditor.save_stderr
+    win._openfile(fp, add_to_recent=False, dump=True)
+
+
+def run(filepath=None):
     '''Create the main window and run application'''
 
-    # Load translations -- portuguese translation is pending :\
+    # Load translations
     translator = QtCore.QTranslator()
     localename = QtCore.QLocale.system().name()
-    translation = 'data/translations/tugalinhas_' + localename
+    translation = TRANSLATIONS_PATH + localename + '.qm'
+    if not os.path.exists(translation):
+        warnings.warn(
+            'could not find translation for your locale: %r' % localename)
     translator.load(translation)
 
     # Start app with splash screen
@@ -68,28 +81,10 @@ def run(pynfile=None):
     window.show()
     splash.raise_()
 
-    if pynfile is not None:
-        pynfile = os.path.abspath(pynfile)
-        QtCore.QTimer.singleShot(250, lambda: window.open(pynfile))
-
+    if filepath is not None:
+        filepath = os.path.abspath(filepath)
+        QtCore.QTimer.singleShot(250, lambda: window.open(filepath))
     app.exec_()
 
-
-def dumpfile():
-    fp = sys.argv[-1]
-    app = QtGui.QApplication(sys.argv)
-    win = MainWindow(app)
-    sys.stdout = win.interpretereditor.save_stdout
-    sys.stderr = win.interpretereditor.save_stderr
-    win._openfile(fp, add_to_recent=False, dump=True)
-
-
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        if sys.argv[1] == '-D':
-            if len(sys.argv) > 2:
-                level = sys.argv[2]
-                setup_logging(level)
-            else:
-                setup_logging()
     run()

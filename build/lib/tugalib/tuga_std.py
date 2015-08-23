@@ -4,6 +4,7 @@ Outras funções
 
 Outras funções que não se encaixam em nenhuma categoria específica.
 '''
+import time as _time
 
 
 def todos(sequência):
@@ -37,9 +38,26 @@ def algum(sequência):
 
     return any(sequência)
 
+#
+# Controle do tempo
+#
 
+
+def dormir(intervalo):
+    '''Permanece sem fazer nada o intervalo de tempo fornecido (em segundos)'''
+
+    _time.sleep(intervalo)
+
+
+def pausa():
+    '''Interrompe a execução até o usuário apertar a tecla <enter>'''
+
+    input('')
+
+
+#
 # TODO: fazer funções com strings de documentação
-
+#
 binário = bin
 booleano = bool
 # bytes = bytes

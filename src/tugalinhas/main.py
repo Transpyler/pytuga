@@ -67,7 +67,6 @@ def run(filepath=None):
     if not os.path.exists(translation):
         warnings.warn(
             'could not find translation for your locale: %r' % localename)
-    print(translation)
     translator.load(translation)
 
     # Start app with splash screen

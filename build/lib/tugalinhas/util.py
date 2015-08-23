@@ -5,7 +5,7 @@ import math
 from random import randrange
 from math import copysign
 from PyQt4 import QtSvg, QtGui, QtCore
-from tugalinhas import DATA_DIR, NODEFAULT
+from tugalinhas import SHARED_ART_PATH, NODEFAULT
 
 
 #
@@ -66,7 +66,7 @@ class SvgRenderer(object):
         If no filepath is given, return the renderer for the default svg file.
         '''
         if filepath is None:
-            filepath = os.path.join(DATA_DIR, 'tuga.svg')
+            filepath = os.path.join(SHARED_ART_PATH)
         return QtSvg.QSvgRenderer(filepath, self.app)
 
 

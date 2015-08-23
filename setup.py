@@ -1,3 +1,4 @@
+#-*-coding: utf8-*-
 import os
 from setuptools import setup, find_packages
 
@@ -21,6 +22,7 @@ setup(
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
     author='Fábio Macêdo Mendes',
     author_email='fabiomacedomendes@gmail.com',
+    url='https://github.com/fabiommendes/pytuga',
     long_description=('''
     Pytuguês é uma linguagem de programação que modifica a sintaxe do
     Python para aceitar comandos em português. A linguagem foi desenvolvida
@@ -44,7 +46,7 @@ setup(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: POSIX',
         'Programming Language :: Python',
-        #'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries',
     ],
 
     #
@@ -63,8 +65,8 @@ setup(
         #    'pytuga = tugalinhas.main:run',,
         #],
         'console_scripts': [
-            'pytuga = pytuga.main:run',         # Main interpreter
-            # 'tugashell = tugashell.main:run',   # A better shell, TBR
+            'pytuga = pytuga.main:run',          # Main interpreter
+            # 'tugashell = tugashell.main:run',    # A better shell, TBR
         ],
         'gui_scripts': [
             'tugalinhas = tugalinhas.main:run',  # Graphical environment

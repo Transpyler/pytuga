@@ -29,11 +29,10 @@
 import os
 import sys
 import logging
+from tugalib import __version__
 
 #
-# Some configuration parameters
-#
-VERSION = __version__ = '0.2a'
+VERSION = __version__
 NAME = 'tugalinhas'
 FULL_NAME = '%s-%s' % (NAME, VERSION)
 
@@ -51,33 +50,12 @@ LOG_FILENAME = 'logfile.log'
 #
 # System paths and URLs
 #
-BACKUP_FILENAME = 'tugalinhas_backup~%s.pytg'
+BACKUP_FILENAME = '~tugalinhas-%s.pytg-bak'
 BUG_URL = 'http://...'  # FIXME
-
-
-def _get_data_dir():
-    '''Return default data directory'''
-
-    # Executing from src
-    data = os.path.abspath('../../data')
-    if os.path.exists(data):
-        return data
-
-    # Fallback to a local install
-    base = os.path.expanduser('~/.local/')
-    localdir = os.path.join(base, 'share', 'tugalinhas')
-    if os.path.exists(localdir):
-        return localdir
-
-    # Look for a system install
-    base = os.path.abspath(sys.prefix)
-    sysdir = os.path.join(base, 'share', 'tugalinhas')
-    if os.path.exists(sysdir):
-        return sysdir
-
-    raise RuntimeError('no data directory was found, check your installation')
-DATA_DIR = _get_data_dir()
-UI_DIR = os.path.join(DATA_DIR, 'ui')
+DATA_PATH = os.path.split(__file__)[0]
+TRANSLATIONS_PATH = os.path.join(DATA_PATH, 'translations', 'tugalinhas_')
+SHARED_ART_PATH = os.path.join(DATA_PATH, 'ui', 'shared-art.svg')
+UI_FILES_PATH = os.path.join(DATA_PATH, 'ui')
 
 
 def _get_doc_dir():
@@ -117,3 +95,7 @@ NODEFAULT = object()
 NOTHING = object()
 
 del os, sys, logging
+
+if __name__ == '__main__':
+    from tugalinhas.main import run
+    run()

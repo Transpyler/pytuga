@@ -1,14 +1,15 @@
 import code
 import sys
 import traceback
-from pytuga import lexer
 import tugalib
+from pytuga import lexer
+from pytuga import __version__
 
-pytuga_banner = '''
-pytuga 0.1, o interpretador de Pytuguês.
+pytuga_banner = \
+    '''pytuga %s, o interpretador de Pytuguês.
 [Python 3.4, GCC] em linux
 digite "ajuda()", "licença()" ou "tutorial()" para maiores informações
-'''
+''' % __version__
 
 
 class PyTugaConsole(code.InteractiveConsole):

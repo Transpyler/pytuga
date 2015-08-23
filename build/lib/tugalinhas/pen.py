@@ -936,7 +936,7 @@ class Pen(object):
         dx = distance * cos(theta)
         dy = distance * sin(theta)
 
-        p1 = item.pos()
+        p1 = as_qpoint(item.pos())
         p2 = QtCore.QPointF(p1.x() + dx, p1.y() + dy)
         item.setPos(p2)
 

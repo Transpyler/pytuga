@@ -9,9 +9,10 @@ def start_interactive():
     '''Inicia REPL'''
 
 
-def main():
+def run():
     '''Função principal de execução'''
 
+    print(sys.argv)
     if len(sys.argv) <= 1:
         return start_interactive()
 

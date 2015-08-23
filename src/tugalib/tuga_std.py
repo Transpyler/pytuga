@@ -55,8 +55,9 @@ def pausa():
     input('')
 
 
+#
 # TODO: fazer funções com strings de documentação
-
+#
 binário = bin
 booleano = bool
 # bytes = bytes

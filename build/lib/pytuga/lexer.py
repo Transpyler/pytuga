@@ -1,14 +1,9 @@
-# TODO: criar classe de token e de token_list(ou o que valha)
-# mover boa parte das funções para estas classes e implementar operadores
-# matemáticos mais expressivos (e.g.: tk >> 2 move 2 casas para direita)
-
 from collections import deque
 import tokenize
 from tokenize import TokenInfo
 from tokenize import (
     COLON, COMMA, DEDENT, ENDMARKER, LPAR, RPAR, NAME, OP, NUMBER)
 from pytuga import constants as cte
-from coverage.files import sep
 
 __all__ = ['transpile', 'compile', 'exec']
 
@@ -116,6 +111,9 @@ class Token(object):
     #
     # Magic methods
     #
+    def __repr__(self):
+        return 'Token(%r, %r, %r, %r)' % (tuple(self)[:-1])
+
     def __len__(self):
         return 5
 
@@ -220,8 +218,8 @@ def transpile_tk(tokens):
     while tk.string not in TK_HANDLER:
         try:
             name = cte.TOKEN_TRANSLATIONS[tk.string]
-            token = tkcopy(tk, name=name, fixend=True)
-            delta = len(tk.string) - len(name)
+            token = tkcopy(tk, string=name, fixend=True)
+            delta = len(name) - len(tk.string)
             tokens = hshift(tokens, delta)
         except KeyError:
             token = tk
@@ -303,98 +301,90 @@ def _transpile_para(tk, tokens):
 
     Aparece nos comandos::
 
-        para cada <nome> em <sequência> [faça]:
+        para [cada] <nome> em <sequência> [faça]:
             <BLOCO>
 
-        para <nome> de <início> até <fim> [a cada <passo>] [faça]:
+        para [cada] <nome> de <início> até <fim> [a cada <passo>] [faça]:
             <BLOCO>
     '''
 
-    for_tk = tkcopy(tk, name='for', end=tk.end + delta(0, -1))
-
-    # Loop do tipo "para cada"
+    # Troca "para" por "for"
+    tokens = hshift(tokens, -1)
     if tokens[0].string == 'cada':
         tokens.popleft()
-        tokens = hshift(transpile_tk(tokens), -6)
-        tokens.appendleft(for_tk)
-        return remove_before_colon(tokens, 'faça')
+        tokens = hshift(tokens, -5)
+    tokens.appendleft(tkcopy(tk, string='for', fixend=True))
 
-    else:
+    # Remove o "faça" opcional no fim do bloco
+    tokens = remove_before_colon(tokens, 'faça')
+
+    # Testa se <nome> é um token válido
+    if tokens[1].type != NAME:
+        raise SyntaxError('esperava um nome no comando "para cada <nome> ..."')
+
+    # Verifica o tipo de comando: mapa em sequência
+    if tokens[2].string in 'em':
+        tokens[2].string = 'in'
+        return transpile_tk(tokens)
+
+    # Mapa numérico
+    elif tokens[2].string == 'de':
         # Separa cada elemento que caracteriza o loop
-        varname, tk_de, tail = partition(tokens, 'de')
-        varname = transpile_tk(varname)
+        tk_for, varname, tk_de, *tail = tokens
+        tokens = TokenStream([tk_for, varname, tkcopy(tk_de, string='in')])
+        tokens.append(tkcopy(tail[0], 'range', NAME, fixend=True))
+        tokens.append(tkcopy(tail[0], '(', LPAR, hshift=5, fixend=True))
+
+        # Recupera o primeiro elemento do range
         start, _tk_até, tail = partition(tail, 'até')
+        start = hshift(transpile_tk(start), 6)
+        tokens.extend(start)
 
-        # Assegura que um único nome foi definido para o índice
-        if len(varname) != 1:
-            raise SyntaxError()
-        varname = varname[0]
+        # Adiciona a vírgula
+        tokens.append(Token(',', start=tokens[-1].end))
 
+        # Recupera o final do range -- primeiro verifica se define o passo
         try:
-            end, tk_cada, tail = partition(tail, 'cada')
-            end = transpile_tk(end)
+            end, _, tail = partition(tail, 'cada')
             if end[-1].string == 'a':
                 end.pop()
+            end = transpile_tk(end)
+
+        # O passo *não está* definido
         except MissingSeparatorError:
-            tk_cada = None
-            end, tk_colon, tail = partition(tail, ':')
-            if end[-1].string == 'faça':
-                end.pop()
+            end, colon_tk, tail = partition(tail, ':')
             end = transpile_tk(end)
             step = None
+
+        # O passo *está* definido
         else:
-            step, tk_colon, tail = partition(tail, ':')
-            if step[-1].string == 'faça':
-                step.pop()
+            step, colon_tk, tail = partition(tail, ':')
             step = transpile_tk(step)
-        colon_sep = tail[0].start[1] - tk_colon.end[1]
-        tail = transpile_tk(tail)
 
-        # Alinha os elementos do loop e cria as novas tokens para completar
-        aux = start[0]
-        tokens = TokenStream([
-            for_tk,
-            tkcopy(varname, hshift=-1),
-            tkcopy(tk_de, name='in', hshift=-1),
-            tkcopy(aux, type=NAME, name='range', hshift=-1, fixend=True),
-            tkcopy(aux, type=LPAR, name='(', hshift=-4, fixend=True),
-        ])
-        tokens.extend(hshift(start, -3))
-
-        # Comma
-        aux = tokens[-1]
-        comma = tkcopy(aux, type=COMMA, name=',', start=aux.end, fixend=True)
-        tokens.append(comma)
-
-        # Final range
-        tokens.extend(hshift(end, -7))
-        aux = tokens[-1]
-        plus = tkcopy(aux, type=OP, name='+', start=aux.end, hshift=1,
-                      fixend=True)
-        one = tkcopy(plus, type=NUMBER, name='1', start=plus.end, hshift=1,
-                     fixend=True)
-        tokens.extend([plus, one])
+        # Adiciona o fim do range
+        tokens.extend(halign(end, tokens[-1].end + (0, 1)))
+        tokens.append(Token('+', OP, tokens[-1].end + (0, 1)))
+        tokens.append(Token('1', NUMBER, tokens[-1].end + (0, 1)))
 
         # Adiciona passo, se necessário
-        if tk_cada is not None:
-            aux = tokens[-1]
-            comma = tkcopy(aux, type=COMMA, name=',', start=aux.end,
-                           fixend=True)
-            tokens.append(comma)
-            tokens.extend(hshift(halign(step, tokens[-1].end), 1))
+        if step:
+            tokens.append(Token(',', COMMA, tokens[-1].end))
+            tokens.extend(halign(step, tokens[-1].end + (0, 1)))
 
-        # Fecha range()
-        aux = tokens[-1]
-        rpar = tkcopy(aux, type=RPAR, name=')', start=aux.end,
-                      fixend=True, hshift=0)
-        colon = tkcopy(aux, type=COLON, name=':', start=aux.end,
-                       fixend=True, hshift=0)
-        tokens.extend([rpar, colon])
+        # Fecha parênteses do range e finaliza
+        tokens.append(Token(')', RPAR, tokens[-1].end))
+        tokens.append(Token(':', COLON, tokens[-1].end))
 
-        tail = hshift(halign(tail, tokens[-1].end), colon_sep)
+        # Continua processamento
+        tail_sep = tail[0].start[1] - colon_tk.end[1]
+        tail = halign(transpile_tk(tail), tokens[-1].end)
+        tail = hshift(tail, tail_sep)
         tokens.extend(tail)
-
         return tokens
+
+    else:
+        raise SyntaxError(
+            'esperava "de" ou "em" no comando "para cada <nome> de|em ..."')
 
 
 @handle_token('enquanto')
@@ -412,7 +402,7 @@ def _transpile_enquanto(tk, tokens):
             <BLOCO>
     '''
 
-    tokens.appendleft(tkcopy(tk, name='while'))
+    tokens.appendleft(tkcopy(tk, string='while'))
     tokens = remove_before_colon(tokens, 'faça')
     return transpile_tk(tokens)
 
@@ -432,7 +422,7 @@ def _transpile_se(tk, tokens):
             <BLOCO>
     '''
 
-    tokens.appendleft(tkcopy(tk, name='if'))
+    tokens.appendleft(tkcopy(tk, string='if'))
     tokens = remove_before_colon(tokens, 'faça')
     tokens = remove_before_colon(tokens, 'então')
     return transpile_tk(tokens)
@@ -459,7 +449,7 @@ def _transpile_ou(tk, tokens):
 
     # Caso trivial: simplesmente traduz
     if tokens[0].string not in ['então', 'se']:
-        tokens.appendleft(tkcopy(tk, name='or'))
+        tokens.appendleft(tkcopy(tk, string='or'))
         return transpile_tk(tokens)
 
     # Remove "então se"
@@ -472,7 +462,7 @@ def _transpile_ou(tk, tokens):
     tokens.popleft()
 
     tokens = hshift(tokens, shift)
-    tokens.appendleft(tkcopy(tk, name='elif'))
+    tokens.appendleft(tkcopy(tk, string='elif'))
     tokens = remove_before_colon(tokens, 'faça')
     tokens = remove_before_colon(tokens, 'então')
     return transpile_tk(tokens)
@@ -493,7 +483,7 @@ def _transpile_senão(tk, tokens):
             <BLOCO>
     '''
 
-    tokens.appendleft(tkcopy(tk, name='else'))
+    tokens.appendleft(tkcopy(tk, string='else'))
     tokens = remove_before_colon(tokens, 'faça')
     return transpile_tk(tokens)
 
@@ -520,8 +510,8 @@ def _transpile_definir(tk, tokens):
     if tokens[0].string == 'função':
         return hshift(transpile_tk(tokens), -len(tk.string) - 1)
     else:
-        tokens = hshift(transpile_tk(tokens), len(tk.string) - 3)
-        tokens.appendleft(tkcopy(tk, name='def', fixend=True))
+        tokens = hshift(transpile_tk(tokens), -(len(tk.string) - 3))
+        tokens.appendleft(tkcopy(tk, string='def', fixend=True))
     return tokens
 
 
@@ -562,11 +552,11 @@ def tk_hshift(tk, value):
     return Token(name, tt, start, end, line)
 
 
-def tkcopy(tk, type=None, name=None, start=None, end=None, line=None,
+def tkcopy(tk, string=None, type=None, start=None, end=None, line=None,
            hshift=0, vshift=0, fixend=False):
     tn, tt, ts, te, tl = tk
     type = type or tt
-    name = name or tn
+    string = string or tn
     start = start or ts
     end = end or te
     line = line or tl
@@ -574,11 +564,11 @@ def tkcopy(tk, type=None, name=None, start=None, end=None, line=None,
     start = start[0] + vshift, start[1] + hshift
     end = end[0] + vshift, end[1] + hshift
 
-    delta = len(tk.string) - len(name)
+    delta = len(tk.string) - len(string)
     if fixend and delta:
-        end = end[0], end[1] + delta
+        end = end[0], end[1] - delta
 
-    return Token(name, type, start, end, line)
+    return Token(string, type, start, end, line)
 
 
 def tkprint(tk_list):
@@ -878,6 +868,7 @@ def tostring(tokens):
             c, d = last_pos
             if (a < c) or (a == c and d > b):
                 fmt = idx, tokens[idx - 1], tk
+                print(tokens)
                 raise ValueError(
                     'tokens sobrepõe a partir de #%s:\n\t%s\n\t%s)' % fmt)
             last_pos = tk.end
@@ -1090,6 +1081,14 @@ else:
 
     ptsrc = '\n\n\nsenão faça: mostre(x)'
     pysrc = '\n\n\nelse: mostre(x)'
+    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
+
+    ptsrc = 'para x de 10 até 20: mostre(x)'
+    pysrc = 'for x in range(10, 20 + 1): mostre(x)'
+    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
+
+    ptsrc = 'para xx de 10 até 20: mostre(x)'
+    pysrc = 'for xx in range(10, 20 + 1): mostre(x)'
     assert transpile(ptsrc) == pysrc, transpile(ptsrc)
 
     #
