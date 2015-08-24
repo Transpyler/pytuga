@@ -47,11 +47,11 @@ instaladas::
     
 Depois de instalar as dependências, instale o Pytuguês utilizando o PIP:
 
-    $ sudo pip3 install pytuga --upgrade 
+    $ sudo pip3 install pytuga --upgrade --pre
     
 Se quiser apenas fazer a instalação local, o comando fica
 
-    $ pip3 install pytuga --upgrade --user
+    $ pip3 install pytuga --upgrade --user --pre
 
 
 -------
@@ -71,7 +71,7 @@ Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:
 
 Depois disto abra o terminal (Win+R e digite "cmd") e digite o comando::
     
-    $ pip3 install pytuga --upgrade --user
+    $ pip3 install pytuga --upgrade --user --pre
     
 
 Tutorial
@@ -91,7 +91,7 @@ Para mostrar uma mensagem na tela, por exemplo, digite::
     olá, mundo
     
 Experimente também com operações básicas, para ter um sabor dos recursos do 
-terminal de Pytuguês.
+terminal de Pytuguês::
 
     >>> 5 * 4 * 3 * 2 * 1
     120
@@ -124,7 +124,7 @@ podemos construir interações complexas e interessantes utilizando estes blocos
 básicos e os recursos comuns de programação como repetições, execução 
 condicional, interação com o usuário, etc.
 
-*Desafio!*
+**Desafio!**
 
 Faça um programa que desenhe figuras regulares como quadrado, triângulo,
 pentágono, etc.
@@ -176,7 +176,7 @@ não é uma falsidade matemática. Na realidade, estamos atribuindo um novo valo
 
 
 
-*Desafio!*
+**Desafio!**
 
 Calcule 42 ** 42. Muito provavelmente este resultado é maior que o que cabe na 
 sua calculadora! Confira. 
@@ -271,13 +271,13 @@ O código abaixo, por exemplo, é muito semelhate ao anterior, mas o comando
 "esquerda(120)" està alinhado ao início da linha. Isto fáz com que apenas a 
 parte "frente(100)" seja executada as três vezes. O comando esquerda está fora 
 do bloco "repetir" e portanto é executado apenas uma única vez após o bloco 
-terminar.
+terminar::
 
     repetir 3 vezes:
         frente(100)
     esquerda(120)
         
-*Desafio!*
+**Desafio!**
 
 
 Faça uma estrela de 5 pontas utilizando o comando repetir. Depois tente fazer
@@ -338,7 +338,7 @@ Finalmente, podemos omitir o passo na segunda versão do comando caso ele seja
 igual à 1.
 
 
-*Desafio!*
+**Desafio!**
 
 
 Desenhe uma espiral quadrada de 10 braços em que o tamanho de cada avanço varie 
@@ -398,8 +398,7 @@ do comando "repetir"::
         esquerda(120)
         n_iterações = n_iterações + 1
         
-*Desafio!*
---------
+**Desafio!**
 
 A função ``aleatório()`` produz um número aleatório entre 0 e 1. O programa 
 abaixo, por exemplo, produz 100 "passos do bêbado" e imprime a coordenada x 
@@ -471,15 +470,16 @@ Onde no máximo um dos blocos de código será executado, sendo o que correspond
 à primeira condição que é satisfeita. Analogamente aos laços repetição, os 
 termos "então faça" e "faça" são opcionais.
 
-O condicional funciona assim:
-    * Primeiramente testamos a "condição 1". Se ela for satisfeita, o bloco de 
-      código correspondente é executado e o Pytuguês ignora todos os outros 
-      blocos restantes e continua a execução a partir daí.
-    * Caso a condição seja falsa, partimos para a "condição 2". Se ela for 
-      satisfeita, executamos o segundo bloco de código e pulamos sobre todos os 
-      outros.
-    * Somente se nenhuma das condições forem satisfeitas, executa-se o bloco 
-      senão. Caso o bloco senão não exista, nenhum comando é executado. 
+O condicional funciona assim.
+
+* Primeiramente testamos a "condição 1". Se ela for satisfeita, o bloco de 
+  código correspondente é executado e o Pytuguês ignora todos os outros 
+  blocos restantes e continua a execução a partir daí.
+* Caso a condição seja falsa, partimos para a "condição 2". Se ela for 
+  satisfeita, executamos o segundo bloco de código e pulamos sobre todos os 
+  outros.
+* Somente se nenhuma das condições forem satisfeitas, executa-se o bloco 
+  senão. Caso o bloco senão não exista, nenhum comando é executado. 
       
 Talvez fique mais claro em um exemplo::
 
@@ -496,28 +496,28 @@ Talvez fique mais claro em um exemplo::
     senão:
         mostre(x)
         
-Se *x* for igual à 4, o programa imprimirá "x é par", pois a 
-condição ``x % 2 == 0`` (resto da divisão de *x* por 2 é igual à zero) é a 
-primeira condição satisfeita no bloco condicional. Caso *x* seja igual à 12, a
+Se **x** for igual à 4, o programa imprimirá "x é par", pois a 
+condição ``x % 2 == 0`` (resto da divisão de **x** por 2 é igual à zero) é a 
+primeira condição satisfeita no bloco condicional. Caso **x** seja igual à 12, a
 mensagem mostrada será "x é grande", pois apesar de tanto ``x > 10`` quanto
 ``x % 2 == 0`` serem satisfeitos para este valor, a primeira condição é 
 selecionada pois aparece primeiro no bloco condicional. Para executarmos o bloco
-"senão", é necessário utilizar um valor de *x* que viole todas as condições 
+"senão", é necessário utilizar um valor de **x** que viole todas as condições 
 apresentadas. Neste caso, qualquer um dos valores 3, 5, 7 e 9 funcionam.
 
 
-*Desafio!*
+**Desafio!**
   
 Pergunte a idade do usuário e imprima uma das mensagens abaixo dependendo da
-faixa em que ele se situa::
+faixa em que ele se situa.
 
-    * negativo: "você ainda não nasceu!"
-    * 0-3: "você é um bebê"
-    * 4-9: "você é uma criança"       
-    * 10-12: "você é um pré-adolescente"
-    * 13-19: "você é um adolescente"
-    * 20-59: "você é um adulto"
-    * 60 ou mais: "você é um idoso"
+* negativo: "você ainda não nasceu!"
+* 0-3: "você é um bebê"
+* 4-9: "você é uma criança"       
+* 10-12: "você é um pré-adolescente"
+* 13-19: "você é um adolescente"
+* 20-59: "você é um adulto"
+* 60 ou mais: "você é um idoso"
     
 O Pytuguês aceita condições compostas, assim podemos usar o teste ``0 <= idade <= 3``
 para verificar se a idade está no intervalo entre 0 e 3.
