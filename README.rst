@@ -45,12 +45,12 @@ instaladas::
 
     $ sudo apt-get install python3-pyqt4 python3-pyqt4.qsci python3-pip
         
-Se quiser apenas fazer a instalação local, o comando fica
+Se quiser apenas fazer a instalação local, o comando fica::
 
     $ sudo pip3 install bidict --user
     $ pip3 install pytuga --user --pre
     
-Uma vez instalado, você pode atualizar a versão do Pytuguês usando
+Uma vez instalado, você pode atualizar a versão do Pytuguês usando::
     
     $ pip3 install pytuga --pre -U --user 
     
