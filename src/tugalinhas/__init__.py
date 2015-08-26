@@ -1,5 +1,5 @@
+# Copyright 2015 Fábio Macêdo Mendes
 # Copyright 2010-2013 Lee Harr
-# Copyright 2010-2013  Fábio Macêdo Mendes
 #
 # Tugalinhas is a fork/adaptation of Pynguin for teaching Python to Portuguese
 # speaking communities using the "Pytuguês" programming language. The original
@@ -79,7 +79,7 @@ def _get_doc_dir():
         return sysdir
 
     raise RuntimeError('no doc directory was found, check your installation')
-DOC_DIR = _get_doc_dir()
+DOC_DIR = ''  # _get_doc_dir()
 
 #
 # Colors definitions

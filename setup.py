@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.3a0'
+VERSION = '0.3a1'
 REQUIRES = ['PyQt4', 'PyQt4.Qsci', 'bidict', 'turtle']
 
 

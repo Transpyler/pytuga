@@ -62,16 +62,27 @@ Windows
 Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:
 
 32 bits::
-    * https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi
-    * http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x32.exe
+    * `Python <https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi/>`
+    * `PyQt4 <http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x32.exe/>`
     
 64 bits::
-    * https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi
-    * http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe
+    * `Python <https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi/>`
+    * `PyQt4 <http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe/>`
 
-Depois disto abra o terminal (Win+R e digite "cmd") e digite o comando::
+É importante marcar a opção "Add python.exe to your path" durante a instalação.
+Depois disto abra o terminal do Windows (Win+R e digite "cmd") e digite o comando::
     
-    $ pip3 install pytuga --upgrade --user --pre
+    $ python -m pip install bidict
+    $ python -m pip install pytuga -U --pre
+    
+Se o código anterior não funcionar, provavelmente significa que o Python não 
+está no caminho padrão de procura do Windows. Se este for o caso, é necessário
+mudar para o diretório onde o Python foi instalado. Digite::
+
+    $ cd c:\Python34\
+    
+E agora repita os comandos anteriores. Se você decidiu instalar o Python em 
+outro caminho, modifique o comando acima para indicar o caminho correto.
     
 
 Tutorial
