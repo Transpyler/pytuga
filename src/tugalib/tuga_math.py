@@ -8,6 +8,7 @@ usuário.
 
 import math as _math
 import random as _random
+from tugalib.util import synonyms
 pi = _math.pi
 neperiano = _math.exp(1)
 
@@ -34,6 +35,7 @@ def raiz(x):
     return _math.sqrt(x)
 
 
+@synonyms('sen')
 def seno(x):
     '''Retorna o seno de x, onde x é medido em radianos.
 
@@ -47,9 +49,9 @@ def seno(x):
     '''
 
     return _math.sin(x)
-sen = seno
 
 
+@synonyms('cos')
 def cosseno(x):
     '''Retorna o cosseno de x, onde x é medido em radianos.
 
@@ -63,9 +65,9 @@ def cosseno(x):
     '''
 
     return _math.cos(x)
-cos = cosseno
 
 
+@synonyms('tan', 'tg')
 def tangente(x):
     '''Retorna a tangente de x, onde x é medido em radianos.
 
@@ -79,9 +81,9 @@ def tangente(x):
     '''
 
     return _math.tan(x)
-tan = tangente
 
 
+@synonyms('exp')
 def exponencial(x):
     '''Retorna a exponencial de x.
 
@@ -92,14 +94,12 @@ def exponencial(x):
 
     >>> exponencial(1)
     2.718281828459045
-    >>> exp(1)
-    2.718281828459045
     '''
 
     return _math.exp(x)
-exp = exponencial
 
 
+@synonyms('log', 'ln')
 def logarítimo(x):
     '''Retorna o logarítimo natural de x.
 
@@ -110,12 +110,9 @@ def logarítimo(x):
 
     >>> logarítimo(1)
     0.0
-    >>> log(exp(1))
-    1.0
     '''
 
     return _math.log(x)
-log = logarítimo
 
 
 def log10(x):
@@ -129,11 +126,10 @@ def log10(x):
     '''
     return _math.log10(x)
 
+
 #
 # Controle de arredondamento e sinal dos números
 #
-
-
 def módulo(x):
     '''Retorna o módulo de x.
 
@@ -169,6 +165,7 @@ def sinal(x):
         raise ValueError('argumento não possui sinal definido')
 
 
+@synonyms('arredonde')
 def arredondar(x):
     '''Arredonda o número x para o inteiro mais pŕoximo.
 
@@ -182,9 +179,9 @@ def arredondar(x):
     '''
 
     return int(round(x))
-arredonde = arredondar
 
 
+@synonyms('trunque')
 def truncar(x):
     '''Remove a parte decimal do número.
 
@@ -198,7 +195,6 @@ def truncar(x):
     '''
 
     return int(x)
-trunque = truncar
 
 
 #
@@ -258,6 +254,38 @@ def produto(números):
     return prod
 
 
+def todos(sequência):
+    '''Retorna Verdadeiro se todos os objetos da sequência dada forem
+    verdadeiros e Falso caso contrário.
+
+    Exemplo
+    -------
+
+    >>> todos([Verdadeiro, Verdadeiro])  # doctest: +SKIP
+    Verdadeiro
+    >>> todos([Verdadeiro, Falso])       # doctest: +SKIP
+    Falso
+    '''
+
+    return all(sequência)
+
+
+def algum(sequência):
+    '''Retorna Verdadeiro se algum dos objetos da sequência dada for
+    verdadeiro e Falso caso contrário.
+
+    Exemplo
+    -------
+
+    >>> algum([Verdadeiro, Verdadeiro])  # doctest: +SKIP
+    Verdadeiro
+    >>> algum([Verdadeiro, Falso])       # doctest: +SKIP
+    Falso
+    '''
+
+    return any(sequência)
+
+
 #
 # Números aleatórios
 #
@@ -273,12 +301,12 @@ def inteiro_aleatório(início, fim):
     return _random.randint(início, fim)
 
 
-def lance_dado():
+@synonyms('lance_dados')
+def lançar_dado():
     '''Retorna um número aleatório entre 1 e 6, como num lance de dados
     comuns'''
 
     return _random.randint(1, 6)
-lançar_dado = lance_dado
 
 
 if __name__ == '__main__':

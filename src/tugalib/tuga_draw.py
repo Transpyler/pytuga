@@ -9,6 +9,7 @@ try:
     import turtle as _TURTLE_MODULE
 except ImportError:
     _TURTLE_MODULE = None
+from tugalib.util import synonyms
 
 
 def _turtle():
@@ -45,6 +46,7 @@ def esquerda(ângulo):
     _turtle().left(ângulo)
 
 
+@synonyms('vá_para')
 def ir_para(x, y):
     '''Move cursor para a posição absoluta especificada em pixels.
 
@@ -61,6 +63,7 @@ def começo():
     _turtle().home()
 
 
+@synonyms('mude_x')
 def mudar_x(x):
     '''Define a primeira coordenada da posição para o valor x deixando a outra
     inalterada.'''
@@ -68,6 +71,7 @@ def mudar_x(x):
     _turtle().setx(x)
 
 
+@synonyms('mude_y')
 def mudar_y(y):
     '''Define a segunda coordenada da posição para o valor y deixando a outra
     inalterada.'''
@@ -75,6 +79,7 @@ def mudar_y(y):
     _turtle().sety(y)
 
 
+@synonyms('mude_orientação')
 def mudar_orientação(ângulo):
     '''Define a orientação do cursor. Um ângulo=0 aponta o cursor na
     direção do eixo x. A rotação é definida no sentido anti-horário.'''

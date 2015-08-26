@@ -5,54 +5,45 @@ Outras funções
 Outras funções que não se encaixam em nenhuma categoria específica.
 '''
 import time as _time
+from tugalib.util import synonyms
 
-
-def todos(sequência):
-    '''Retorna Verdadeiro se todos os objetos da sequência dada forem
-    verdadeiros e Falso caso contrário.
-
-    Exemplo
-    -------
-
-    >>> todos([Verdadeiro, Verdadeiro])
-    Verdadeiro
-    >>> todos([Verdadeiro, Falso])
-    Falso
-    '''
-
-    return all(sequência)
-
-
-def algum(sequência):
-    '''Retorna Verdadeiro se algum dos objetos da sequência dada for
-    verdadeiro e Falso caso contrário.
-
-    Exemplo
-    -------
-
-    >>> algum([Verdadeiro, Verdadeiro])
-    Verdadeiro
-    >>> algum([Verdadeiro, Falso])
-    Falso
-    '''
-
-    return any(sequência)
 
 #
-# Controle do tempo
+# Controle de tempo e de saída do programa
 #
-
-
+@synonyms('durma')
 def dormir(intervalo):
     '''Permanece sem fazer nada o intervalo de tempo fornecido (em segundos)'''
 
     _time.sleep(intervalo)
 
 
-def pausa():
+@synonyms('pausa', 'pause')
+def pausar():
     '''Interrompe a execução até o usuário apertar a tecla <enter>'''
 
     input('')
+
+
+@synonyms('termine')
+def terminar():
+    '''Termina a execução do programa.
+
+    Semelhante à função sair(cod_erro), mas não requer a especificação de um
+    código de erro'''
+
+    sair(0)
+
+
+@synonyms('saia')
+def sair(código_erro):
+    '''Termina a execução do programa fornecendo um código de erro ou código
+    de saída.
+
+    Um ``código_erro=0`` sinaliza que o programa terminou com sucesso. Qualquer
+    outro número ou um texto representa falha'''
+
+    raise SystemExit(código_erro)
 
 
 #
@@ -79,6 +70,8 @@ ordenado = sorted
 texto = str
 tupla = tuple
 tipo = type
+verdadeiro = Verdadeiro = True
+falso = Falso = False
 
 if __name__ == '__main__':
     import doctest
