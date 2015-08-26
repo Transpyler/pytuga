@@ -1,9 +1,10 @@
-#-*-coding: utf8-*-
+#-*-coding: utf-8-*-
 import os
+import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.3a1'
+VERSION = '0.3a2'
 REQUIRES = ['PyQt4', 'PyQt4.Qsci', 'bidict', 'turtle']
 
 
@@ -13,10 +14,15 @@ version_file = os.path.join(base, 'src', 'tugalib', 'version.py')
 with open(version_file, 'w') as F:
     F.write('__version__ = %r\n' % VERSION)
 
+# Fix possible bug in Windows which does not generate the gui script
+console_scripts = ['pytuga = pytuga.main:run']
+gui_scripts = ['tugalinhas = tugalinhas.main:run']
+if sys.platform.startswith('win'):
+    gui_scripts = ['tugalinhas_window = tugalinhas.main:run']
+    console_scripts.append('tugalinhas = tugalinhas.main:run')
+
+# Run setup() function
 setup(
-    #
-    # Basic meta
-    #
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
@@ -64,13 +70,8 @@ setup(
         #'eggexecutable': [
         #    'pytuga = tugalinhas.main:run',,
         #],
-        'console_scripts': [
-            'pytuga = pytuga.main:run',          # Main interpreter
-            # 'tugashell = tugashell.main:run',    # A better shell, TBR
-        ],
-        'gui_scripts': [
-            'tugalinhas = tugalinhas.main:run',  # Graphical environment
-        ]
+        'console_scripts': console_scripts,
+        'gui_scripts': gui_scripts,
     },
 
     #

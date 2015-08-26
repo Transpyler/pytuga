@@ -70,7 +70,8 @@ Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:
     * `PyQt4 <http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe/>`
 
 É importante marcar a opção "Add python.exe to your path" durante a instalação.
-Depois disto abra o terminal do Windows (Win+R e digite "cmd") e digite o comando::
+Depois disto abra o terminal do Windows (Win+R e digite "cmd") e execute os 
+comandos::
     
     $ python -m pip install bidict
     $ python -m pip install pytuga -U --pre
@@ -83,6 +84,8 @@ mudar para o diretório onde o Python foi instalado. Digite::
     
 E agora repita os comandos anteriores. Se você decidiu instalar o Python em 
 outro caminho, modifique o comando acima para indicar o caminho correto.
+
+Para executar o Tugalinhas, aperte Win+R e digite "tugalinhas" no prompt.
     
 
 Tutorial
