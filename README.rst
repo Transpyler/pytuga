@@ -43,15 +43,17 @@ estejam instalados. Se sua distribuição for baseada no Debian/Ubuntu,
 o comando abaixo garante que todas as bibliotecas necessárias serão 
 instaladas::
 
-    $ sudo apt-get install python3-pyqt4 python3-pip
-    
-Depois de instalar as dependências, instale o Pytuguês utilizando o PIP:
-
-    $ sudo pip3 install pytuga --upgrade --pre
-    
+    $ sudo apt-get install python3-pyqt4 python3-pyqt4.qsci python3-pip
+        
 Se quiser apenas fazer a instalação local, o comando fica
 
-    $ pip3 install pytuga --upgrade --user --pre
+    $ sudo pip3 install bidict --user
+    $ pip3 install pytuga --user --pre
+    
+Uma vez instalado, você pode atualizar a versão do Pytuguês usando
+    
+    $ pip3 install pytuga --pre -U --user 
+    
 
 
 -------

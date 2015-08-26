@@ -67,9 +67,6 @@ setup(
     #
     entry_points={
         # Stand alone tugalinhas?
-        #'eggexecutable': [
-        #    'pytuga = tugalinhas.main:run',,
-        #],
         'console_scripts': console_scripts,
         'gui_scripts': gui_scripts,
     },
