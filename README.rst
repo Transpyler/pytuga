@@ -47,7 +47,7 @@ instaladas::
         
 Se quiser apenas fazer a instalação local, o comando fica::
 
-    $ sudo pip3 install bidict --user
+    $ pip3 install bidict --user
     $ pip3 install pytuga --user --pre
     
 Uma vez instalado, você pode atualizar a versão do Pytuguês usando::
