@@ -4,8 +4,8 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.4a0'
-REQUIRES = ['PyQt4', 'PyQt4.Qsci', 'bidict', 'turtle']
+VERSION = '0.5.1'
+REQUIRES = ['bidict']  # 'PyQt4',
 
 
 # Rewrite __version__.py in tugalib
@@ -38,9 +38,9 @@ setup(
     O único objetivo do Pytuguês é facilitar o aprendizado de programação. Uma
     vez que os conceitos básicos forem apreendidos, a transição para uma
     linguagem real (no caso o Python) torna-se bem gradual e natural.
-    
+
     Este pacote possui alguns programas:
-    
+
         * pytuga: o interpretador de Pytuguês.
         * tugalinhas: programa educativo que permite ensinar programação
           visualmente, controlando o movimento de um personagem no espírito da
@@ -60,7 +60,7 @@ setup(
     #
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    requires=REQUIRES,
+    install_requires=REQUIRES,
 
     #
     # Scripts

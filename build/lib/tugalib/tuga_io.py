@@ -6,80 +6,95 @@ Funções que realizam a interação com o usuário, seja lendo valores digitado
 ou arquivos, seja mostrando valores na tela.
 '''
 
+from tugalib.util import synonyms
 
-def mostre(objeto):
-    '''Mostra o objeto ou texto fornecido na tela
 
-    Exemplo
-    -------
+@synonyms('mostre')
+def mostrar(objeto, *args):
+    '''
+    Mostra o objeto ou texto fornecido na tela.
 
-    >>> mostre("Olá, mundo!")
+    Se for chamada com vários argumentos, imprime os mesmos em sequência,
+    separando com um espaço.
+
+    Examples
+    --------
+
+    >>> mostrar("Olá, mundo!")
     Olá, mundo!
     '''
 
-    print(objeto)
-mostrar = mostre
+    print(objeto, *args)
 
 
-def leia_texto(mensagem):
-    '''Pede ao usuário uma entrada de texto.
+@synonyms('leia_texto')
+def ler_texto(mensagem):
+    '''
+    Pede ao usuário uma entrada de texto.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
-    >>> nome = leia_texto('Seu nome: ')
-    >>> mostre("olá, " + nome)  # usuário digita "maria"
+    >>> nome = ler_texto('Seu nome: ')
+    >>> mostrar("olá, " + nome)  # usuário digita "maria"
     olá, maria
     '''
 
-    mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
+    if isinstance(mensagem, str):
+        mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
     return input(mensagem)
-ler_texto = leia_texto
 
 
-def leia_número(mensagem):
-    '''Pede ao usuário uma entrada numérica.
+@synonyms('leia_número')
+def ler_número(mensagem):
+    '''
+    Pede ao usuário uma entrada numérica.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
-    >>> x = leia_número('Um número: ')  # usuário digita um 2...
+    >>> x = ler_número('Um número: ')  # usuário digita um 2...
     >>> x + 40
     42
     '''
 
-    mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
-    num = float(input(mensagem).replace(',', '.'))
+    texto = ler_texto(mensagem)
+    num = float(texto.replace(',', '.'))
     return int(num) if int(num) == num else num
-ler_número = leia_número
 
 
-def leia_arquivo(arquivo):
-    '''Lê conteúdo de um arquivo texto e retorna uma string de texto.
+@synonyms('leia_arquivo')
+def ler_arquivo(arquivo):
+    '''
+    Lê conteúdo de um arquivo texto e retorna uma string de texto.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
-    >>> dados = leia_arquivo("foo.txt")
+    >>> dados = ler_arquivo("foo.txt")
     '''
 
     return open(arquivo).read()
-ler_arquivo = leia_arquivo
 
 
-def salve_arquivo(arquivo, texto):
-    '''Salva o conteúdo de texto no arquivo indicado, apagando qualquer
+@synonyms('salve_arquivo')
+def salvar_arquivo(arquivo, texto):
+    '''
+    Salva o conteúdo de texto no arquivo indicado, apagando qualquer
     conteúdo anterior.
 
     CUIDADO! Caso o arquivo dado exista, esta função sobrescreverá seu conteúdo
     sem perguntar nada!
 
-    Exemplo
-    -------
+    Examples
+    --------
 
-    >>> salve_arquivo("foo.txt", dados)
+    >>> salvar_arquivo("foo.txt", dados)
     '''
 
     with open(arquivo) as F:
         F.write(str(texto))
-salvar_arquivo = salve_arquivo
+
+if __name__ == '__main__':
+    import doctest
+    # doctest.testmod()

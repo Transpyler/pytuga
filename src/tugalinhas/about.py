@@ -19,7 +19,7 @@ class AboutDialog(QtGui.QDialog):
         svgrenderer = util.SvgRenderer(app)
         renderer = svgrenderer.getrend()
         img = QtGui.QPixmap(300, 150)
-        img.fill(QtCore.Qt.transparent)
+        img.tip_fill(QtCore.Qt.transparent)
         self.img = img
         painter = QtGui.QPainter(img)
         renderer.render(painter, 'splash')

@@ -1,4 +1,5 @@
 '''
+
 Desenho
 =======
 
@@ -9,6 +10,7 @@ try:
     import turtle as _TURTLE_MODULE
 except ImportError:
     _TURTLE_MODULE = None
+from tugalib.util import synonyms
 
 
 def _turtle():
@@ -45,8 +47,10 @@ def esquerda(ângulo):
     _turtle().left(ângulo)
 
 
+@synonyms('vá_para')
 def ir_para(x, y):
-    '''Move cursor para a posição absoluta especificada em pixels.
+    '''
+    Move cursor para a posição absoluta especificada em pixels.
 
     Se a caneta estiver abaixada, desenha uma linha até o ponto especificado'''
 
@@ -61,6 +65,7 @@ def começo():
     _turtle().home()
 
 
+@synonyms('mude_x')
 def mudar_x(x):
     '''Define a primeira coordenada da posição para o valor x deixando a outra
     inalterada.'''
@@ -68,6 +73,7 @@ def mudar_x(x):
     _turtle().setx(x)
 
 
+@synonyms('mude_y')
 def mudar_y(y):
     '''Define a segunda coordenada da posição para o valor y deixando a outra
     inalterada.'''
@@ -75,8 +81,29 @@ def mudar_y(y):
     _turtle().sety(y)
 
 
+@synonyms('mude_orientação')
 def mudar_orientação(ângulo):
     '''Define a orientação do cursor. Um ângulo=0 aponta o cursor na
     direção do eixo x. A rotação é definida no sentido anti-horário.'''
 
     _turtle().setheading(ângulo)
+
+
+@synonyms('suba_caneta')
+def subir_caneta():
+    '''Para de desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    levantada do papel.'''
+
+    _turtle().pu()
+
+
+@synonyms('desca_caneta')
+def descer_caneta():
+    '''Volta a desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    abaixada sobre o papel.'''
+
+    _turtle().pd()

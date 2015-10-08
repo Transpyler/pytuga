@@ -25,3 +25,9 @@ from .tuga_strings import *
 from .tuga_math import *
 from .tuga_io import *
 from .tuga_draw import *
+
+# Registra funções sinônimas
+from . import util
+util.register_synonyms(globals())
+del synonyms
+del util

@@ -52,19 +52,19 @@ class Settings(QtGui.QDialog):
         autocall = settings.value('editor/testall_autocall', False, bool)
         ui.testall_autocall.setChecked(autocall)
 
-        # Background color
+        # Background tip_color
         default = DEFAULT_BGCOLOR
         c = settings.value('view/bgcolor', default)
         color = QtGui.QColor(c)
         self.set_bgcolor_swatch(color)
         ui._bgcolor = color
-        # Pen color
+        # Pen tip_color
         default = DEFAULT_COLOR
-        rgba = int(settings.value('tugalinhas/color', default))
+        rgba = int(settings.value('tugalinhas/tip_color', default))
         color = QtGui.QColor.fromRgba(rgba)
         self.set_pencolor_swatch(color)
         ui._color = color
-        # Fill color
+        # Fill tip_color
         default = DEFAULT_FILLCOLOR
         rgba = int(settings.value('tugalinhas/fillcolor', default))
         color = QtGui.QColor.fromRgba(rgba)
@@ -117,7 +117,7 @@ class Settings(QtGui.QDialog):
     def set_bgcolor_swatch(self, c):
         btn = self.ui.bgcolor
         pix = QtGui.QPixmap(150, 30)
-        pix.fill(c)
+        pix.tip_fill(c)
         i = QtGui.QIcon(pix)
         btn.setIcon(i)
         btn.setIconSize(QtCore.QSize(150, 30))
@@ -125,7 +125,7 @@ class Settings(QtGui.QDialog):
     def pencolorbrowse(self):
         settings = QtCore.QSettings()
         default = DEFAULT_COLOR
-        rgba = int(settings.value('tugalinhas/color', default))
+        rgba = int(settings.value('tugalinhas/tip_color', default))
         color = QtGui.QColor.fromRgba(rgba)
         color = self.colorbrowse(color, True)
         self.set_pencolor_swatch(color)
@@ -134,7 +134,7 @@ class Settings(QtGui.QDialog):
     def set_pencolor_swatch(self, c):
         btn = self.ui.pencolor
         pix = QtGui.QPixmap(150, 30)
-        pix.fill(c)
+        pix.tip_fill(c)
         i = QtGui.QIcon(pix)
         btn.setIcon(i)
         btn.setIconSize(QtCore.QSize(150, 30))
@@ -151,7 +151,7 @@ class Settings(QtGui.QDialog):
     def set_fillcolor_swatch(self, c):
         btn = self.ui.fillcolor
         pix = QtGui.QPixmap(150, 30)
-        pix.fill(c)
+        pix.tip_fill(c)
         i = QtGui.QIcon(pix)
         btn.setIcon(i)
         btn.setIconSize(QtCore.QSize(150, 30))
@@ -182,7 +182,7 @@ class Settings(QtGui.QDialog):
         self.set_bgcolor_swatch(color)
         self.ui._bgcolor = color
 
-        r, g, b, a = pyn.color()
+        r, g, b, a = pyn.tip_color()
         color = QtGui.QColor.fromRgb(r, g, b, a)
         self.set_pencolor_swatch(color)
         self.ui._color = color

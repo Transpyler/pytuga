@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tugalib.tuga_math &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="../../index.html" />
+    <link rel="up" title="Código do módulo" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fonte de tugalib.tuga_math</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Funções matemáticas</span>
+<span class="sd">===================</span>
+
+<span class="sd">O pytuga fornece algumas funções matemáticas comuns para a conveniência do</span>
+<span class="sd">usuário.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">math</span> <span class="kn">as</span> <span class="nn">_math</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="kn">as</span> <span class="nn">_random</span>
+<span class="kn">from</span> <span class="nn">tugalib.util</span> <span class="kn">import</span> <span class="n">synonyms</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="n">_math</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">neperiano</span> <span class="o">=</span> <span class="n">_math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># Funções elementares e usadas em cálculo científico</span>
+<span class="c">#</span>
+<div class="viewcode-block" id="raiz"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.raiz">[documentos]</a><span class="k">def</span> <span class="nf">raiz</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna a raiz quadrada de x.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; raiz(4)</span>
+<span class="sd">    2.0</span>
+<span class="sd">    ssdsfds</span>
+
+
+<span class="sd">    Migração</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Corresponde à função math.sqrt() no Python</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;sen&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="seno"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.seno">[documentos]</a><span class="k">def</span> <span class="nf">seno</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o seno de x, onde x é medido em radianos.</span>
+
+<span class="sd">    Pode ser chamada na forma curta (sen) ou longa (seno).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; seno(0)</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;cos&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="cosseno"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.cosseno">[documentos]</a><span class="k">def</span> <span class="nf">cosseno</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Retorna o cosseno de x, onde x é medido em radianos.</span>
+
+<span class="sd">    Pode ser chamada na forma curta (cos) ou longa (cosseno).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; cosseno(0)</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;tan&#39;</span><span class="p">,</span> <span class="s">&#39;tg&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="tangente"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.tangente">[documentos]</a><span class="k">def</span> <span class="nf">tangente</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna a tangente de x, onde x é medido em radianos.</span>
+
+<span class="sd">    Pode ser chamada na forma curta (tan) ou longa (tangente).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; tangente(0)</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;exp&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="exponencial"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.exponencial">[documentos]</a><span class="k">def</span> <span class="nf">exponencial</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna a exponencial de x.</span>
+
+<span class="sd">    Pode ser chamada na forma curta (exp) ou longa (exponencial).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; exponencial(1)</span>
+<span class="sd">    2.718281828459045</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;log&#39;</span><span class="p">,</span> <span class="s">&#39;ln&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="logarítimo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.logarítimo">[documentos]</a><span class="k">def</span> <span class="nf">logarítimo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o logarítimo natural de x.</span>
+
+<span class="sd">    Pode ser chamada na forma curta (log) ou longa (logarítimo).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; logarítimo(1)</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="log10"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.log10">[documentos]</a><span class="k">def</span> <span class="nf">log10</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o logarítimo de x na base 10.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; log10(10)</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># Controle de arredondamento e sinal dos números</span>
+<span class="c">#</span></div>
+<div class="viewcode-block" id="módulo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.módulo">[documentos]</a><span class="k">def</span> <span class="nf">módulo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o módulo de x.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; módulo(-1)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; módulo(1)</span>
+<span class="sd">    1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="sinal"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.sinal">[documentos]</a><span class="k">def</span> <span class="nf">sinal</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna 1, -1 ou 0, dependendo do sinal de x.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; sinal(-32.0)</span>
+<span class="sd">    -1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;argumento não possui sinal definido&#39;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;arredonde&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="arredondar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.arredondar">[documentos]</a><span class="k">def</span> <span class="nf">arredondar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Arredonda o número x para o inteiro mais pŕoximo.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; arredondar(1.6)</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; arredondar(1.4)</span>
+<span class="sd">    1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;trunque&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="truncar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.truncar">[documentos]</a><span class="k">def</span> <span class="nf">truncar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Remove a parte decimal do número.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; truncar(1.6)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; truncar(1.4)</span>
+<span class="sd">    1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># Funções em listas de números</span>
+<span class="c">#</span></div>
+<div class="viewcode-block" id="máximo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.máximo">[documentos]</a><span class="k">def</span> <span class="nf">máximo</span><span class="p">(</span><span class="n">lista</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o maior valor da lista dada.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; máximo([1, 5, 42, 0])</span>
+<span class="sd">    42</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">lista</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="mínimo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.mínimo">[documentos]</a><span class="k">def</span> <span class="nf">mínimo</span><span class="p">(</span><span class="n">lista</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o menor valor da lista dada.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; mínimo([1, 5, 42, 0])</span>
+<span class="sd">    0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">lista</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="soma"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.soma">[documentos]</a><span class="k">def</span> <span class="nf">soma</span><span class="p">(</span><span class="n">números</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o resultado da soma da sequência de números dada.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; soma([1, 2, 3, 4])</span>
+<span class="sd">    10</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">números</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="produto"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.produto">[documentos]</a><span class="k">def</span> <span class="nf">produto</span><span class="p">(</span><span class="n">números</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna o resultado do produto dos números dados.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; produto([1, 2, 3, 4, 5])</span>
+<span class="sd">    120</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">prod</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">números</span><span class="p">:</span>
+        <span class="n">prod</span> <span class="o">*=</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">prod</span>
+
+</div>
+<div class="viewcode-block" id="todos"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.todos">[documentos]</a><span class="k">def</span> <span class="nf">todos</span><span class="p">(</span><span class="n">sequência</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna Verdadeiro se todos os objetos da sequência dada forem</span>
+<span class="sd">    verdadeiros e Falso caso contrário.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; todos([Verdadeiro, Verdadeiro])  # doctest: +SKIP</span>
+<span class="sd">    Verdadeiro</span>
+<span class="sd">    &gt;&gt;&gt; todos([Verdadeiro, Falso])       # doctest: +SKIP</span>
+<span class="sd">    Falso</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">sequência</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="algum"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.algum">[documentos]</a><span class="k">def</span> <span class="nf">algum</span><span class="p">(</span><span class="n">sequência</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retorna Verdadeiro se algum dos objetos da sequência dada for</span>
+<span class="sd">    verdadeiro e Falso caso contrário.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; algum([Verdadeiro, Verdadeiro])  # doctest: +SKIP</span>
+<span class="sd">    Verdadeiro</span>
+<span class="sd">    &gt;&gt;&gt; algum([Verdadeiro, Falso])       # doctest: +SKIP</span>
+<span class="sd">    Falso</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">sequência</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># Números aleatórios</span>
+<span class="c">#</span></div>
+<div class="viewcode-block" id="aleatório"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.aleatório">[documentos]</a><span class="k">def</span> <span class="nf">aleatório</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Retorna um número aleatório no intervalo [0, 1]&#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="inteiro_aleatório"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.inteiro_aleatório">[documentos]</a><span class="k">def</span> <span class="nf">inteiro_aleatório</span><span class="p">(</span><span class="n">início</span><span class="p">,</span> <span class="n">fim</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Retorna um inteiro aleatório dentro do intervalo [início, fim]&#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">início</span><span class="p">,</span> <span class="n">fim</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;lance_dados&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="lançar_dado"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_math.lançar_dado">[documentos]</a><span class="k">def</span> <span class="nf">lançar_dado</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Retorna um número aleatório entre 1 e 6, como num lance de dados</span>
+<span class="sd">    comuns&#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

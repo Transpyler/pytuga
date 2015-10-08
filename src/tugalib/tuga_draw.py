@@ -1,4 +1,5 @@
 '''
+
 Desenho
 =======
 
@@ -48,7 +49,8 @@ def esquerda(ângulo):
 
 @synonyms('vá_para')
 def ir_para(x, y):
-    '''Move cursor para a posição absoluta especificada em pixels.
+    '''
+    Move cursor para a posição absoluta especificada em pixels.
 
     Se a caneta estiver abaixada, desenha uma linha até o ponto especificado'''
 
@@ -85,3 +87,23 @@ def mudar_orientação(ângulo):
     direção do eixo x. A rotação é definida no sentido anti-horário.'''
 
     _turtle().setheading(ângulo)
+
+
+@synonyms('suba_caneta')
+def subir_caneta():
+    '''Para de desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    levantada do papel.'''
+
+    _turtle().pu()
+
+
+@synonyms('desca_caneta')
+def descer_caneta():
+    '''Volta a desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    abaixada sobre o papel.'''
+
+    _turtle().pd()

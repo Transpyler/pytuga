@@ -27,7 +27,8 @@ def pausar():
 
 @synonyms('termine')
 def terminar():
-    '''Termina a execução do programa.
+    '''
+    Termina a execução do programa.
 
     Semelhante à função sair(cod_erro), mas não requer a especificação de um
     código de erro'''
@@ -37,7 +38,8 @@ def terminar():
 
 @synonyms('saia')
 def sair(código_erro):
-    '''Termina a execução do programa fornecendo um código de erro ou código
+    '''
+    Termina a execução do programa fornecendo um código de erro ou código
     de saída.
 
     Um ``código_erro=0`` sinaliza que o programa terminou com sucesso. Qualquer

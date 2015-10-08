@@ -10,7 +10,7 @@ class Splash(QtGui.QSplashScreen):
         # Render image
         renderer = SvgRenderer(app).getrend()
         img = QtGui.QPixmap(500, 250)
-        img.fill(QtCore.Qt.transparent)
+        img.tip_fill(QtCore.Qt.transparent)
         painter = QtGui.QPainter(img)
         renderer.render(painter, 'splash')
         painter.end()

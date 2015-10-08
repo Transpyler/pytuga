@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tugalib.tuga_std &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="../../index.html" />
+    <link rel="up" title="Código do módulo" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fonte de tugalib.tuga_std</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Outras funções</span>
+<span class="sd">==============</span>
+
+<span class="sd">Outras funções que não se encaixam em nenhuma categoria específica.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">time</span> <span class="kn">as</span> <span class="nn">_time</span>
+<span class="kn">from</span> <span class="nn">tugalib.util</span> <span class="kn">import</span> <span class="n">synonyms</span>
+
+
+<span class="c">#</span>
+<span class="c"># Controle de tempo e de saída do programa</span>
+<span class="c">#</span>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;durma&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="dormir"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_std.dormir">[documentos]</a><span class="k">def</span> <span class="nf">dormir</span><span class="p">(</span><span class="n">intervalo</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Permanece sem fazer nada o intervalo de tempo fornecido (em segundos)&#39;&#39;&#39;</span>
+
+    <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">intervalo</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;pausa&#39;</span><span class="p">,</span> <span class="s">&#39;pause&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="pausar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_std.pausar">[documentos]</a><span class="k">def</span> <span class="nf">pausar</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Interrompe a execução até o usuário apertar a tecla &lt;enter&gt;&#39;&#39;&#39;</span>
+
+    <span class="nb">input</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;termine&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="terminar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_std.terminar">[documentos]</a><span class="k">def</span> <span class="nf">terminar</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Termina a execução do programa.</span>
+
+<span class="sd">    Semelhante à função sair(cod_erro), mas não requer a especificação de um</span>
+<span class="sd">    código de erro&#39;&#39;&#39;</span>
+
+    <span class="n">sair</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;saia&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="sair"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_std.sair">[documentos]</a><span class="k">def</span> <span class="nf">sair</span><span class="p">(</span><span class="n">código_erro</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Termina a execução do programa fornecendo um código de erro ou código</span>
+<span class="sd">    de saída.</span>
+
+<span class="sd">    Um ``código_erro=0`` sinaliza que o programa terminou com sucesso. Qualquer</span>
+<span class="sd">    outro número ou um texto representa falha&#39;&#39;&#39;</span>
+
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">código_erro</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># TODO: fazer funções com strings de documentação</span>
+<span class="c">#</span></div>
+<span class="n">binário</span> <span class="o">=</span> <span class="nb">bin</span>
+<span class="n">booleano</span> <span class="o">=</span> <span class="nb">bool</span>
+<span class="c"># bytes = bytes</span>
+<span class="n">caractere</span> <span class="o">=</span> <span class="nb">chr</span>
+<span class="n">dicionário</span> <span class="o">=</span> <span class="nb">dict</span>
+<span class="n">enumerar</span> <span class="o">=</span> <span class="nb">enumerate</span>
+<span class="n">real</span> <span class="o">=</span> <span class="nb">float</span>
+<span class="n">formatar</span> <span class="o">=</span> <span class="n">format</span>
+<span class="n">ajuda</span> <span class="o">=</span> <span class="n">help</span>
+<span class="n">hexadecimal</span> <span class="o">=</span> <span class="nb">hex</span>
+<span class="n">inteiro</span> <span class="o">=</span> <span class="nb">int</span>
+<span class="n">tamanho</span> <span class="o">=</span> <span class="nb">len</span>
+<span class="n">lista</span> <span class="o">=</span> <span class="nb">list</span>
+<span class="n">octal</span> <span class="o">=</span> <span class="nb">oct</span>
+<span class="c">#ord = ord</span>
+<span class="n">invertido</span> <span class="o">=</span> <span class="nb">reversed</span>
+<span class="n">conjunto</span> <span class="o">=</span> <span class="nb">set</span>
+<span class="n">ordenado</span> <span class="o">=</span> <span class="nb">sorted</span>
+<span class="n">texto</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">tupla</span> <span class="o">=</span> <span class="nb">tuple</span>
+<span class="n">tipo</span> <span class="o">=</span> <span class="nb">type</span>
+<span class="n">verdadeiro</span> <span class="o">=</span> <span class="n">Verdadeiro</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">falso</span> <span class="o">=</span> <span class="n">Falso</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

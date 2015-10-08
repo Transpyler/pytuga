@@ -1,0 +1,718 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Biblioteca de funções &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="index.html" />
+    <link rel="next" title="Migrando para Python" href="python.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-tugalib.tuga_io">
+<span id="biblioteca-de-funcoes"></span><h1>Biblioteca de funções<a class="headerlink" href="#module-tugalib.tuga_io" title="Link permanente para este título">¶</a></h1>
+<div class="section" id="funcoes-de-entrada-e-saida">
+<h2>Funções de entrada e saída<a class="headerlink" href="#funcoes-de-entrada-e-saida" title="Link permanente para este título">¶</a></h2>
+<p>Funções que realizam a interação com o usuário, seja lendo valores digitados
+ou arquivos, seja mostrando valores na tela.</p>
+<dl class="function">
+<dt id="tugalib.tuga_io.ler_arquivo">
+<code class="descname">ler_arquivo</code><span class="sig-paren">(</span><em>arquivo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_io.html#ler_arquivo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_io.ler_arquivo" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Lê conteúdo de um arquivo texto e retorna uma string de texto.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>leia_arquivo</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dados</span> <span class="o">=</span> <span class="n">ler_arquivo</span><span class="p">(</span><span class="s">&quot;foo.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_io.ler_número">
+<code class="descname">ler_número</code><span class="sig-paren">(</span><em>mensagem</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_io.html#ler_número"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_io.ler_número" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Pede ao usuário uma entrada numérica.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>leia_número</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ler_número</span><span class="p">(</span><span class="s">&#39;Um número: &#39;</span><span class="p">)</span>  <span class="c"># usuário digita um 2...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">+</span> <span class="mi">40</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_io.ler_texto">
+<code class="descname">ler_texto</code><span class="sig-paren">(</span><em>mensagem</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_io.html#ler_texto"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_io.ler_texto" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Pede ao usuário uma entrada de texto.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>leia_texto</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nome</span> <span class="o">=</span> <span class="n">ler_texto</span><span class="p">(</span><span class="s">&#39;Seu nome: &#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mostrar</span><span class="p">(</span><span class="s">&quot;olá, &quot;</span> <span class="o">+</span> <span class="n">nome</span><span class="p">)</span>  <span class="c"># usuário digita &quot;maria&quot;</span>
+<span class="go">olá, maria</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_io.mostrar">
+<code class="descname">mostrar</code><span class="sig-paren">(</span><em>objeto</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_io.html#mostrar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_io.mostrar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Mostra o objeto ou texto fornecido na tela.</p>
+<p>Se for chamada com vários argumentos, imprime os mesmos em sequência,
+separando com um espaço.</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>mostre</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mostrar</span><span class="p">(</span><span class="s">&quot;Olá, mundo!&quot;</span><span class="p">)</span>
+<span class="go">Olá, mundo!</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_io.salvar_arquivo">
+<code class="descname">salvar_arquivo</code><span class="sig-paren">(</span><em>arquivo</em>, <em>texto</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_io.html#salvar_arquivo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_io.salvar_arquivo" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Salva o conteúdo de texto no arquivo indicado, apagando qualquer
+conteúdo anterior.</p>
+<p>CUIDADO! Caso o arquivo dado exista, esta função sobrescreverá seu conteúdo
+sem perguntar nada!</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>salve_arquivo</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">salvar_arquivo</span><span class="p">(</span><span class="s">&quot;foo.txt&quot;</span><span class="p">,</span> <span class="n">dados</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<span class="target" id="module-tugalib.tuga_std"></span><div class="section" id="outras-funcoes">
+<h2>Outras funções<a class="headerlink" href="#outras-funcoes" title="Link permanente para este título">¶</a></h2>
+<p>Outras funções que não se encaixam em nenhuma categoria específica.</p>
+<dl class="function">
+<dt id="tugalib.tuga_std.dormir">
+<code class="descname">dormir</code><span class="sig-paren">(</span><em>intervalo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_std.html#dormir"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_std.dormir" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Permanece sem fazer nada o intervalo de tempo fornecido (em segundos)</p>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>durma</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_std.pausar">
+<code class="descname">pausar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_std.html#pausar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_std.pausar" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Interrompe a execução até o usuário apertar a tecla &lt;enter&gt;</p>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>pausa</strong> ou <strong>pause</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_std.sair">
+<code class="descname">sair</code><span class="sig-paren">(</span><em>código_erro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_std.html#sair"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_std.sair" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Termina a execução do programa fornecendo um código de erro ou código
+de saída.</p>
+<p>Um <code class="docutils literal"><span class="pre">código_erro=0</span></code> sinaliza que o programa terminou com sucesso. Qualquer
+outro número ou um texto representa falha</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>saia</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_std.terminar">
+<code class="descname">terminar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_std.html#terminar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_std.terminar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Termina a execução do programa.</p>
+<p>Semelhante à função sair(cod_erro), mas não requer a especificação de um
+código de erro</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>termine</strong></p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-tugalib.tuga_draw"></span><div class="section" id="desenho">
+<h2>Desenho<a class="headerlink" href="#desenho" title="Link permanente para este título">¶</a></h2>
+<p>Funções de desenho que utilizam a biblioteca turtle.</p>
+<dl class="function">
+<dt id="tugalib.tuga_draw.começo">
+<code class="descname">começo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#começo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.começo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Move cursor para a origem do sistema de coordenadas.</p>
+<p>Se a caneta estiver abaixada, desenha uma linha até o ponto especificado</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.descer_caneta">
+<code class="descname">descer_caneta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#descer_caneta"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.descer_caneta" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Volta a desenhar na tela na medida em que o cursor se movimenta.</p>
+<blockquote>
+<div>Pense que se trata de um robô e que a caneta responsável pelo desenho está
+abaixada sobre o papel.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>desca_caneta</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.direita">
+<code class="descname">direita</code><span class="sig-paren">(</span><em>ângulo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#direita"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.direita" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Gira para a direita pelo ângulo especificado (em graus)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.esquerda">
+<code class="descname">esquerda</code><span class="sig-paren">(</span><em>ângulo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#esquerda"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.esquerda" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Gira para a esquerda pelo ângulo especificado (em graus)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.frente">
+<code class="descname">frente</code><span class="sig-paren">(</span><em>passo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#frente"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.frente" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Anda para frente pelo passo especificado em pixels</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.ir_para">
+<code class="descname">ir_para</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#ir_para"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.ir_para" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Move cursor para a posição absoluta especificada em pixels.</p>
+<p>Se a caneta estiver abaixada, desenha uma linha até o ponto especificado</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>vá_para</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.mudar_orientação">
+<code class="descname">mudar_orientação</code><span class="sig-paren">(</span><em>ângulo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#mudar_orientação"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.mudar_orientação" title="Link permanente para esta definição">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Define a orientação do cursor. Um ângulo=0 aponta o cursor na</dt>
+<dd>direção do eixo x. A rotação é definida no sentido anti-horário.</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>mude_orientação</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.mudar_x">
+<code class="descname">mudar_x</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#mudar_x"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.mudar_x" title="Link permanente para esta definição">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Define a primeira coordenada da posição para o valor x deixando a outra</dt>
+<dd>inalterada.</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>mude_x</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.mudar_y">
+<code class="descname">mudar_y</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#mudar_y"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.mudar_y" title="Link permanente para esta definição">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Define a segunda coordenada da posição para o valor y deixando a outra</dt>
+<dd>inalterada.</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>mude_y</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.subir_caneta">
+<code class="descname">subir_caneta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#subir_caneta"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.subir_caneta" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Para de desenhar na tela na medida em que o cursor se movimenta.</p>
+<blockquote>
+<div>Pense que se trata de um robô e que a caneta responsável pelo desenho está
+levantada do papel.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>suba_caneta</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_draw.trás">
+<code class="descname">trás</code><span class="sig-paren">(</span><em>passo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_draw.html#trás"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_draw.trás" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Anda para trás pelo passo especificado em pixels</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-tugalib.tuga_math"></span><div class="section" id="funcoes-matematicas">
+<h2>Funções matemáticas<a class="headerlink" href="#funcoes-matematicas" title="Link permanente para este título">¶</a></h2>
+<p>O pytuga fornece algumas funções matemáticas comuns para a conveniência do
+usuário.</p>
+<dl class="function">
+<dt id="tugalib.tuga_math.aleatório">
+<code class="descname">aleatório</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#aleatório"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.aleatório" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna um número aleatório no intervalo [0, 1]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.algum">
+<code class="descname">algum</code><span class="sig-paren">(</span><em>sequência</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#algum"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.algum" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna Verdadeiro se algum dos objetos da sequência dada for
+verdadeiro e Falso caso contrário.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">algum</span><span class="p">([</span><span class="n">Verdadeiro</span><span class="p">,</span> <span class="n">Verdadeiro</span><span class="p">])</span>  
+<span class="go">Verdadeiro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algum</span><span class="p">([</span><span class="n">Verdadeiro</span><span class="p">,</span> <span class="n">Falso</span><span class="p">])</span>       
+<span class="go">Falso</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.arredondar">
+<code class="descname">arredondar</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#arredondar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.arredondar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Arredonda o número x para o inteiro mais pŕoximo.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>arredonde</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arredondar</span><span class="p">(</span><span class="mf">1.6</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arredondar</span><span class="p">(</span><span class="mf">1.4</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.cosseno">
+<code class="descname">cosseno</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#cosseno"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.cosseno" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o cosseno de x, onde x é medido em radianos.</p>
+<blockquote>
+<div>Pode ser chamada na forma curta (cos) ou longa (cosseno).</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>cos</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cosseno</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.exponencial">
+<code class="descname">exponencial</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#exponencial"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.exponencial" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Retorna a exponencial de x.</p>
+<p>Pode ser chamada na forma curta (exp) ou longa (exponencial).</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>exp</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exponencial</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">2.718281828459045</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.inteiro_aleatório">
+<code class="descname">inteiro_aleatório</code><span class="sig-paren">(</span><em>início</em>, <em>fim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#inteiro_aleatório"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.inteiro_aleatório" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna um inteiro aleatório dentro do intervalo [início, fim]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.lançar_dado">
+<code class="descname">lançar_dado</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#lançar_dado"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.lançar_dado" title="Link permanente para esta definição">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Retorna um número aleatório entre 1 e 6, como num lance de dados</dt>
+<dd>comuns</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>lance_dados</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.log10">
+<code class="descname">log10</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#log10"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.log10" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o logarítimo de x na base 10.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">log10</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.logarítimo">
+<code class="descname">logarítimo</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#logarítimo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.logarítimo" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Retorna o logarítimo natural de x.</p>
+<p>Pode ser chamada na forma curta (log) ou longa (logarítimo).</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>log</strong> ou <strong>ln</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logarítimo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.máximo">
+<code class="descname">máximo</code><span class="sig-paren">(</span><em>lista</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#máximo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.máximo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o maior valor da lista dada.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">máximo</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.mínimo">
+<code class="descname">mínimo</code><span class="sig-paren">(</span><em>lista</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#mínimo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.mínimo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o menor valor da lista dada.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mínimo</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.módulo">
+<code class="descname">módulo</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#módulo"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.módulo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o módulo de x.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">módulo</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">módulo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.produto">
+<code class="descname">produto</code><span class="sig-paren">(</span><em>números</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#produto"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.produto" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o resultado do produto dos números dados.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">produto</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">120</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.raiz">
+<code class="descname">raiz</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#raiz"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.raiz" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna a raiz quadrada de x.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">raiz</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="go">ssdsfds</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.seno">
+<code class="descname">seno</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#seno"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.seno" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Retorna o seno de x, onde x é medido em radianos.</p>
+<p>Pode ser chamada na forma curta (sen) ou longa (seno).</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>sen</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seno</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.sinal">
+<code class="descname">sinal</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#sinal"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.sinal" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna 1, -1 ou 0, dependendo do sinal de x.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sinal</span><span class="p">(</span><span class="o">-</span><span class="mf">32.0</span><span class="p">)</span>
+<span class="go">-1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.soma">
+<code class="descname">soma</code><span class="sig-paren">(</span><em>números</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#soma"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.soma" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna o resultado da soma da sequência de números dada.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">soma</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.tangente">
+<code class="descname">tangente</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#tangente"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.tangente" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Retorna a tangente de x, onde x é medido em radianos.</p>
+<p>Pode ser chamada na forma curta (tan) ou longa (tangente).</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>tan</strong> ou <strong>tg</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tangente</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.todos">
+<code class="descname">todos</code><span class="sig-paren">(</span><em>sequência</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#todos"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.todos" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Retorna Verdadeiro se todos os objetos da sequência dada forem
+verdadeiros e Falso caso contrário.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">todos</span><span class="p">([</span><span class="n">Verdadeiro</span><span class="p">,</span> <span class="n">Verdadeiro</span><span class="p">])</span>  
+<span class="go">Verdadeiro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">todos</span><span class="p">([</span><span class="n">Verdadeiro</span><span class="p">,</span> <span class="n">Falso</span><span class="p">])</span>       
+<span class="go">Falso</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_math.truncar">
+<code class="descname">truncar</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_math.html#truncar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_math.truncar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Remove a parte decimal do número.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>trunque</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">truncar</span><span class="p">(</span><span class="mf">1.6</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">truncar</span><span class="p">(</span><span class="mf">1.4</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<span class="target" id="module-tugalib.tuga_strings"></span><div class="section" id="textos-strings">
+<h2>Textos (strings)<a class="headerlink" href="#textos-strings" title="Link permanente para este título">¶</a></h2>
+<p>Funções para processamento de texto.</p>
+<dl class="function">
+<dt id="tugalib.tuga_strings.concatenar">
+<code class="descname">concatenar</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#concatenar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.concatenar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Converte os argumentos para texto e concatena o resultado</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>concatene</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">concatenar</span><span class="p">(</span><span class="s">&#39;x = &#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">&#39;x = 2&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.concatenar_lista">
+<code class="descname">concatenar_lista</code><span class="sig-paren">(</span><em>lista</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#concatenar_lista"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.concatenar_lista" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Converte os argumentos da lista em texto e concatena o resultado.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>concatene_lista</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">concatenar_lista</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">&#39;abc123&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.formatar">
+<code class="descname">formatar</code><span class="sig-paren">(</span><em>texto</em>, <em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#formatar"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.formatar" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div><p>Formata o texto inserindo os parâmetros dados nas posições coringa.</p>
+<p>Existem duas sintaxes diferentes para a formatação de texto. A primeira,
+baseada em C, utiliza o símbolo %s, %f, %d, etc para delimitar os pontos
+de inserção por posição.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">formatar</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%i</span><span class="s"> = </span><span class="si">%.2f</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="go">&#39;42 = 42.00&#39;</span>
+</pre></div>
+</div>
+<p>A segunda usa esta sintaxe (explicar!)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">formatar</span><span class="p">(</span><span class="s">&#39;{0} = {1}&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="go">&#39;42 = 42&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>formate</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.maiúsculas">
+<code class="descname">maiúsculas</code><span class="sig-paren">(</span><em>texto</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#maiúsculas"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.maiúsculas" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Converte um texto para letras maiúsculas</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">maiúsculas</span><span class="p">(</span><span class="s">&#39;olá, mundo!&#39;</span><span class="p">)</span>
+<span class="go">&#39;OLÁ, MUNDO!&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.minúsculas">
+<code class="descname">minúsculas</code><span class="sig-paren">(</span><em>texto</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#minúsculas"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.minúsculas" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Converte um texto para letras minúsculas</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">minúsculas</span><span class="p">(</span><span class="s">&#39;OLÁ, MUNDO!&#39;</span><span class="p">)</span>
+<span class="go">&#39;olá, mundo!&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.substituir">
+<code class="descname">substituir</code><span class="sig-paren">(</span><em>texto</em>, <em>valor</em>, <em>substituição</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#substituir"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.substituir" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Substitui no <code class="docutils literal"><span class="pre">texto</span></code> todas as ocorrências de <code class="docutils literal"><span class="pre">valor</span></code> pela
+<code class="docutils literal"><span class="pre">substituição</span></code> dada.</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>substitua</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">substituir</span><span class="p">(</span><span class="s">&#39;Olá, pessoal!&#39;</span><span class="p">,</span> <span class="s">&#39;pessoal&#39;</span><span class="p">,</span> <span class="s">&#39;mundo&#39;</span><span class="p">)</span>
+<span class="go">&#39;Olá, mundo!&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.unir_lista">
+<code class="descname">unir_lista</code><span class="sig-paren">(</span><em>separador</em>, <em>lista</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#unir_lista"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.unir_lista" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Semelhante à concatenar_lista(), mas une os valores pelo texto separador
+especificado</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>una_lista</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">unir_lista</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">&#39;1, 2, 3&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tugalib.tuga_strings.unir_valores">
+<code class="descname">unir_valores</code><span class="sig-paren">(</span><em>separador</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tugalib/tuga_strings.html#unir_valores"><span class="viewcode-link">[código fonte]</span></a><a class="headerlink" href="#tugalib.tuga_strings.unir_valores" title="Link permanente para esta definição">¶</a></dt>
+<dd><blockquote>
+<div>Semelhante à concatenar(), mas une os valores pelo texto separador
+especificado</div></blockquote>
+<p class="rubric">Notes</p>
+<p>Também pode ser chamada como <strong>una_valores</strong></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">unir_valores</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">&#39;1, 2, 3&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Tabela de Conteúdos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Biblioteca de funções</a><ul>
+<li><a class="reference internal" href="#funcoes-de-entrada-e-saida">Funções de entrada e saída</a></li>
+<li><a class="reference internal" href="#outras-funcoes">Outras funções</a></li>
+<li><a class="reference internal" href="#desenho">Desenho</a></li>
+<li><a class="reference internal" href="#funcoes-matematicas">Funções matemáticas</a></li>
+<li><a class="reference internal" href="#textos-strings">Textos (strings)</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial.html" title="capítulo anterior">Tutorial</a></li>
+      <li>Next: <a href="python.html" title="próximo capítulo">Migrando para Python</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>Esta Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/referência.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/referência.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

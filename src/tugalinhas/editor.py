@@ -21,10 +21,6 @@ class PythonEditor(QsciScintilla):
         self.setup_margin1()
         self.setup_cursor()
         self.setup_lexer()
-        self.setup_custom()
-
-    def setup_custom(self):
-        pass
 
     def setup_font(self):
         # Set the default font
@@ -85,7 +81,7 @@ class PythonEditor(QsciScintilla):
 
     def show_line_numbers(self):
         fontmetrics = QtGui.QFontMetrics(self._font)
-        self.setMarginWidth(0, fontmetrics.width("00") + 6)
+        self.setMarginWidth(0, fontmetrics.tip_width("00") + 6)
         self.setMarginLineNumbers(0, True)
 
     def wrap(self):

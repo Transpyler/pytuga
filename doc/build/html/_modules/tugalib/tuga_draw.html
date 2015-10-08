@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tugalib.tuga_draw &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="../../index.html" />
+    <link rel="up" title="Código do módulo" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fonte de tugalib.tuga_draw</h1><div class="highlight"><pre>
+&#39;&#39;&#39;
+
+Desenho
+=======
+
+Funções de desenho que utilizam a biblioteca turtle.
+&#39;&#39;&#39;
+
+try:
+    import turtle as _TURTLE_MODULE
+except ImportError:
+    _TURTLE_MODULE = None
+from tugalib.util import synonyms
+
+
+def _turtle():
+    &#39;&#39;&#39;Return turtle module or an error&#39;&#39;&#39;
+
+    if _TURTLE_MODULE is None:
+        raise RuntimeError(&#39;o módulo turtle ou o módulo tk não estão &#39;
+                           &#39;disponíveis, cheque sua instalação&#39;)
+    else:
+        return _TURTLE_MODULE
+
+
+<div class="viewcode-block" id="frente"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.frente">[documentos]</a>def frente(passo):
+    &#39;&#39;&#39;Anda para frente pelo passo especificado em pixels&#39;&#39;&#39;
+
+    _turtle().fd(passo)
+
+</div>
+<div class="viewcode-block" id="trás"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.trás">[documentos]</a>def trás(passo):
+    &#39;&#39;&#39;Anda para trás pelo passo especificado em pixels&#39;&#39;&#39;
+
+    _turtle().bk(passo)
+
+</div>
+<div class="viewcode-block" id="direita"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.direita">[documentos]</a>def direita(ângulo):
+    &#39;&#39;&#39;Gira para a direita pelo ângulo especificado (em graus)&#39;&#39;&#39;
+
+    _turtle().right(ângulo)
+
+</div>
+<div class="viewcode-block" id="esquerda"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.esquerda">[documentos]</a>def esquerda(ângulo):
+    &#39;&#39;&#39;Gira para a esquerda pelo ângulo especificado (em graus)&#39;&#39;&#39;
+
+    _turtle().left(ângulo)
+
+</div>
+@synonyms(&#39;vá_para&#39;)
+<div class="viewcode-block" id="ir_para"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.ir_para">[documentos]</a>def ir_para(x, y):
+    &#39;&#39;&#39;
+    Move cursor para a posição absoluta especificada em pixels.
+
+    Se a caneta estiver abaixada, desenha uma linha até o ponto especificado&#39;&#39;&#39;
+
+    _turtle().goto(x, y)
+
+</div>
+<div class="viewcode-block" id="começo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.começo">[documentos]</a>def começo():
+    &#39;&#39;&#39;Move cursor para a origem do sistema de coordenadas.
+
+    Se a caneta estiver abaixada, desenha uma linha até o ponto especificado&#39;&#39;&#39;
+
+    _turtle().home()
+
+</div>
+@synonyms(&#39;mude_x&#39;)
+<div class="viewcode-block" id="mudar_x"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.mudar_x">[documentos]</a>def mudar_x(x):
+    &#39;&#39;&#39;Define a primeira coordenada da posição para o valor x deixando a outra
+    inalterada.&#39;&#39;&#39;
+
+    _turtle().setx(x)
+
+</div>
+@synonyms(&#39;mude_y&#39;)
+<div class="viewcode-block" id="mudar_y"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.mudar_y">[documentos]</a>def mudar_y(y):
+    &#39;&#39;&#39;Define a segunda coordenada da posição para o valor y deixando a outra
+    inalterada.&#39;&#39;&#39;
+
+    _turtle().sety(y)
+
+</div>
+@synonyms(&#39;mude_orientação&#39;)
+<div class="viewcode-block" id="mudar_orientação"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.mudar_orientação">[documentos]</a>def mudar_orientação(ângulo):
+    &#39;&#39;&#39;Define a orientação do cursor. Um ângulo=0 aponta o cursor na
+    direção do eixo x. A rotação é definida no sentido anti-horário.&#39;&#39;&#39;
+
+    _turtle().setheading(ângulo)
+
+</div>
+@synonyms(&#39;suba_caneta&#39;)
+<div class="viewcode-block" id="subir_caneta"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.subir_caneta">[documentos]</a>def subir_caneta():
+    &#39;&#39;&#39;Para de desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    levantada do papel.&#39;&#39;&#39;
+
+    _turtle().pu()
+
+</div>
+@synonyms(&#39;desca_caneta&#39;)
+<div class="viewcode-block" id="descer_caneta"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_draw.descer_caneta">[documentos]</a>def descer_caneta():
+    &#39;&#39;&#39;Volta a desenhar na tela na medida em que o cursor se movimenta.
+
+    Pense que se trata de um robô e que a caneta responsável pelo desenho está
+    abaixada sobre o papel.&#39;&#39;&#39;
+
+    _turtle().pd()</div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

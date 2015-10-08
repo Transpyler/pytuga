@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tugalib.tuga_io &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="../../index.html" />
+    <link rel="up" title="Código do módulo" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fonte de tugalib.tuga_io</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Funções de entrada e saída</span>
+<span class="sd">==========================</span>
+
+<span class="sd">Funções que realizam a interação com o usuário, seja lendo valores digitados</span>
+<span class="sd">ou arquivos, seja mostrando valores na tela.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">tugalib.util</span> <span class="kn">import</span> <span class="n">synonyms</span>
+
+
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;mostre&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="mostrar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_io.mostrar">[documentos]</a><span class="k">def</span> <span class="nf">mostrar</span><span class="p">(</span><span class="n">objeto</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mostra o objeto ou texto fornecido na tela.</span>
+
+<span class="sd">    Se for chamada com vários argumentos, imprime os mesmos em sequência,</span>
+<span class="sd">    separando com um espaço.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; mostrar(&quot;Olá, mundo!&quot;)</span>
+<span class="sd">    Olá, mundo!</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">objeto</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;leia_texto&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ler_texto"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_io.ler_texto">[documentos]</a><span class="k">def</span> <span class="nf">ler_texto</span><span class="p">(</span><span class="n">mensagem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Pede ao usuário uma entrada de texto.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; nome = ler_texto(&#39;Seu nome: &#39;)</span>
+<span class="sd">    &gt;&gt;&gt; mostrar(&quot;olá, &quot; + nome)  # usuário digita &quot;maria&quot;</span>
+<span class="sd">    olá, maria</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mensagem</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">mensagem</span> <span class="o">=</span> <span class="n">mensagem</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mensagem</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">mensagem</span>
+    <span class="k">return</span> <span class="nb">input</span><span class="p">(</span><span class="n">mensagem</span><span class="p">)</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;leia_número&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ler_número"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_io.ler_número">[documentos]</a><span class="k">def</span> <span class="nf">ler_número</span><span class="p">(</span><span class="n">mensagem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Pede ao usuário uma entrada numérica.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; x = ler_número(&#39;Um número: &#39;)  # usuário digita um 2...</span>
+<span class="sd">    &gt;&gt;&gt; x + 40</span>
+<span class="sd">    42</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">texto</span> <span class="o">=</span> <span class="n">ler_texto</span><span class="p">(</span><span class="n">mensagem</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">texto</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">==</span> <span class="n">num</span> <span class="k">else</span> <span class="n">num</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;leia_arquivo&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ler_arquivo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_io.ler_arquivo">[documentos]</a><span class="k">def</span> <span class="nf">ler_arquivo</span><span class="p">(</span><span class="n">arquivo</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Lê conteúdo de um arquivo texto e retorna uma string de texto.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; dados = ler_arquivo(&quot;foo.txt&quot;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">arquivo</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+</div>
+<span class="nd">@synonyms</span><span class="p">(</span><span class="s">&#39;salve_arquivo&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="salvar_arquivo"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_io.salvar_arquivo">[documentos]</a><span class="k">def</span> <span class="nf">salvar_arquivo</span><span class="p">(</span><span class="n">arquivo</span><span class="p">,</span> <span class="n">texto</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Salva o conteúdo de texto no arquivo indicado, apagando qualquer</span>
+<span class="sd">    conteúdo anterior.</span>
+
+<span class="sd">    CUIDADO! Caso o arquivo dado exista, esta função sobrescreverá seu conteúdo</span>
+<span class="sd">    sem perguntar nada!</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; salvar_arquivo(&quot;foo.txt&quot;, dados)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">arquivo</span><span class="p">)</span> <span class="k">as</span> <span class="n">F</span><span class="p">:</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">texto</span><span class="p">))</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="c"># doctest.testmod()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

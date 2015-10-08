@@ -9,13 +9,21 @@ Funções úteis que não devem ser exportadas para o API do tugalib.
 def synonyms(*args):
     '''Decorador que marca sinônimos de uma função'''
 
+    fmt_args = ['**%s**' % x for x in args]
+
     def decorator(func):
+        if len(args) == 1:
+            data = fmt_args[0]
+        else:
+            data = ', '.join(fmt_args[:-1])
+            data += ' ou ' + fmt_args[-1]
+
         func.__synonyms__ = args
         func.__doc__ += (
             '\n\n'
-            'Sinônimos\n'
-            '---------\n\n'
-            '%s') % (', '.join(args))
+            'Notes\n'
+            '-----\n\n'
+            'Também pode ser chamada como ' + data)
         return func
     return decorator
 

@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Instalação &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="index.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Pytuguês" href="intro.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="instalacao">
+<h1>Instalação<a class="headerlink" href="#instalacao" title="Link permanente para este título">¶</a></h1>
+<p>Pytuguês se baseia e é implementado em Python 3. Para a instalação completa do
+Pytuguês, é necessário instalar algumas bibliotecas adicionais do Python. As
+instruções de instalação diferem ligeiramente em cada plataforma.</p>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Link permanente para este título">¶</a></h2>
+<p>Você precisa do Python3 e do PyQt4. Existe uma chance razoável que ambos
+estejam instalados. Se sua distribuição for baseada no Debian/Ubuntu,
+o comando abaixo garante que todas as bibliotecas necessárias serão
+instaladas</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo apt-get install python3-all python3-pyqt4 python3-pyqt4.qsci python3-pip
+</pre></div>
+</div>
+<p>Se quiser apenas fazer a instalação local, o comando fica:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ pip3 install pytuga --user
+</pre></div>
+</div>
+<p>Uma vez instalado, você pode atualizar a versão do Pytuguês usando:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ pip3 install pytuga -U --user
+</pre></div>
+</div>
+<p>O script de instalação salva os arquivos executáveis na pasta <code class="docutils literal"><span class="pre">~/.local/bin.</span></code>
+Normalmente esta pasta não está no <code class="docutils literal"><span class="pre">PATH</span></code>, mas a pasta <code class="docutils literal"><span class="pre">~/bin/</span></code> está. Se esta
+pasta existir, use o comando</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cp ~/.local/bin/* ~/bin/
+</pre></div>
+</div>
+<p>Caso ela não exista, faça a ligação entre as duas</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ln -s ~/.local/bin ~/bin
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Link permanente para este título">¶</a></h2>
+<p>É necessário baixar e instalar manualmente os pacote com o Python3.4 e o PyQt4.
+Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:</p>
+<dl class="docutils">
+<dt>32 bits</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi">Python</a></li>
+<li><a class="reference external" href="http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x32.exe">PyQt4</a></li>
+</ul>
+</dd>
+</dl>
+<dl class="docutils">
+<dt>64 bits</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi">Python</a></li>
+<li><a class="reference external" href="http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe">PyQt4</a></li>
+</ul>
+</dd>
+</dl>
+<p>É importante marcar a opção &#8220;Add python.exe to your path&#8221; durante a instalação.
+Depois disto abra o terminal do Windows (Win+R e digite &#8220;cmd&#8221;) e execute os
+comandos:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python -m pip install pytuga -U
+</pre></div>
+</div>
+<p>Se o código anterior não funcionar, provavelmente significa que o Python não
+está no caminho padrão de procura do Windows. Se este for o caso, é necessário
+mudar para o diretório onde o Python foi instalado. Digite:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd c:\Python34\
+</pre></div>
+</div>
+<p>E agora repita os comandos anteriores. Se você decidiu instalar o Python em
+outro caminho, modifique o comando acima para indicar o caminho correto.</p>
+<p>Para executar o Tugalinhas, aperte Win+R e digite &#8220;tugalinhas&#8221; no prompt. Caso
+isto não funcione (especialmente nas versões mais novas do Windows), procure
+o executável do tugalinhas na pasta <code class="docutils literal"><span class="pre">c:\Python34\Scripts\</span></code></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Tabela de Conteúdos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Instalação</a><ul>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="intro.html" title="capítulo anterior">Pytuguês</a></li>
+      <li>Next: <a href="tutorial.html" title="próximo capítulo">Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>Esta Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/install.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/install.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

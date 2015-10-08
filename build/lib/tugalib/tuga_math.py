@@ -8,6 +8,7 @@ usuário.
 
 import math as _math
 import random as _random
+from tugalib.util import synonyms
 pi = _math.pi
 neperiano = _math.exp(1)
 
@@ -16,13 +17,15 @@ neperiano = _math.exp(1)
 # Funções elementares e usadas em cálculo científico
 #
 def raiz(x):
-    '''Retorna a raiz quadrada de x.
+    '''
+    Retorna a raiz quadrada de x.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> raiz(4)
     2.0
+    ssdsfds
 
 
     Migração
@@ -34,111 +37,112 @@ def raiz(x):
     return _math.sqrt(x)
 
 
+@synonyms('sen')
 def seno(x):
-    '''Retorna o seno de x, onde x é medido em radianos.
+    '''
+    Retorna o seno de x, onde x é medido em radianos.
 
     Pode ser chamada na forma curta (sen) ou longa (seno).
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> seno(0)
     0.0
     '''
 
     return _math.sin(x)
-sen = seno
 
 
+@synonyms('cos')
 def cosseno(x):
     '''Retorna o cosseno de x, onde x é medido em radianos.
 
     Pode ser chamada na forma curta (cos) ou longa (cosseno).
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> cosseno(0)
     1.0
     '''
 
     return _math.cos(x)
-cos = cosseno
 
 
+@synonyms('tan', 'tg')
 def tangente(x):
-    '''Retorna a tangente de x, onde x é medido em radianos.
+    '''
+    Retorna a tangente de x, onde x é medido em radianos.
 
     Pode ser chamada na forma curta (tan) ou longa (tangente).
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> tangente(0)
     0.0
     '''
 
     return _math.tan(x)
-tan = tangente
 
 
+@synonyms('exp')
 def exponencial(x):
-    '''Retorna a exponencial de x.
+    '''
+    Retorna a exponencial de x.
 
     Pode ser chamada na forma curta (exp) ou longa (exponencial).
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> exponencial(1)
-    2.718281828459045
-    >>> exp(1)
     2.718281828459045
     '''
 
     return _math.exp(x)
-exp = exponencial
 
 
+@synonyms('log', 'ln')
 def logarítimo(x):
-    '''Retorna o logarítimo natural de x.
+    '''
+    Retorna o logarítimo natural de x.
 
     Pode ser chamada na forma curta (log) ou longa (logarítimo).
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> logarítimo(1)
     0.0
-    >>> log(exp(1))
-    1.0
     '''
 
     return _math.log(x)
-log = logarítimo
 
 
 def log10(x):
-    '''Retorna o logarítimo de x na base 10.
+    '''
+    Retorna o logarítimo de x na base 10.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> log10(10)
     1.0
     '''
     return _math.log10(x)
 
+
 #
 # Controle de arredondamento e sinal dos números
 #
-
-
 def módulo(x):
-    '''Retorna o módulo de x.
+    '''
+    Retorna o módulo de x.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> módulo(-1)
     1
@@ -150,11 +154,12 @@ def módulo(x):
 
 
 def sinal(x):
-    '''Retorna 1, -1 ou 0, dependendo do sinal de x.
+    '''
+    Retorna 1, -1 ou 0, dependendo do sinal de x.
 
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> sinal(-32.0)
     -1
@@ -169,11 +174,13 @@ def sinal(x):
         raise ValueError('argumento não possui sinal definido')
 
 
+@synonyms('arredonde')
 def arredondar(x):
-    '''Arredonda o número x para o inteiro mais pŕoximo.
+    '''
+    Arredonda o número x para o inteiro mais pŕoximo.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> arredondar(1.6)
     2
@@ -182,14 +189,15 @@ def arredondar(x):
     '''
 
     return int(round(x))
-arredonde = arredondar
 
 
+@synonyms('trunque')
 def truncar(x):
-    '''Remove a parte decimal do número.
+    '''
+    Remove a parte decimal do número.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> truncar(1.6)
     1
@@ -198,17 +206,17 @@ def truncar(x):
     '''
 
     return int(x)
-trunque = truncar
 
 
 #
 # Funções em listas de números
 #
 def máximo(lista):
-    '''Retorna o maior valor da lista dada.
+    '''
+    Retorna o maior valor da lista dada.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> máximo([1, 5, 42, 0])
     42
@@ -218,10 +226,11 @@ def máximo(lista):
 
 
 def mínimo(lista):
-    '''Retorna o menor valor da lista dada.
+    '''
+    Retorna o menor valor da lista dada.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> mínimo([1, 5, 42, 0])
     0
@@ -231,10 +240,11 @@ def mínimo(lista):
 
 
 def soma(números):
-    '''Retorna o resultado da soma da sequência de números dada.
+    '''
+    Retorna o resultado da soma da sequência de números dada.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> soma([1, 2, 3, 4])
     10
@@ -243,10 +253,11 @@ def soma(números):
 
 
 def produto(números):
-    '''Retorna o resultado do produto dos números dados.
+    '''
+    Retorna o resultado do produto dos números dados.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> produto([1, 2, 3, 4, 5])
     120
@@ -256,6 +267,40 @@ def produto(números):
     for x in números:
         prod *= x
     return prod
+
+
+def todos(sequência):
+    '''
+    Retorna Verdadeiro se todos os objetos da sequência dada forem
+    verdadeiros e Falso caso contrário.
+
+    Examples
+    --------
+
+    >>> todos([Verdadeiro, Verdadeiro])  # doctest: +SKIP
+    Verdadeiro
+    >>> todos([Verdadeiro, Falso])       # doctest: +SKIP
+    Falso
+    '''
+
+    return all(sequência)
+
+
+def algum(sequência):
+    '''
+    Retorna Verdadeiro se algum dos objetos da sequência dada for
+    verdadeiro e Falso caso contrário.
+
+    Examples
+    --------
+
+    >>> algum([Verdadeiro, Verdadeiro])  # doctest: +SKIP
+    Verdadeiro
+    >>> algum([Verdadeiro, Falso])       # doctest: +SKIP
+    Falso
+    '''
+
+    return any(sequência)
 
 
 #
@@ -273,12 +318,12 @@ def inteiro_aleatório(início, fim):
     return _random.randint(início, fim)
 
 
-def lance_dado():
+@synonyms('lance_dados')
+def lançar_dado():
     '''Retorna um número aleatório entre 1 e 6, como num lance de dados
     comuns'''
 
     return _random.randint(1, 6)
-lançar_dado = lance_dado
 
 
 if __name__ == '__main__':

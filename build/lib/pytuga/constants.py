@@ -6,10 +6,10 @@ TOKEN_TRANSLATIONS = dict(
     # Loops
     enquanto='while',
     # para cada='for',
-    termine='break',
-    terminar='break',
+    quebre='break',
+    quebrar='break',
     # continue='continue',
-    continuar='break',
+    continuar='continue',
 
     # Condicionais
     se='if',

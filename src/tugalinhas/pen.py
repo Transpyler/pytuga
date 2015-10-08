@@ -32,16 +32,16 @@ TURTLE_FUNCTIONS = [
     'ir_para', 'mudar_orientação', 'mudar_x', 'mudar_y', 'começo',
 
     # Return state
-    'position', 'pos',
+    'position', 'tip_pos',
     'towards', 'distance',
     'xcor', 'ycor', '_heading',
     'posição', 'ângulo_para', 'distância_para',
     'coordenada_x', 'coordenada_y', 'orientação',
 
     # Drawing state
-    'pendown', 'pd', 'down',
+    'pendown', 'pd', 'tip_down',
     'penup', 'pu', 'up',
-    'pensize', 'width',
+    'pensize', 'tip_width',
     'pen', 'isdown',
     'abaixa', 'levanta', 'espessura', 'mudar_espessura', 'está_abaixada',
 
@@ -134,11 +134,11 @@ class PenState(object):
         self.setPos(QtCore.QPointF(0, 0))
         self.is_down = True
         self.angle = 0
-        self.color = (255, 255, 255)
+        self.tip_color = (255, 255, 255)
         self.fillcolor = (100, 220, 110)
         self.penwidth = 2
 
-    def pos(self):
+    def tip_pos(self):
         return self._pos
 
     def setPos(self, pos):
@@ -201,7 +201,7 @@ class Drawable(QtGui.QGraphicsItem):
     def expand(self, pos=None):
         '''Check if the scene needs to expand for the drawn items.
 
-        pass in pos=None to check all drawn items even if it is
+        pass in tip_pos=None to check all drawn items even if it is
             likely that the current position would not cause a
             need to expand the scene. (Used currently for the
             quick-draw circle which never actually moves the
@@ -256,7 +256,7 @@ class Drawable(QtGui.QGraphicsItem):
             self.item.setSharedRenderer(self.renderer)
             self.item.setElementId(imageid)
             irect = self.renderer.boundsOnElement(imageid)
-            w, h = irect.width(), irect.height()
+            w, h = irect.tip_width(), irect.height()
             ws, hs = w * self.scale, h * self.scale
             self.position = QtCore.QPointF(ws / 2, hs / 2)
         else:
@@ -702,8 +702,8 @@ class Pen(object):
 
     def _sync_items(self):
         '''Sometimes, after running code is interrupted (like by Ctrl-C)
-            the actual position (state.pos) and displayed position
-            (drawable.pos) will be out of sync.
+            the actual position (state.tip_pos) and displayed position
+            (drawable.tip_pos) will be out of sync.
 
             This method can be called to synchronize the state to the
             position and rotation of the display.
@@ -711,7 +711,7 @@ class Pen(object):
         '''
 
         if self.drawable is not None:
-            pos = self.drawable.pos()
+            pos = self.drawable.tip_pos()
             ang = self.drawable.angle
         else:
             pos = (0, 0)
@@ -825,9 +825,9 @@ class Pen(object):
                 pen,
                 'drawable') and hasattr(
                 pen.drawable,
-                'pos'):
+                'tip_pos'):
             # LOG.info(markers)
-            pos = pen.drawable.pos()
+            pos = pen.drawable.tip_pos()
             x, y = pos.x(), pos.y()
             ang = pen.drawable.angle
             items = pen.drawn_items
@@ -851,7 +851,7 @@ class Pen(object):
 
         # self._log(markers)
         pos, marker = markers.pop()
-        # self._log(pos, marker)
+        # self._log(tip_pos, marker)
         if hasattr(self, '_pen'):
             pen = self._pen
         else:
@@ -920,7 +920,7 @@ class Pen(object):
     def _gitem_new_line(self):
         '''Break off the current QGraphicsItem line and start
             a new line. Need to do this any time the objects
-            should be separate, like for fill color, or for
+            should be separate, like for tip_fill tip_color, or for
             removing separately in undo.
         '''
 
@@ -936,7 +936,7 @@ class Pen(object):
         dx = distance * cos(theta)
         dy = distance * sin(theta)
 
-        p1 = as_qpoint(item.pos())
+        p1 = as_qpoint(item.tip_pos())
         p2 = QtCore.QPointF(p1.x() + dx, p1.y() + dy)
         item.setPos(p2)
 
@@ -1115,14 +1115,14 @@ class Pen(object):
         item = self.drawable.scene().addSimpleText(text, self._font)
 
         itemrect = item.boundingRect()
-        textlength = itemrect.width()
+        textlength = itemrect.tip_width()
         textheight = itemrect.height()
 
         item.setZValue(self._zvalue)
         Pen._zvalue += 1
 
         item.setPen(self.drawable.pen)
-        item.setBrush(self.drawable.pen.color())
+        item.setBrush(self.drawable.pen.tip_color())
 
         x, y = self.drawable.x(), self.drawable.y()
         item.translate(x, y)
@@ -1170,7 +1170,7 @@ class Pen(object):
         if move:
             fm = QtGui.QFontMetrics(self._font)
             r = fm.boundingRect(strtxt)
-            fd = r.width()
+            fd = r.tip_width()
             self._forward(self.state, fd, False)
         self.queue_command(self._write, (strtxt, move, align, valign))
 
@@ -1258,7 +1258,7 @@ class Pen(object):
         '''reset()
 
         Move to home location and angle and restore state
-            to the initial values (pen, fill, etc).
+            to the initial values (pen, tip_fill, etc).
 
         if full is True, also removes any added user_pens and clears out
             any pending pen movements. Also resets the pen
@@ -1297,7 +1297,7 @@ class Pen(object):
             self.goto(0, 0)
             self.turnto(0)
             self.pendown()
-            self.width(2)
+            self.tip_width(2)
             self._set_color_to_default()
             self.nofill()
             self._set_fillcolor_to_default()
@@ -1340,32 +1340,32 @@ class Pen(object):
         c = QtGui.QColor(r, g, b, a)
         self.drawable.qpen.setColor(c)
 
-    def color(self, r=None, g=None, b=None, a=None):
-        '''color(red, green, blue) # 0-255 for each value
-        color() # return the current color
+    def tip_color(self, r=None, g=None, b=None, a=None):
+        '''tip_color(red, green, blue) # 0-255 for each value
+        tip_color() # return the current tip_color
 
-        Set the line color for drawing. The color should be given as
+        Set the line tip_color for drawing. The tip_color should be given as
             3 integers between 0 and 255, specifying the red, blue, and
-            green components of the color.
+            green components of the tip_color.
 
         Uses the choose_color() function from the util module which
             also offers these options:
 
-            Can also pass in just the name of a color, or the
-                string 'random' for a randomly selected color or
-                'rlight' for a random light color
-                'rmedium' for a random medium color
-                'rdark' for a random dark color
-                'ralpha' for a random color with random alpha channel
+            Can also pass in just the name of a tip_color, or the
+                string 'random' for a randomly selected tip_color or
+                'rlight' for a random light tip_color
+                'rmedium' for a random medium tip_color
+                'rdark' for a random dark tip_color
+                'ralpha' for a random tip_color with random alpha channel
 
-        return the color being used for drawing -- makes getting
+        return the tip_color being used for drawing -- makes getting
             randomly selected colors easier.
         '''
         if r is g is b is None:
-            return self.state.color
+            return self.state.tip_color
 
         r, g, b, a = choose_color(r, g, b, a)
-        self.state.color = (r, g, b, a)
+        self.state.tip_color = (r, g, b, a)
         self.queue_command(self._gitem_new_line)
         self.queue_command(self._color, (r, g, b, a))
 
@@ -1374,15 +1374,15 @@ class Pen(object):
     def _set_color_to_default(self):
         settings = QtCore.QSettings()
         default = DEFAULT_COLOR
-        rgba = int(settings.value('pen/color', default))
+        rgba = int(settings.value('pen/tip_color', default))
         c = QtGui.QColor.fromRgba(rgba)
         r, g, b, a = c.getRgb()
-        if self.state.color != (r, g, b, a):
-            self.color(r, g, b, a)
+        if self.state.tip_color != (r, g, b, a):
+            self.tip_color(r, g, b, a)
 
     def bgcolor(self, r=None, g=None, b=None):
         if r is g is b is None:
-            color = self.scene.backgroundBrush().color()
+            color = self.scene.backgroundBrush().tip_color()
             r, g, b, _ = color.getRgb()
             return r, g, b
         else:
@@ -1467,11 +1467,11 @@ class Pen(object):
 
     def _fillcolor(self, r=None, g=None, b=None, a=None):
         '''fillcolor(red, green, blue, alpha) # 0-255 for each value
-        fillcolor() # return the current fill color
+        fillcolor() # return the current tip_fill tip_color
 
-        Set the fill color for drawing. The color should be given as
+        Set the tip_fill tip_color for drawing. The tip_color should be given as
             3 integers between 0 and 255, specifying the red, blue, and
-            green components of the color. Optionally, an alpha value
+            green components of the tip_color. Optionally, an alpha value
             can also be given to set transparency.
         '''
         color = QtGui.QColor.fromRgb(r, g, b, a)
@@ -1481,9 +1481,9 @@ class Pen(object):
     def fillcolor(self, r=None, g=None, b=None, a=None):
         '''fillcolor(r, g, b, a)
 
-        Set the color to be used for filling drawn shapes.
+        Set the tip_color to be used for filling drawn shapes.
 
-        return the color being used for filling -- makes getting
+        return the tip_color being used for filling -- makes getting
             randomly selected colors easier.
         '''
         r, g, b, a = choose_color(r, g, b, a)
@@ -1508,26 +1508,26 @@ class Pen(object):
             self.drawable.fillmode = True
             self._gitem_new_line()
             if self is self.main_window.pen:
-                self.main_window._sync_fill_menu('fill')
+                self.main_window._sync_fill_menu('tip_fill')
         else:
             self.drawable.fillmode = False
             self._gitem_new_line()
             if self is self.main_window.pen:
                 self.main_window._sync_fill_menu('nofill')
 
-    def fill(self, color=None, rule=None):
-        '''fill()
+    def tip_fill(self, color=None, rule=None):
+        '''tip_fill()
 
-        Go in to fill mode. Anything drawn will be filled until
+        Go in to tip_fill mode. Anything drawn will be filled until
             nofill() is called.
 
-        Set the fill color by passing in an (r, g, b) tuple, or
-            pass color='random' for a random fill color.
+        Set the tip_fill tip_color by passing in an (r, g, b) tuple, or
+            pass tip_color='random' for a random tip_fill tip_color.
 
-        If a fill color is specified (color is not None)
-            return the color that is being used as fill color.
+        If a tip_fill tip_color is specified (tip_color is not None)
+            return the tip_color that is being used as tip_fill tip_color.
 
-        Change the fill rule by passing in either
+        Change the tip_fill rule by passing in either
             'winding' (default) or 'oddeven'
         '''
         if color is not None:
@@ -1546,7 +1546,7 @@ class Pen(object):
     def nofill(self):
         '''nofill()
 
-        Turn off fill mode.
+        Turn off tip_fill mode.
         '''
         self.state.fillmode = False
         self.queue_command(self._gitem_fillmode, (False,))
@@ -1557,7 +1557,7 @@ class Pen(object):
     def fillrule(self, rule):
         '''fillrule(method) # 'oddeven' or 'winding'
 
-        Set the fill method to OddEvenFill or WindingFill.
+        Set the tip_fill method to OddEvenFill or WindingFill.
         '''
         if rule == 'oddeven':
             fr = QtCore.Qt.OddEvenFill
@@ -1572,7 +1572,7 @@ class Pen(object):
         old_drawable = self.old_drawable = self.drawable
         if old_drawable is None:
             return
-        pos = old_drawable.pos()
+        pos = old_drawable.tip_pos()
         ang = old_drawable.angle
 
         if filepath is None:
@@ -1589,7 +1589,7 @@ class Pen(object):
                 # custom non-svg avatar
                 rend = None
                 pm = QtGui.QPixmap(filepath)
-                w, h = pm.width(), pm.height()
+                w, h = pm.tip_width(), pm.height()
                 if w > h:
                     pm = pm.scaledToWidth(250)
                     h = pm.height()
@@ -1597,7 +1597,7 @@ class Pen(object):
                     wo = 0
                 elif h > w:
                     pm = pm.scaledToHeight(250)
-                    w = pm.width()
+                    w = pm.tip_width()
                     wo = (250 - w) / 2
                     ho = 0
                 else:
@@ -1605,7 +1605,7 @@ class Pen(object):
 
                 if rend is None:
                     rend = QtGui.QPixmap(250, 250)
-                    rend.fill(QtCore.Qt.transparent)
+                    rend.tip_fill(QtCore.Qt.transparent)
                     painter = QtGui.QPainter(rend)
                     painter.drawPixmap(wo, ho, pm)
 
@@ -1736,7 +1736,7 @@ class Pen(object):
         '''Animated circle drawing
         '''
         self.queue_command(self._gitem_new_line)
-        pos0 = self.state.pos()
+        pos0 = self.state.tip_pos()
         ang0 = self.state.angle
         if center:
             pen = self.pen
@@ -1796,7 +1796,7 @@ class Pen(object):
         '''
 
         ritem = self.state
-        cpt = ritem.pos()
+        cpt = ritem.tip_pos()
 
         crect = self._circle_rect(r, cpt, ritem.angle, center)
 
@@ -1886,11 +1886,11 @@ class Pen(object):
 
         If pie is True radii will also be drawn from the ends of
             the arc to the center of the circle it is an arc of.
-            If fill is on the full pie shaped wedge will be filled.
+            If tip_fill is on the full pie shaped wedge will be filled.
         '''
 
         ritem = self.state
-        cpt = ritem.pos()
+        cpt = ritem.tip_pos()
 
         # Direction of drawing makes more sense this way
         if not center and r < 0:
@@ -1979,7 +1979,7 @@ class Pen(object):
         return True if the pen is in the visible area, or
             False if it is outside the visible area.
         '''
-        pos = self.state.pos()
+        pos = self.state.tip_pos()
         return pos in self._viewrect()
 
     def viewcoords(self, floats=False):
@@ -2021,7 +2021,7 @@ class Pen(object):
             rend = self.main_window.renderer
         item = Drawable(rend, imageid, None)
         item.angle = gitem.angle
-        item.setPos(gitem.pos())
+        item.setPos(gitem.tip_pos())
         item.setZValue(self._zvalue)
         Pen._zvalue += 1
         gitem.scene().addItem(item)
@@ -2035,7 +2035,7 @@ class Pen(object):
 
         Can also stamp the other images by including the image name.
         '''
-        pos = self.state.pos()
+        pos = self.state.tip_pos()
         x, y = pos.x(), pos.y()
         self.queue_command(self._stamp, (x, y, imageid))
 
@@ -2087,7 +2087,7 @@ class Pen(object):
             forward depends on which direction the pen is
             facing when you tell him to go forward.
 
-        If the pen is down, this will also draw a line as the
+        If the pen is tip_down, this will also draw a line as the
             pen moves forward.
         '''
         self._forward(self.state, distance, False)
@@ -2101,7 +2101,7 @@ class Pen(object):
             forward depends on which direction the pen is
             facing when you tell him to go forward.
 
-        If the pen is down, this will also draw a line as the
+        If the pen is tip_down, this will also draw a line as the
             pen moves backward.
         '''
         self.forward(-distance)
@@ -2158,7 +2158,7 @@ class Pen(object):
         obj.set_transform()
 
     def goto(self, x, y=None):
-        '''Move turtle to an absolute position. If the pen is down, draw line.
+        '''Move turtle to an absolute position. If the pen is tip_down, draw line.
         Do not change the turtle’s orientation.
 
         If y is None, x must be a pair of coordinates.'''
@@ -2168,7 +2168,7 @@ class Pen(object):
         elif y is None:
             x, y = x
 
-        angle = self.heading()
+        angle = self.tip_heading()
         self.setheading(self.towards(x, y))
         self.forward(self.distance(x, y))
         self.setheading(angle)
@@ -2229,9 +2229,9 @@ class Pen(object):
     def position(self):
         '''Return the pen's current location (x,y).'''
 
-        pos = self.state.pos()
+        pos = self.state.tip_pos()
         return Vec2D(pos.x(), -pos.y())
-    pos = position
+    tip_pos = position
 
     def towards(self, x, y=None):
         '''towards(x, y) # in pixels
@@ -2261,8 +2261,8 @@ class Pen(object):
         dy = y - cy
         return hypot(dx, dy)
 
-    def heading(self):
-        '''Get the current heading'''
+    def tip_heading(self):
+        '''Get the current tip_heading'''
 
         return -self._heading
 
@@ -2289,7 +2289,7 @@ class Pen(object):
         return self.ycor()
 
     def orientação(self):
-        return self.heading()
+        return self.tip_heading()
 
     #
     # Drawing state
@@ -2297,11 +2297,11 @@ class Pen(object):
     def pendown(self):
         '''pendown()
 
-        Put the pen in the down (drawing) position.
+        Put the pen in the tip_down (drawing) position.
         '''
         self.pen = self.state.is_down = True
         self.queue_command(self._pendown)
-    down = pd = pendown
+    tip_down = pd = pendown
 
     def penup(self):
         '''penup()
@@ -2315,9 +2315,9 @@ class Pen(object):
 
     def pensize(self, w=None):
         '''pensize(w) # in pixels
-        pensize() # return the current width
+        pensize() # return the current tip_width
 
-        Set the line width for drawing.
+        Set the line tip_width for drawing.
         '''
         if w is None:
             return self.state.penwidth
@@ -2325,13 +2325,13 @@ class Pen(object):
             self.state.penwidth = w
             self.queue_command(self._gitem_new_line)
             self.queue_command(self._width, (w,))
-    width = pensize
+    tip_width = pensize
 
     def pen(self):
         raise NotImplementedError
 
     def isdown(self):
-        '''Return True if pen is down, False if it’s up.'''
+        '''Return True if pen is tip_down, False if it’s up.'''
 
     # Portuguese
 

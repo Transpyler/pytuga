@@ -35,7 +35,7 @@ class Scene(QtGui.QGraphicsScene):
         self.setSceneRect(left, top, width, height)
 
 
-class MainWindow(QtGui.QMainWindow):
+class Tugalinhas(QtGui.QMainWindow):
 
     '''Main window for the tugalinhas application'''
 
@@ -182,7 +182,7 @@ class MainWindow(QtGui.QMainWindow):
         self.speedgroup.triggered.connect(self.speedMenuEvent)
 
     def setup_fill_choices(self):
-        choices = ((self.ui.actionFill, 'fill'),
+        choices = ((self.ui.actionFill, 'tip_fill'),
                    (self.ui.actionNofill, 'nofill'))
         self._fills = bidict(choices)
         self.fillgroup = QtGui.QActionGroup(self)
@@ -359,7 +359,7 @@ class MainWindow(QtGui.QMainWindow):
         self._leftdragstart = None
 
     def rightclick(self, ev):
-        evpos = ev.pos()
+        evpos = ev.tip_pos()
         scpos = self.scene.view.mapToScene(evpos)
         for pen in self.user_pens:
             if pen is self.pen and 'onclick' in self.interpreter_locals:
@@ -421,7 +421,7 @@ class MainWindow(QtGui.QMainWindow):
             bgcolor = ui._bgcolor
             settings.setValue('view/bgcolor', bgcolor.name())
             color = ui._color
-            settings.setValue('pen/color', color.rgba())
+            settings.setValue('pen/tip_color', color.rgba())
             fillcolor = ui._fillcolor
             settings.setValue('pen/fillcolor', fillcolor.rgba())
 
@@ -1551,7 +1551,7 @@ Carrying on trying to recover if possible...
         sz = src.size().toSize()
         self._i = i = QtGui.QImage(sz, QtGui.QImage.Format_ARGB32)
         p = QtGui.QPainter(i)
-        irf = QtCore.QRectF(0, 0, src.width(), src.height())
+        irf = QtCore.QRectF(0, 0, src.tip_width(), src.height())
 
         self.scene.render(p, irf, src)
         if not i.save(fp):
@@ -1880,12 +1880,12 @@ Carrying on trying to recover if possible...
         ie.clearline()
 
     def setPenColor(self):
-        '''use a color selection dialog to set the pen line color
+        '''use a tip_color selection dialog to set the pen line tip_color
 
-        sets the color for the primary pen only. For other later
-            added user_pens, use p.color()
+        sets the tip_color for the primary pen only. For other later
+            added user_pens, use p.tip_color()
         '''
-        icolor = self.pen.drawable.pen.brush().color()
+        icolor = self.pen.drawable.pen.brush().tip_color()
         ncolor = QtGui.QColorDialog.getColor(
             icolor,
             self,
@@ -1893,15 +1893,15 @@ Carrying on trying to recover if possible...
             QtGui.QColorDialog.ShowAlphaChannel)
         if ncolor.isValid():
             r, g, b, a = ncolor.getRgb()
-            self.pen.color(r, g, b, a)
+            self.pen.tip_color(r, g, b, a)
             if a != 255:
-                cmd = 'color(%s, %s, %s, %s)\n' % (r, g, b, a)
+                cmd = 'tip_color(%s, %s, %s, %s)\n' % (r, g, b, a)
             else:
-                cmd = 'color(%s, %s, %s)\n' % (r, g, b)
+                cmd = 'tip_color(%s, %s, %s)\n' % (r, g, b)
             self.interpretereditor.addcmd(cmd)
 
     def set_background_color(self):
-        '''Use color selection dialog to set the background color.
+        '''Use tip_color selection dialog to set the background tip_color.
         '''
 
         r, g, b = self.pen.bgcolor()
@@ -1914,12 +1914,12 @@ Carrying on trying to recover if possible...
             self.interpretereditor.addcmd(cmd)
 
     def setPenWidth(self):
-        '''open a dialog with a spin button to get a new pen line width
+        '''open a dialog with a spin button to get a new pen line tip_width
 
-        sets the width for the primary pen only. For other later
-            added user_pens, use p.width()
+        sets the tip_width for the primary pen only. For other later
+            added user_pens, use p.tip_width()
         '''
-        iwidth = self.pen.drawable.pen.width()
+        iwidth = self.pen.drawable.pen.tip_width()
         uifile = 'penwidth.ui'
         uipath = os.path.join(UI_FILES_PATH, uifile)
         DClass, _ = uic.loadUiType(uipath)
@@ -1930,8 +1930,8 @@ Carrying on trying to recover if possible...
         dc.thewid.setValue(iwidth)
         d.exec_()
         nwidth = dc.thewid.value()
-        self.pen.width(nwidth)
-        cmd = 'width(%s)\n' % nwidth
+        self.pen.tip_width(nwidth)
+        cmd = 'tip_width(%s)\n' % nwidth
         self.interpretereditor.addcmd(cmd)
 
     def _sync_pendown_menu(self, choice):
@@ -1956,25 +1956,25 @@ Carrying on trying to recover if possible...
         action.setChecked(True)
 
     def setFill(self, ev):
-        '''toggle fill on / off
+        '''toggle tip_fill on / off
 
-        sets the fill for the primary pen only. For other later
-            added user_pens, use p.fill() or p.nofill()
+        sets the tip_fill for the primary pen only. For other later
+            added user_pens, use p.tip_fill() or p.nofill()
         '''
         if ev == self.ui.actionFill:
-            self.pen.fill()
-            self.interpretereditor.addcmd('fill()\n')
+            self.pen.tip_fill()
+            self.interpretereditor.addcmd('tip_fill()\n')
         else:
             self.pen.nofill()
             self.interpretereditor.addcmd('nofill()\n')
 
     def setFillColor(self):
-        '''use a color selection dialog to set the fill color
+        '''use a tip_color selection dialog to set the tip_fill tip_color
 
-        sets the fill color for the primary pen only. For other
+        sets the tip_fill tip_color for the primary pen only. For other
             later added user_pens, use p.fillcolor()
         '''
-        icolor = self.pen.drawable.brush.color()
+        icolor = self.pen.drawable.brush.tip_color()
         ncolor = QtGui.QColorDialog.getColor(
             icolor,
             self,
@@ -1982,13 +1982,13 @@ Carrying on trying to recover if possible...
             QtGui.QColorDialog.ShowAlphaChannel)
         if ncolor.isValid():
             r, g, b, a = ncolor.getRgb()
-            self.pen.fill()
-            self._sync_fill_menu('fill')
+            self.pen.tip_fill()
+            self._sync_fill_menu('tip_fill')
             self.pen.fillcolor(r, g, b, a)
             if a != 255:
-                cmd = 'fill(color=(%s, %s, %s, %s))\n' % (r, g, b, a)
+                cmd = 'tip_fill(tip_color=(%s, %s, %s, %s))\n' % (r, g, b, a)
             else:
-                cmd = 'fill(color=(%s, %s, %s))\n' % (r, g, b)
+                cmd = 'tip_fill(tip_color=(%s, %s, %s))\n' % (r, g, b)
             self.interpretereditor.addcmd(cmd)
 
     def makedeleteaction(self):
@@ -2127,9 +2127,9 @@ Carrying on trying to recover if possible...
     def resizeEvent(self, ev):
         scene = self.scene
         size = ev.size()
-        wnew, hnew = size.width(), size.height()
+        wnew, hnew = size.tip_width(), size.height()
         rect = scene.sceneRect()
-        wr, hr = rect.width(), rect.height()
+        wr, hr = rect.tip_width(), rect.height()
 
         if wnew > wr or hnew > hr:
             w = max(wr, wnew)

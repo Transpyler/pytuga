@@ -1,3 +1,10 @@
+'''
+Textos (strings)
+================
+
+Funções para processamento de texto.
+'''
+
 from tugalib.util import synonyms
 # TODO: terminar as traduções de funções e escolher ordem dos argumentos
 
@@ -7,10 +14,11 @@ from tugalib.util import synonyms
 #
 @synonyms('concatene')
 def concatenar(*args):
-    '''Converte os argumentos para texto e concatena o resultado
+    '''
+    Converte os argumentos para texto e concatena o resultado
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> concatenar('x = ', 2)
     'x = 2'
@@ -21,10 +29,11 @@ def concatenar(*args):
 
 @synonyms('concatene_lista')
 def concatenar_lista(lista):
-    '''Converte os argumentos da lista em texto e concatena o resultado.
+    '''
+    Converte os argumentos da lista em texto e concatena o resultado.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> concatenar_lista(['a', 'b', 'c', 1, 2, 3])
     'abc123'
@@ -35,11 +44,12 @@ def concatenar_lista(lista):
 
 @synonyms('una_valores')
 def unir_valores(separador, *args):
-    '''Semelhante à concatenar(), mas une os valores pelo texto separador
+    '''
+    Semelhante à concatenar(), mas une os valores pelo texto separador
     especificado
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> unir_valores(', ', 1, 2, 3)
     '1, 2, 3'
@@ -50,13 +60,14 @@ def unir_valores(separador, *args):
 
 @synonyms('una_lista')
 def unir_lista(separador, lista):
-    '''Semelhante à concatenar_lista(), mas une os valores pelo texto separador
+    '''
+    Semelhante à concatenar_lista(), mas une os valores pelo texto separador
     especificado
 
-    Exemplo
-    -------
+    Examples
+    --------
 
-    >>> unir_valores(', ', 1, 2, 3)
+    >>> unir_lista(', ', [1, 2, 3])
     '1, 2, 3'
     '''
 
@@ -75,7 +86,8 @@ separar_em_linhas = separe_em_linhas = str.splitlines
 #
 @synonyms('formate')
 def formatar(texto, *args, **kwds):
-    '''Formata o texto inserindo os parâmetros dados nas posições coringa.
+    '''
+    Formata o texto inserindo os parâmetros dados nas posições coringa.
 
     Existem duas sintaxes diferentes para a formatação de texto. A primeira,
     baseada em C, utiliza o símbolo %s, %f, %d, etc para delimitar os pontos
@@ -98,11 +110,12 @@ def formatar(texto, *args, **kwds):
 
 @synonyms('substitua')
 def substituir(texto, valor, substituição):
-    '''Substitui no "texto" todas as ocorrências de "valor" pela "substituição"
-    dada.
+    '''
+    Substitui no ``texto`` todas as ocorrências de ``valor`` pela
+    ``substituição`` dada.
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> substituir('Olá, pessoal!', 'pessoal', 'mundo')
     'Olá, mundo!'
@@ -120,10 +133,11 @@ def substituir(texto, valor, substituição):
 # Maiúsculas e minúsculas
 #
 def maiúsculas(texto):
-    '''Converte um texto para letras maiúsculas
+    '''
+    Converte um texto para letras maiúsculas
 
-    Exemplo
-    -------
+    Examples
+    --------
 
     >>> maiúsculas('olá, mundo!')
     'OLÁ, MUNDO!'
@@ -135,8 +149,8 @@ def maiúsculas(texto):
 def minúsculas(texto):
     '''Converte um texto para letras minúsculas
 
-    Exemplo
-    -------
+    Examples
+    ---------
 
     >>> minúsculas('OLÁ, MUNDO!')
     'olá, mundo!'

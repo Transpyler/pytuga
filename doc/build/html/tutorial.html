@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="index.html" />
+    <link rel="next" title="Biblioteca de funções" href="referência.html" />
+    <link rel="prev" title="Instalação" href="install.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link permanente para este título">¶</a></h1>
+<p>Um programa de computador pode ser entendido como uma série de instruções que são executadas em sequência para completar uma determinada tarefa. As tarefas podem ir do extremamente simples, como mostrar mensagens na tela, até o extremamente complicado como fazer um cálculo científico ou dirigir um carro. No caso do Pytuguês você provavelmente iniciará o contato com a programação desenhando figuras na tela. No início, iremos programar o computador para realizar tarefas como quadrados, triângulos, estrelas ou outras figuras geométricas.</p>
+<p>Podemos iniciar o ambiente de programação em modo texto invocando o comando <em>pytuga</em> no terminal. Uma alternativa gráfica mais amigável é o <em>Tugalinhas</em> que também é instalado junto com este pacote.</p>
+<p>Uma vez aberto o <em>Tugalinhas</em> ou o <em>pytuga</em>, nos deparamos com o shell de Pytuguês (que inicia com <code class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></code>) onde podemos digitar comandos diretamente. Para mostrar uma mensagem na tela, por exemplo, digite:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mostre</span><span class="p">(</span><span class="s">&quot;olá, mundo!&quot;</span><span class="p">)</span>
+<span class="go">olá, mundo</span>
+</pre></div>
+</div>
+<p>Experimente também com operações básicas, para ter um sabor dos recursos disponíveis no terminal de Pytuguês:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="mi">5</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1</span>
+<span class="go">120</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">40</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+<p>A sintaxe do Pytuguês foi criada para produzir códigos que se assemelhem o máximo possível com um pseudocódigo em português. Queremos que o significado dos programas mais simples seja óbvio para um usuário que não conhece a linguagem ou que nunca programou na vida e que a linguagem seja fácil de aprender e pareça natural para programadores iniciantes. O Python oferece isto para falantes do inglês, queremos oferecer o mesmo para Brasileiros, Portugueses, Angolanos, etc.</p>
+<p>Esta seção vai percorrer os principais recursos do Pytuguês para que você possa começar a programar em poucos minutos. Normalmente a primeira interação com o Pytuguês se dá através da programação gráfica, onde controlamos a trajetória de um pequeno &#8220;robô&#8221; que desenha figuras geométricas na tela. Inicie o Tugalinhas ou o pytuga. Os comandos básicos para interagir com o cursor na tela são:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frente</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>   <span class="c"># avança 100 pixels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trás</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>     <span class="c"># recua 100 pixels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">direita</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>   <span class="c"># gira 90 graus no sentido horário</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">esquerda</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>  <span class="c"># gira 90 graus no sentido anti-horário</span>
+</pre></div>
+</div>
+<p>Digite os comandos no terminal interativo para ver o Tuga se mexer. Aos poucos podemos construir interações complexas e interessantes utilizando estes blocos básicos e os recursos comuns de programação como repetições, execução condicional, interação com o usuário, etc.</p>
+<p><strong>Desafio!</strong></p>
+<p>Faça um programa que desenhe uma figura regular como quadrado, triângulo, ou pentágono.</p>
+<div class="section" id="comandos-basicos">
+<h2>Comandos básicos<a class="headerlink" href="#comandos-basicos" title="Link permanente para este título">¶</a></h2>
+<p>Esta seção apresenta os recursos mais básicos do Pytuguês que serão utilizados posteriormente para construir programas mais complexos e interessantes.</p>
+<div class="section" id="operacoes-matematicas">
+<h3>Operações matemáticas<a class="headerlink" href="#operacoes-matematicas" title="Link permanente para este título">¶</a></h3>
+<p>Talvez o uso mais simples do interpretador de Pytuguês seja como uma calculadora. Além das operações aritméticas comuns, o Pytuguês permite salvar variáveis, utilizar funções científicas, definir as nossas próprias funções matemáticas, além de vários outros recursos.</p>
+<p>A notação para as operações matemáticas é usual, onde apenas lembramos que as casas decimais são separadas por pontos e não por vírgulas:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>     <span class="c"># soma</span>
+<span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>     <span class="c"># subtração</span>
+<span class="mf">3.14</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c"># multiplicação</span>
+<span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span>     <span class="c"># divisão</span>
+<span class="mi">3</span><span class="o">**</span><span class="mi">2</span>      <span class="c"># potência</span>
+</pre></div>
+</div>
+<p>É possível criar variáveis e reaproveitá-las em outras partes do código. As funções matemáticas mais comuns também estão imediatamente disponíveis. Experimente estes comandos no terminal interativo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">raiz</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="go">3.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+<span class="go">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">módulo</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>O operador de igual <code class="docutils literal"><span class="pre">=</span></code>, possui o sentido usual da maioria das linguagens de programação, mas que é diferente do da matemática. Ele não estabelece ou testa uma relação de igualdade. Ele é utilizado na atribuição de variáveis. Portanto um código do tipo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>não é uma falsidade matemática. Na realidade, estamos atribuindo um novo valor para a variável <code class="docutils literal"><span class="pre">x</span></code> que é igual ao valor anterior adicionado de 1.</p>
+<p><strong>Desafio!</strong></p>
+<p>Calcule <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">42**42</span></code>. Muito provavelmente este resultado é maior que o que cabe na sua calculadora! Confira.</p>
+</div>
+<div class="section" id="interacao-com-o-usuario">
+<h3>Interação com o usuário<a class="headerlink" href="#interacao-com-o-usuario" title="Link permanente para este título">¶</a></h3>
+<p>Em um programa de computador muitas vezes queremos perguntar algum tipo de informação ao usuário. O Pytuguês oferece algumas funções para salvar valores digitados pelo usuário em variáveis. Os principais métodos de entrada são as funções <code class="docutils literal"><span class="pre">leia_texto(msg)</span></code>, <code class="docutils literal"><span class="pre">leia_número(msg)</span></code>  e <code class="docutils literal"><span class="pre">leia_arquivo(arquivo)</span></code>. O código a seguir, por exemplo, pergunta o nome e a idade do usuário:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">nome</span> <span class="o">=</span> <span class="n">leia_texto</span><span class="p">(</span><span class="s">&quot;Qual é o seu nome? &quot;</span><span class="p">)</span>
+<span class="n">idade</span> <span class="o">=</span> <span class="n">leia_número</span><span class="p">(</span><span class="s">&quot;Qual é a sua idade? &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A variável <code class="docutils literal"><span class="pre">nome</span></code> contêm o texto que o usuário digitou como sendo o seu nome e a variável <code class="docutils literal"><span class="pre">idade</span></code> guarda a idade em um formato numérico. A diferença entre <code class="docutils literal"><span class="pre">leia_número(msg)</span></code> e <code class="docutils literal"><span class="pre">leia_texto(msg)</span></code> está em que a primeira salva o resultado em formato numérico e obriga o usuário a digitar um número válido. A segunda conterá sempre um texto, mesmo quando o usuário digitar um número. Note que existe uma diferença entre um número e um texto que contêm um número: enquanto o primeiro admite as operações matemáticas, o segundo corresponde a um valor textual que por um acaso é ser interpretado (por nós humanos, não pelo computador!) como um número.</p>
+<p>As funções mencionadas acima são conhecidas como &#8220;funções de entrada&#8221;, já que permitem que o usuário do programa dê a entrada em valores que serão utilizados posteriormente. As <em>funções de saída</em> são aquelas que fornecem informação de volta para o usuário. A mais importante delas é a função <code class="docutils literal"><span class="pre">mostre(valor)</span></code>, que mostra o conteúdo do argumento na tela. Podemos fazer a saída na forma de um arquivo, utilizando a função <code class="docutils literal"><span class="pre">salve_arquivo(nome_do_arquivo,</span> <span class="pre">valor)</span></code>.</p>
+<div class="section" id="teste">
+<h4>Teste<a class="headerlink" href="#teste" title="Link permanente para este título">¶</a></h4>
+<p>Crie uma função que pergunte o ano de nascimento do usuário e calcule a sua idade.</p>
+</div>
+</div>
+</div>
+<div class="section" id="controle-de-fluxo-de-codigo">
+<h2>Controle de fluxo de código<a class="headerlink" href="#controle-de-fluxo-de-codigo" title="Link permanente para este título">¶</a></h2>
+<p>Alguns comandos do Pytuguês executam ações imediatas, como por exemplo, o comando <code class="docutils literal"><span class="pre">frente(passo)</span></code>. Podemos construir programas interessantes como uma receita de bolo encadeando vários destes comandos. O programa abaixo, por exemplo, desenha um triângulo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">frente</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">frente</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">frente</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(você consegue fazer o triângulo apontar para baixo?)</p>
+<p>Em alguns casos é necessário controlar o &#8220;fluxo de código&#8221;; ou seja, temos que decidir quais comandos serão executados e quantas vezes será realizada cada execução. Esta seção mostra as principais estruturas de controle de fluxo de código do Pytuguês, o <em>repetir</em>, o <em>para cada</em>, o <em>enquanto</em> e o <em>se/senão</em>.</p>
+<div class="section" id="repeticoes-repetir">
+<h3>Repetições: <em>repetir</em><a class="headerlink" href="#repeticoes-repetir" title="Link permanente para este título">¶</a></h3>
+<p>Muitas tarefas que um programa realiza envovem um grande número de repetições de tarefas mais simples. Na realidade computadores são muito bons nisso: podem repetir exatamente a mesma sequência de passos uma quantidade gigantesca de vezes sem ficarem cansados, errarem ou reclamarem. O comando mais básico de repetição do Pytuguês é o comando <code class="docutils literal"><span class="pre">repetir</span></code>. Ele simplesmente repete um bloco de instruções pelo número dado de vezes:</p>
+<div class="highlight-python"><div class="highlight"><pre>repetir 3 vezes:
+    frente(100)
+    esquerda(120)
+</pre></div>
+</div>
+<p>Em programação, chamamos cada uma destas repetições de uma &#8220;iteração&#8221; do loop <em>repetir</em>. Neste caso, aplicamos 3 iterações da sequência de comandos <code class="docutils literal"><span class="pre">frente/esquerda</span></code>.</p>
+<p>No exemplo acima ele repete os comandos <code class="docutils literal"><span class="pre">frente(100)</span></code> e <code class="docutils literal"><span class="pre">esquerda(120)</span></code> três vezes, nesta ordem. De modo mais abstrato, podemos descrever o comando repetir como:</p>
+<div class="highlight-python"><div class="highlight"><pre>repetir &lt;número&gt; vezes:
+    &lt;bloco de instruções&gt;
+</pre></div>
+</div>
+<p>Onde o campo &lt;número&gt; representa qualquer número inteiro ou variável numérica e &lt;bloco de instruções&gt; é uma sequência de instruções como a <code class="docutils literal"><span class="pre">frente(100)/esquerda(90)</span></code> dada anteriormente. Devemos nos atentar para os espaços em branco durante a definição do bloco de instruções. São eles que delimitam o bloco de instruções e dizem para o Pytuguês quais instruções devem ser repetidas e quais não fazem parte do bloco de instruções.</p>
+<p>O código abaixo, por exemplo, é muito semelhate ao anterior, mas o comando <code class="docutils literal"><span class="pre">esquerda(120)</span></code> està alinhado ao início da linha. Isto fáz com que apenas a parte <code class="docutils literal"><span class="pre">frente(100)</span></code> seja executada as três vezes. O comando esquerda está fora do bloco <em>repetir</em> e portanto é executado apenas uma única vez após o bloco terminar:</p>
+<div class="highlight-python"><div class="highlight"><pre>repetir 3 vezes:
+    frente(100)
+esquerda(120)
+</pre></div>
+</div>
+<p><strong>Desafio!</strong></p>
+<p>Faça uma estrela de 5 pontas utilizando o comando repetir. Depois tente fazer a estrela de Davi (neste caso pode ser necessário usar 2 repetições).</p>
+</div>
+<div class="section" id="repeticoes-para-cada">
+<h3>Repetições: <em>para cada</em><a class="headerlink" href="#repeticoes-para-cada" title="Link permanente para este título">¶</a></h3>
+<p>Muitas vezes queremos repetir um bloco de comandos onde em cada iteração uma variável deve mudar de valor de forma previsível. Por exemplo, se quisermos cumprimentar várias pessoas numa lista, é possível escrever algo como:</p>
+<div class="highlight-python"><div class="highlight"><pre>para cada nome em [&quot;Maria&quot;, &quot;João&quot;, &quot;José&quot;] faça:
+    mostre(&quot;Olá &quot; + nome)
+</pre></div>
+</div>
+<p>Neste caso, a variável <em>nome</em> assume um valor diferente em cada iteração, obtendo-os a partir da lista de nomes fornecida.</p>
+<p>É muito comum também realizar iterações sobre sequências numéricas. O comando muda ligeiramente, onde especificamos o intervalo de valores inteiros que queremos percorrer. O exemplo abaixo soma todos os números de 1 até 10:</p>
+<div class="highlight-python"><div class="highlight"><pre>soma = 0
+
+para cada x de 1 até 10 faça:
+    soma = soma + x
+
+mostre(soma)
+</pre></div>
+</div>
+<p>Se quisermos pular de dois em dois, a sintaxe muda um pouquinho:</p>
+<div class="highlight-python"><div class="highlight"><pre>soma = 0
+
+para cada x de 1 até 10 a cada 2 faça:
+    soma = soma + x
+
+mostre(soma)
+</pre></div>
+</div>
+<p>Neste caso, somente os ímpares seriam contabilizados na soma.</p>
+<p>A sintaxe geral do comando <em>para cada</em> é dada abaixo. Na forma de sequência, ela funciona como:</p>
+<div class="highlight-python"><div class="highlight"><pre>para cada &lt;nome&gt; em &lt;sequência&gt; faça:
+    &lt;bloco de comandos&gt;
+</pre></div>
+</div>
+<p>Caso seja uma sequência numérica, podemos usar:</p>
+<div class="highlight-python"><div class="highlight"><pre>para cada &lt;nome&gt; de &lt;início&gt; até &lt;fim&gt; a cada &lt;passo&gt; faça:
+    &lt;bloco de comandos&gt;
+</pre></div>
+</div>
+<p>Assim como no bloco <em>repetir</em>, o comando <em>faça</em> é opcional. Podemos também trocar o comando <em>para cada</em> por simplesmente <em>para</em>, na forma compacta. Finalmente, podemos omitir o passo na segunda versão do comando caso ele seja igual à 1.</p>
+<p><strong>Desafio!</strong></p>
+<p>Desenhe uma espiral quadrada de 10 braços em que o tamanho de cada avanço varie segundo o padrão 10px, 20px, 30px, ..., 100px. A forma ingênua criar este programa seria algo do tipo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">frente</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">frente</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">frente</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">frente</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">esquerda</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>É lógico que podemos fazer bem melhor com o comando <em>para cada</em> (ou até mesmo com o comando repetir).</p>
+</div>
+<div class="section" id="repeticoes-enquanto">
+<h3>Repetições: enquanto<a class="headerlink" href="#repeticoes-enquanto" title="Link permanente para este título">¶</a></h3>
+<p>O comando <em>para cada</em> é útil quando sabemos de antemão o número de iterações que devem ser executadas. Muitas vezes, no entanto, queremos repetir um bloco de código por um número indefinido de vezes até que um determinado critério de parada seja satisfeito. O código abaixo, por exemplo, repete uma pergunta até que o usuário acerte a resposta correta:</p>
+<div class="highlight-python"><div class="highlight"><pre>enquanto ler_texto(&quot;Qual é o baterista dos Beatles? &quot;) != &quot;Ringo&quot; faça:
+    mostre(&quot;Resposta errada! Tente novamente...&quot;)
+</pre></div>
+</div>
+<p>De um modo geral, o comando <em>enquanto</em> possui a estrutura:</p>
+<div class="highlight-python"><div class="highlight"><pre>enquanto &lt;condição&gt; faça:
+    &lt;bloco de comandos&gt;
+</pre></div>
+</div>
+<p>Ele executa o bloco de comandos indefinidamente enquanto a condição fornecida for verdadeira. Caso a condição seja falsa, ele interrompe <em>antes</em> de executar o bloco de comandos.</p>
+<p>O comando <em>enquanto</em> é talvez a forma mais geral das estruturas de repetição. Podemos, reescrever todos os laços do tipo <em>para cada</em> ou <em>repetir</em> utilizando o comando <em>enquanto</em>. Existe um custo nisto: o código pode ficar mais longo e confuso e, em alguns casos, até mesmo um pouco mais lento. O código abaixo, por exemplo, desenha um triângulo utilizando o comando <em>enquanto</em>. No entanto, O fato de termos que lidar com variáveis adicionais tira a elegância e concisão do comando <em>repetir</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>n_iterações = 0
+
+enquanto n_iterações &lt; 3:
+    frente(100)
+    esquerda(120)
+    n_iterações = n_iterações + 1
+</pre></div>
+</div>
+<p><strong>Desafio!</strong></p>
+<p>A função <code class="docutils literal"><span class="pre">aleatório()</span></code> produz um número aleatório entre 0 e 1. O programa abaixo, por exemplo, produz 100 &#8220;passos do bêbado&#8221; e imprime a coordenada x após o passo:</p>
+<div class="highlight-python"><div class="highlight"><pre>repetir 100 vezes:
+    # Dá um passo
+    frente(50)
+    esquerda(aleatório() * 360)
+
+    # Imprime a coordenada x
+    x, y = posição()
+    mostre(x)
+</pre></div>
+</div>
+<p>Modifique o comando acima para que o &#8220;passo do bêbado&#8221; termine quando o cursor atingir uma distância de 300 px da origem.</p>
+</div>
+<div class="section" id="condicionais">
+<h3>Condicionais<a class="headerlink" href="#condicionais" title="Link permanente para este título">¶</a></h3>
+<p>Se quisermos executar um comando apenas se determinada condição for satisfeita, então usamos o bloco <em>se</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>x = leia_número(&quot;Diga um número: &quot;)
+
+se x &gt; 10 então faça:
+    mostre(&quot;x é muito grande&quot;)
+</pre></div>
+</div>
+<p>Neste caso, o comando <code class="docutils literal"><span class="pre">mostre(...)</span></code> será executado somente se o usuário digitar um valor maior que 10. Se quisermos adicionar uma condição que deva ser executada caso o teste x &gt; 10 falhe, basta adicionar um bloco do tipo <em>senão</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>x = leia_número(&quot;Diga um número: &quot;)
+
+se x &gt; 10 então faça:
+    mostre(&quot;x é muito grande&quot;)
+senão faça:
+    mostre(&quot;x é pequeno&quot;)
+</pre></div>
+</div>
+<p>Este código imprime na tela que x é muito grande, caso o usuário diga um número maior que 10 ou imprime que x é pequeno, caso contrário. É possível adicionar condições intermediárias usando o bloco <em>ou então se</em>. Neste caso, somente a primeira condição a ser satisfeita é executada. A sintaxe completa é portanto:</p>
+<div class="highlight-python"><div class="highlight"><pre>x = leia_número(&quot;Diga um número: &quot;)
+
+se x &gt; 10 então faça:
+    mostre(&quot;x é muito grande&quot;)
+ou então se x == 7 faça:
+    mostre(&quot;x é meu número da sorte&quot;)
+senão faça:
+    mostre(&quot;x é pequeno&quot;)
+</pre></div>
+</div>
+<p>De um modo geral, a estrutura condicional pode ser escrita como:</p>
+<div class="highlight-python"><div class="highlight"><pre>se &lt;condição 1&gt; então faça:
+    &lt;bloco de código 1&gt;
+ou então se &lt;condição 2&gt; faça:
+    &lt;bloco de código 2&gt;
+ou então se &lt;condição 3&gt; faça:
+    &lt;bloco de código 3&gt;
+...
+senão faça:
+    &lt;bloco de código senão&gt;
+</pre></div>
+</div>
+<p>Onde no máximo um dos blocos de código será executado, sendo o que corresponde à primeira condição que é satisfeita. Analogamente aos laços repetição, os termos <em>então faça</em> e <em>faça</em> são opcionais.</p>
+<p>O condicional funciona assim.</p>
+<ul class="simple">
+<li>Primeiramente testamos a <em>condição 1</em>. Se ela for satisfeita, o bloco de código correspondente é executado e o Pytuguês ignora todos os outros blocos restantes e continua a execução a partir daí.</li>
+<li>Caso a condição seja falsa, partimos para a <em>condição 2</em>. Se ela for satisfeita, executamos o segundo bloco de código e pulamos sobre todos os outros.</li>
+<li>Somente se nenhuma das condições forem satisfeitas, executa-se o bloco senão. Caso o bloco senão não exista, nenhum comando é executado.</li>
+</ul>
+<p>Talvez fique mais claro em um exemplo:</p>
+<div class="highlight-python"><div class="highlight"><pre>se x == 1:
+    mostre(&quot;uma unidade&quot;)
+ou então se x &gt; 10:
+    mostre(&quot;x é grande&quot;)
+ou então se x &lt; 0:
+    mostre(&quot;x é pequeno&quot;)
+ou então se x % 2 == 0:
+    mostre(&quot;x é par&quot;)
+ou então se x == 20:
+    mostre(&quot;esta linha nunca será executada pois 20 &gt; 10&quot;)
+senão:
+    mostre(x)
+</pre></div>
+</div>
+<p>Se <strong>x</strong> for igual à 4, o programa imprimirá &#8220;x é par&#8221;, pois a condição <code class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">2</span> <span class="pre">==</span> <span class="pre">0</span></code> (resto da divisão de <strong>x</strong> por 2 é igual à zero) é a primeira condição satisfeita no bloco condicional. Caso <strong>x</strong> seja igual à 12, a mensagem mostrada será &#8220;x é grande&#8221;, pois apesar de tanto <code class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">10</span></code> quanto <code class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">2</span> <span class="pre">==</span> <span class="pre">0</span></code> serem satisfeitos para este valor, a primeira condição é selecionada pois aparece primeiro no bloco condicional. Para executarmos o bloco <em>senão</em>, é necessário utilizar um valor de <strong>x</strong> que viole todas as condições apresentadas. Neste caso, qualquer um dos valores 3, 5, 7 e 9 funcionam.</p>
+<p><strong>Desafio!</strong></p>
+<p>Pergunte a idade do usuário e imprima uma das mensagens abaixo dependendo da faixa em que ele se situa.</p>
+<ul class="simple">
+<li>negativo: &#8220;você ainda não nasceu!&#8221;</li>
+<li>0-3: &#8220;você é um bebê&#8221;</li>
+<li>4-9: &#8220;você é uma criança&#8221;</li>
+<li>10-12: &#8220;você é um pré-adolescente&#8221;</li>
+<li>13-19: &#8220;você é um adolescente&#8221;</li>
+<li>20-59: &#8220;você é um adulto&#8221;</li>
+<li>60 ou mais: &#8220;você é um idoso&#8221;</li>
+</ul>
+<p>O Pytuguês aceita condições compostas, assim podemos usar o teste <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">idade</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code> para verificar se a idade está no intervalo entre 0 e 3.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Tabela de Conteúdos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#comandos-basicos">Comandos básicos</a><ul>
+<li><a class="reference internal" href="#operacoes-matematicas">Operações matemáticas</a></li>
+<li><a class="reference internal" href="#interacao-com-o-usuario">Interação com o usuário</a><ul>
+<li><a class="reference internal" href="#teste">Teste</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#controle-de-fluxo-de-codigo">Controle de fluxo de código</a><ul>
+<li><a class="reference internal" href="#repeticoes-repetir">Repetições: <em>repetir</em></a></li>
+<li><a class="reference internal" href="#repeticoes-para-cada">Repetições: <em>para cada</em></a></li>
+<li><a class="reference internal" href="#repeticoes-enquanto">Repetições: enquanto</a></li>
+<li><a class="reference internal" href="#condicionais">Condicionais</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="capítulo anterior">Instalação</a></li>
+      <li>Next: <a href="referência.html" title="próximo capítulo">Biblioteca de funções</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>Esta Página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.txt"
+            rel="nofollow">Exibir Fonte</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/tutorial.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -8,7 +8,7 @@ import sys
 import warnings
 from PyQt4 import QtGui, QtCore
 from tugalinhas import TRANSLATIONS_PATH
-from tugalinhas.main_window import MainWindow
+from tugalinhas.main_window import Tugalinhas
 from tugalinhas.splash import Splash
 
 
@@ -51,7 +51,7 @@ def setup_logging(level='debug'):
 def dumpfile():
     fp = sys.argv[-1]
     app = QtGui.QApplication(sys.argv)
-    win = MainWindow(app)
+    win = Tugalinhas(app)
     sys.stdout = win.interpretereditor.save_stdout
     sys.stderr = win.interpretereditor.save_stderr
     win._openfile(fp, add_to_recent=False, dump=True)
@@ -77,7 +77,7 @@ def run(filepath=None):
     splash.show()
     app.processEvents()
 
-    splash.window = window = MainWindow(app)
+    splash.window = window = Tugalinhas(app)
     window.show()
     splash.raise_()
 

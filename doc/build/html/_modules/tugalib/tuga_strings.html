@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tugalib.tuga_strings &mdash; Documentação pytuga 0.5.0</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Documentação pytuga 0.5.0" href="../../index.html" />
+    <link rel="up" title="Código do módulo" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fonte de tugalib.tuga_strings</h1><div class="highlight"><pre>
+&#39;&#39;&#39;
+Textos (strings)
+================
+
+Funções para processamento de texto.
+&#39;&#39;&#39;
+
+from tugalib.util import synonyms
+# TODO: terminar as traduções de funções e escolher ordem dos argumentos
+
+
+#
+# Unir e separar strings
+#
+@synonyms(&#39;concatene&#39;)
+<div class="viewcode-block" id="concatenar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.concatenar">[documentos]</a>def concatenar(*args):
+    &#39;&#39;&#39;
+    Converte os argumentos para texto e concatena o resultado
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; concatenar(&#39;x = &#39;, 2)
+    &#39;x = 2&#39;
+    &#39;&#39;&#39;
+
+    return concatenar_lista(args)
+
+</div>
+@synonyms(&#39;concatene_lista&#39;)
+<div class="viewcode-block" id="concatenar_lista"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.concatenar_lista">[documentos]</a>def concatenar_lista(lista):
+    &#39;&#39;&#39;
+    Converte os argumentos da lista em texto e concatena o resultado.
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; concatenar_lista([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, 1, 2, 3])
+    &#39;abc123&#39;
+    &#39;&#39;&#39;
+
+    return &#39;&#39;.join(map(str, lista))
+
+</div>
+@synonyms(&#39;una_valores&#39;)
+<div class="viewcode-block" id="unir_valores"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.unir_valores">[documentos]</a>def unir_valores(separador, *args):
+    &#39;&#39;&#39;
+    Semelhante à concatenar(), mas une os valores pelo texto separador
+    especificado
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; unir_valores(&#39;, &#39;, 1, 2, 3)
+    &#39;1, 2, 3&#39;
+    &#39;&#39;&#39;
+
+    return unir_lista(separador, args)
+
+</div>
+@synonyms(&#39;una_lista&#39;)
+<div class="viewcode-block" id="unir_lista"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.unir_lista">[documentos]</a>def unir_lista(separador, lista):
+    &#39;&#39;&#39;
+    Semelhante à concatenar_lista(), mas une os valores pelo texto separador
+    especificado
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; unir_lista(&#39;, &#39;, [1, 2, 3])
+    &#39;1, 2, 3&#39;
+    &#39;&#39;&#39;
+
+    return str(separador).join(map(str, lista))
+
+</div>
+particionar = particione = str.partition
+particionar_direita = particione_direita = str.rpartition
+separar_texto = separe_texto = str.split
+separar_em_linhas = separe_em_linhas = str.splitlines
+# rsplit?
+
+
+#
+# Formatação
+#
+@synonyms(&#39;formate&#39;)
+<div class="viewcode-block" id="formatar"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.formatar">[documentos]</a>def formatar(texto, *args, **kwds):
+    &#39;&#39;&#39;
+    Formata o texto inserindo os parâmetros dados nas posições coringa.
+
+    Existem duas sintaxes diferentes para a formatação de texto. A primeira,
+    baseada em C, utiliza o símbolo %s, %f, %d, etc para delimitar os pontos
+    de inserção por posição.
+
+    &gt;&gt;&gt; formatar(&#39;%i = %.2f&#39;, 42, 42)
+    &#39;42 = 42.00&#39;
+
+    A segunda usa esta sintaxe (explicar!)
+
+    &gt;&gt;&gt; formatar(&#39;{0} = {1}&#39;, 42, 42)
+    &#39;42 = 42&#39;
+    &#39;&#39;&#39;
+
+    try:
+        return texto % args
+    except TypeError:
+        return texto.format(*args, **kwds)
+
+</div>
+@synonyms(&#39;substitua&#39;)
+<div class="viewcode-block" id="substituir"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.substituir">[documentos]</a>def substituir(texto, valor, substituição):
+    &#39;&#39;&#39;
+    Substitui no ``texto`` todas as ocorrências de ``valor`` pela
+    ``substituição`` dada.
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; substituir(&#39;Olá, pessoal!&#39;, &#39;pessoal&#39;, &#39;mundo&#39;)
+    &#39;Olá, mundo!&#39;
+    &#39;&#39;&#39;
+
+    return str(texto).replace(valor, substituição)
+
+# maketrans?
+# translate?
+# encode?
+# format_map?
+
+
+#
+# Maiúsculas e minúsculas
+#</div>
+<div class="viewcode-block" id="maiúsculas"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.maiúsculas">[documentos]</a>def maiúsculas(texto):
+    &#39;&#39;&#39;
+    Converte um texto para letras maiúsculas
+
+    Examples
+    --------
+
+    &gt;&gt;&gt; maiúsculas(&#39;olá, mundo!&#39;)
+    &#39;OLÁ, MUNDO!&#39;
+    &#39;&#39;&#39;
+
+    return texto.upper()
+
+</div>
+<div class="viewcode-block" id="minúsculas"><a class="viewcode-back" href="../../referência.html#tugalib.tuga_strings.minúsculas">[documentos]</a>def minúsculas(texto):
+    &#39;&#39;&#39;Converte um texto para letras minúsculas
+
+    Examples
+    ---------
+
+    &gt;&gt;&gt; minúsculas(&#39;OLÁ, MUNDO!&#39;)
+    &#39;olá, mundo!&#39;
+    &#39;&#39;&#39;
+
+    return texto.lower()
+</div>
+título = str.title
+capitalizar = capitalize = str.capitalize
+trocar_caso = troque_caso = str.swapcase
+# casefold?
+
+
+#
+# Controle do espaço em branco
+#
+centralizar = centralize = str.center
+justificar = justifique = justificar_esquerda = justifique_esquerda = str.ljust
+justificar_direita = justifique_direita = str.rjust
+remover_esquerda = remova_esquerda = str.lstrip
+remover_direita = remova_direita = str.rstrip
+remover = remova = str.strip
+expandir_tabs = expanda_tabs = str.expandtabs
+# zfill?
+
+#
+# Testes
+#
+começa_com = str.startswith
+termina_com = str.endswith
+
+é_minúsculo = str.islower
+é_maiúsculo = str.isupper
+é_título = str.istitle
+
+é_alfanumérico = str.isalnum
+é_alfabético = str.isalpha
+é_identificador = str.isidentifier
+é_decimal = str.isdecimal
+é_digito = str.isdigit
+é_numérico = str.isnumeric
+é_imprimível = str.isprintable
+é_espaço = str.isspace
+
+
+#
+# Procura
+#
+contar_em_texto = conte_em_texto = str.count
+procurar_em_texto = procure_em_texto = str.find
+procurar_em_texto_direita = procure_em_texto_direita = str.rfind
+# index?, rindex?
+
+
+if __name__ == &#39;__main__&#39;:
+    import doctest
+    doctest.testmod()
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Pesquisa rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Digite os termos da busca ou o nome de um módulo, classe ou função.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Fábio Macêdo Mendes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
