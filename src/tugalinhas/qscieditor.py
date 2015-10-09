@@ -32,20 +32,43 @@ class PythonEditor(Qsci.QsciScintilla):
     '''
 
     DEFAULT_COLORS = dict(
-        margins_background='#cccccc',
-        caret_line_background='#ffffee',
+        margins_background='#e3e3dd',
+        caret_line_background='#f0f0d0',
+        background='#eeeedd',
+        
+        # Lexer colors
+        lexer_default='#000000',
+        lexer_comment='#000080',
+        lexer_number='#008000',
+        lexer_double_quoted_string='#a00000',
+        lexer_single_quoted_string='#a00000',
+        lexer_keyword='#000080',
+        lexer_triple_single_quoted_string='#a00000',
+        lexer_triple_double_quoted_string='#a00000',
+        lexer_class_name='#000000',
+        lexer_function_method_name='#000000',
+        lexer_operator='#000000',
+        lexer_identifier='#000000',
+        lexer_comment_block='#000080',
+        lexer_unclosed_string='#a00000',
+        lexer_highlighted_identifier='#000000',
+        lexer_decorator='#808000',
     )
+    
+    BOLD_STYLES = {5, 9, 10, 14}
+    
+    LEXER_STYLES = dict(
+        Default=0, Comment=1, Number=2, 
+        DoubleQuotedString=3, SingleQuotedString=4,
+        Keyword=5, TripleSingleQuotedString=6, TripleDoubleQuotedString=7, 
+        ClassName=8, FunctionMethodName=9, 
+        Operator=10, Identifier=11, CommentBlock=12, UnclosedString=13, 
+        HighlightedIdentifier=14, Decorator=15)
     
     def __init__(self, 
             parent=None, *, 
-            
-            # font configuration
-            fontsize=12, fontfamily='monospace', 
-            
-            # default list of words to autocomplete
-            autocomplete_words=(), autocomplete_python=True,
-             
-            # set colors and other stuff
+            fontsize=11, fontfamily='monospace', 
+            autocompletion_words=(), autocomplete_python=True,
             **kwds
             ): 
         super().__init__(parent)
@@ -58,7 +81,7 @@ class PythonEditor(Qsci.QsciScintilla):
         # Configure lexer and api for autocompletion
         lexer = Qsci.QsciLexerPython(self)
         lexer.setDefaultFont(self.font())
-        words = list(autocomplete_words) 
+        words = list(autocompletion_words) 
         if autocomplete_python:
             words.extend(PYTHON_WORDS)
         if words:
@@ -91,10 +114,13 @@ class PythonEditor(Qsci.QsciScintilla):
             if k.endswith('_color'):
                 colors[k[:-6]] = v
         self.setColors(**colors)
-        
+                
         # Check for any rogue parameter
         if kwds:
             raise TypeError('invalid parameter: %r' % kwds.popitem()[0])
+
+    def sizeHint(self):
+        return QtCore.QSize(100, 200)
         
     def setAllFonts(self, family='monospace', size=10, fixedpitch=True):
         '''Set the font of all visible elements in the text editor.
@@ -112,18 +138,25 @@ class PythonEditor(Qsci.QsciScintilla):
         font.setFixedPitch(fixedpitch)
         font.setPointSize(size)
         self.setFont(font)
-        self.setMarginsFont(font)
 
         # Margin 0 is used for line numbers
         fontmetrics = QtGui.QFontMetrics(font)
         self.setMarginsFont(font)
         self.setMarginWidth(0, fontmetrics.width('___') + 0)
+        self.setMarginWidth(1, 0)
         self.setMarginLineNumbers(0, True)
         
         # Change lexer font
         bfamily = bytes(family, encoding='utf8')
-        if self.lexer() is not None:
-            self.lexer().setFont(font)
+        lexer = self.lexer()
+        if lexer is not None:
+            font_bold = QFont(font)
+            font_bold.setBold(True)
+            for style in self.LEXER_STYLES.values():
+                if style in self.BOLD_STYLES:
+                    lexer.setFont(style, font_bold)
+                else:
+                    lexer.setFont(style, font)
             self.SendScintilla(Qsci.QsciScintilla.SCI_STYLESETFONT, 1, bfamily)
             
     def setColors(self, **kwds):
@@ -134,14 +167,41 @@ class PythonEditor(Qsci.QsciScintilla):
         '''
         tasks = []
         
+        # Handle special colors
+        text_color = kwds.pop('text', self.color())
+        self.setColor(QColor(text_color))
+        
+        # Background
+        background_color = kwds.pop('background', self.paper())
+        self.setPaper(QColor(background_color))
+        self.lexer().setPaper(QColor(background_color))
+        self.lexer().setDefaultPaper(QColor(background_color))
+        
+        # Grab lexer colors
+        lexer_colors = {}
         for key, value in list(kwds.items()):
+            inputkey = key
             key = ''.join([x.title() for x in key.split('_')])
-            attr = 'set%sColor' % key
-            method = getattr(self, attr)
-            tasks.append((method, QColor(value)))
-            
+            if key.startswith('Lexer'):
+                key = key[5:]
+                if key not in self.LEXER_STYLES:
+                    raise ValueError('%s is not a valid lexer style' % inputkey)
+                lexer_colors[key] = value
+            else:
+                attr = 'set%sColor' % key
+                method = getattr(self, attr)
+                tasks.append((method, QColor(value)))
+        
+        # Apply main UI colors 
         for method, arg in tasks:
-            method(arg)              
+            method(arg)
+            
+        # Apply lexer colors
+        lexer = self.lexer()
+        for style, color in lexer_colors.items():
+            color = QtGui.QColor(color)
+            style_idx = self.LEXER_STYLES[style]
+            lexer.setColor(color, style_idx)
     
     def runCode(self):
         '''Runs the source code in the editor when user press Control + Return

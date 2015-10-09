@@ -4,8 +4,9 @@ The main editor with python syntax highlighting
 import io
 import sys
 import traceback
-from .util import Qsci, QtCore, QtGui, QColor, QFont, splitindent
+from .util import QtCore, splitindent
 from .qscieditor import PythonEditor
+from matplotlib.texmanager import cmd_split
 
 Tab = QtCore.Qt.Key_Tab
 Backtab = QtCore.Qt.Key_Backtab
@@ -43,15 +44,29 @@ class PythonConsole(PythonEditor):
     A Scintilla based console.
     '''
     
-    def __init__(self, parent=None, namespace=None, **kwds):
+    def __init__(self, 
+                 parent=None, *, 
+                 namespace=None,
+                 header_text=None, 
+                 hide_margins=True, **kwds):
         super().__init__(parent, **kwds)
-        self.setMarginWidth(0, 0)
-        self.setMarginWidth(1, 0)
+        if hide_margins:
+            self.setMarginWidth(0, 0)
+            self.setMarginWidth(1, 0)
         self.current_command = []
         self.console_namespace = dict(namespace or {})
-        self.setText('>>> ')
-        self.locked = (0, 3)
+        
+        # Set header text
+        if header_text is None:
+            header_text = '>>> '
+        else:
+            header_text = '%s\n>>> ' % header_text
+        self.setText(header_text)
+        lineno = header_text.count('\n')
+        self.locked = (lineno, 3)
         self.pylexer = self.lexer()
+        self.history = []
+        self.history_idx = 0
         
     def addPrompt(self, newline=True):
         data = '\n' if newline else ''
@@ -89,6 +104,7 @@ class PythonConsole(PythonEditor):
             # Insert result in text
             self.insert(result)
             self.addPrompt(newline=bool(result))
+            self.history.append(cmd)
         return cmd
         
     def currentCommandIsComplete(self):
@@ -139,14 +155,26 @@ class PythonConsole(PythonEditor):
         self.setSelection(i, j + 1, m, n)
         self.removeSelectedText()
         
+    def replaceCurrentBy(self, cmd):
+        '''Replaces the current command by the given command'''
+        
+        cmd_lines = cmd.splitlines()
+        cmd_lines[1:] = ['... ' + line for line in cmd_lines[1:]]
+        self.cancelCurrent()
+        self.setCursorAtEndPosition()
+        self.insert('\n'.join(cmd_lines))
+        self.setCursorAtEndPosition()
+        self.current_command[:] = cmd.splitlines()[:-1]
+        
     def runCommand(self, cmd):
         '''Run command in the console as if it was inserted by the user''' 
         
         self.cancelCurrent()
-        result = self.executeCommand(cmd, 'eval')
+        result = self.executeCommand(cmd, 'exec')
         if result:
             self.insert('...\n' + result)
             self.addPrompt()
+        self.history_idx = 0
         return result
     
     def keyPressEvent(self, ev):
@@ -173,6 +201,10 @@ class PythonConsole(PythonEditor):
             line = self.text(lineno)
             super().keyPressEvent(ev)
             
+            # Detect autocompletion
+            if self.lineLength(lineno) !=  lineindex + 1:
+                return
+            
             # Add current line to the command list
             self.current_command.append(line[4:])
             
@@ -192,6 +224,17 @@ class PythonConsole(PythonEditor):
         elif key in (Backspace, Backtab):
             if (lineno, lineindex - 1) > self.locked:
                 super().keyPressEvent(ev)
+                
+        # Chooses commands in history
+        elif key in (Up, Down):
+            delta = 1 if key else 1 
+            N = len(self.history)
+            if N:
+                idx = (N - self.history_idx - delta) % N
+                self.replaceCurrentBy(self.history[idx])
+                self.history_idx += delta
+            else:
+                self.cancelCurrent()
             
         else:
             super().keyPressEvent(ev)

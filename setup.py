@@ -1,4 +1,3 @@
-#-*-coding: utf-8-*-
 import os
 import sys
 from setuptools import setup, find_packages
@@ -18,8 +17,8 @@ with open(version_file, 'w') as F:
 console_scripts = ['pytuga = pytuga.main:run']
 gui_scripts = ['tugalinhas = tugalinhas.main:run']
 if sys.platform.startswith('win'):
-    gui_scripts = ['tugalinhas_window = tugalinhas.main:run']
-    console_scripts.append('tugalinhas = tugalinhas.main:run')
+    gui_scripts = ['tugalinhas_window = tugalinhas.__main__:main']
+    console_scripts.append('tugalinhas = tugalinhas.__main__:main')
 
 # Run setup() function
 setup(
