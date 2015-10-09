@@ -3,8 +3,8 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.5.1'
-REQUIRES = ['bidict']  # 'PyQt4',
+VERSION = '0.6.0'
+REQUIRES = ['PyQt5']  # 'PyQt5.Qsci?',
 
 
 # Rewrite __version__.py in tugalib
