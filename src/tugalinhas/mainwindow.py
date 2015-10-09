@@ -53,6 +53,18 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self.turtlearea.setText('')
         self.updateTitle()
         
+    #
+    # View menu
+    #
+    def zoomIn(self):
+        self.turtlearea.zoomIn()
+    
+    def zoomOut(self):
+        self.turtlearea.zoomOut()
+        
+    #
+    # Other commands and utility methods
+    #
     def updateTitle(self):
         if self._filename:
             self.setWindowTitle('Tugalinhas (%s)' % self._filename)

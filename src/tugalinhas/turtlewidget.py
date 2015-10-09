@@ -36,3 +36,9 @@ class TurtleWidget(QtWidgets.QWidget):
         
     def text(self):
         return self.editor.text()
+    
+    def zoomIn(self):
+        self.view.zoomIn()
+    
+    def zoomOut(self):
+        self.view.zoomOut()
