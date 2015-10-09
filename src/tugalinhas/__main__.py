@@ -1,5 +1,5 @@
 import sys
-from tugalinhas2 import QtWidgets, Tugalinhas
+from tugalinhas import QtWidgets, Tugalinhas
 
 
 def main():

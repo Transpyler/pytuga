@@ -33,7 +33,7 @@ class TurtleNamespace(MutableMapping):
     '''
     
     _BLACKLIST = ['items', 'keys', 'values', 'get', 'blacklist', 
-                  'update', 'setdefault', 'pop', 'popitem', 'clear']
+                  'update', 'setdefault', 'pop', 'popitem']
     
     def __init__(self, scene, D={}, **kwds):
         self._scene = scene
@@ -78,12 +78,17 @@ class TurtleNamespace(MutableMapping):
     def _getstate(self, name):
         '''Get the current (tip) value of the state of the current turtle.'''
         
-        return self._scene.getTurtleState(name)
+        return self._scene.turtleState(name)
         
     def _setstate(self, name, value, **kwds):
         '''Modify the state of the current turtle.'''
         
         self._scene.setTurtleState(name, value, **kwds)
+        
+    def _getturtle(self):
+        '''Return the current turtle'''
+        
+        return self._scene.turtle()
         
     def blacklist(self, name):
         '''Adds given name to blacklist of function names'''
@@ -108,7 +113,7 @@ class TurtleNamespace(MutableMapping):
         User can pass the x, y coordinates of the new position or a tuple of 
         (x, y) values.'''
         
-        return self._setstate('pos', value)
+        return self._setstate('pos', value, draw=False, delay=0)
     
     def getheading(self):
         '''Return current heading of the turtle (in degrees)'''
@@ -118,7 +123,7 @@ class TurtleNamespace(MutableMapping):
     def setheading(self, value):
         '''Modifies turtle's heading (in degrees)'''
         
-        return self._setstate('heading', value)
+        return self._setstate('heading', value, delay=0)
 
     def getwidth(self):
         '''Return the pen width (in pixels)'''
@@ -155,20 +160,22 @@ class TurtleNamespace(MutableMapping):
         name.'''
         return self._setstate('fill', color)
     
+    @alias('pu')
     def penup(self):
         '''Raises the turtle pen so it stops drawing'''
         
-        return self._setstate('isdrawing', False)
+        return self._setstate('isdown', False)
     
+    @alias('pd')
     def pendown(self):
         '''Lower the turtle pen so it can draw in the screen'''
         
-        return self._setstate('isdrawing', True)
+        return self._setstate('isdown', True)
     
-    def isdrawing(self):
+    def isdown(self):
         '''Return True if the pen is down or False otherwise'''
         
-        return self._getstate('isdrawing')
+        return self._getstate('isdown')
             
     #
     # Movement functions
@@ -210,6 +217,25 @@ class TurtleNamespace(MutableMapping):
         Negative angles produces counter-clockwise rotation.'''
         
         return self.left(-angle)
+    
+    def restart(self):
+        '''Restart the scene.
+        
+        Clear all elements on the screen and put turtle black to the 
+        default position'''
+        
+        self._scene.clear()
+        self._scene.addTurtle(default=True)
+
+    def clear(self):
+        '''Clear elements preserving turtle.
+        
+        Clear all elements on the screen, but preserves turtle state.'''
+        
+        turtle = self._scene.turtle().copy()
+        self._scene.clear()
+        self._scene.addTurtle(turtle, default=True)
+        
     
     def turtlehelp(self):
         '''Display a help message of all turtle functions'''

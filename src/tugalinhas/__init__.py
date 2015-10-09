@@ -7,4 +7,4 @@ from .qscieditor import PythonEditor
 from .qsciconsole import PythonConsole
 from .qscirepleditor import ReplEditor
 from .turtlewidget import TurtleWidget
-from .tugalinhas import Tugalinhas
+from tugalinhas.mainwindow import Tugalinhas

@@ -197,7 +197,9 @@ class PythonConsole(PythonEditor):
         if key in (Return, Enter):
             if modifiers & Control:
                 return
-            
+
+            self.setCursorAtEndPosition()
+            lineno, lineindex = self.getCursorPosition()            
             line = self.text(lineno)
             super().keyPressEvent(ev)
             

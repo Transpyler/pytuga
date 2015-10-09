@@ -10,7 +10,10 @@ svg_renderer = QtSvg.QSvgRenderer(svg_path)
 
 
 class Turtle(QtSvg.QGraphicsSvgItem):
-    def __init__(self, x, y, parent=None, svg_id='tuga'):
+    def __init__(self, parent=None, 
+                 svg_id='tuga', 
+                 pos=(0, 0), heading=0, isdown=True, 
+                 color=(0, 0, 0), fill=None, width=2):
         super().__init__(parent)
         
         # Loads from turtleart.svg
@@ -26,12 +29,21 @@ class Turtle(QtSvg.QGraphicsSvgItem):
         self.setTransformOriginPoint(0.5 * width, 0.5 * height)
         
         # Put in the desired position and bellow others
-        self.setPos(x, y)
+        self.setPos(*pos)
         self.setZValue(1.0)
+        self.setRotation(heading)
         
-        self.tip_pos = Vec(x, y)
+        self.tip_pos = Vec(*pos)
         self.tip_heading = 0
-        self.tip_down = True
-        self.tip_color = (0, 0, 0)
-        self.tip_fill = None
-        self.tip_width = 2
+        self.tip_isdown = isdown
+        self.tip_color = color
+        self.tip_fill = fill
+        self.tip_width = width
+        self.svg_id = svg_id
+
+    def copy(self):
+        return type(self)(
+            pos=self.tip_pos, heading=self.tip_heading, isdown=self.tip_isdown,
+            color=self.tip_color, fill=self.tip_fill, width=self.tip_width,
+            svg_id=self.svg_id)
+        
