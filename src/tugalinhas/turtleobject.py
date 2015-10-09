@@ -13,7 +13,7 @@ class Turtle(QtSvg.QGraphicsSvgItem):
     def __init__(self, parent=None, 
                  svg_id='tuga', 
                  pos=(0, 0), heading=0, isdown=True, 
-                 color=(0, 0, 0), fill=None, width=2):
+                 color=(0, 0, 0), fill=None, width=2, size=45):
         super().__init__(parent)
         
         # Loads from turtleart.svg
@@ -22,11 +22,12 @@ class Turtle(QtSvg.QGraphicsSvgItem):
         
         # Define local transforms
         rect = self.sceneBoundingRect()
-        width, height = rect.width(), rect.height()
+        curr_width, curr_height = rect.width(), rect.height()
         self.setTransform(QtGui.QTransform(1.00, 0.00,
                                            0.00, 1.00,
-                                           -width/2, -height/2))
-        self.setTransformOriginPoint(0.5 * width, 0.5 * height)
+                                           -curr_width/2, -curr_height/2))
+        self.setTransformOriginPoint(0.5 * curr_width, 0.5 * curr_height)
+        self.setScale(size / curr_width)
         
         # Put in the desired position and bellow others
         self.setPos(*pos)

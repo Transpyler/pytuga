@@ -31,16 +31,13 @@ class TurtleView(QtWidgets.QGraphicsView):
                                      +0, -1, 
                                      +0, +0)
         self.setTransform(transform)
-        self._zoomfactor = 1
-        self._zoomstep = 0.2
+        self._zoomfactor = 1.2
          
     def zoomIn(self):
-        self._zoomfactor *= self._zoomstep + 1
         self.scale(self._zoomfactor, self._zoomfactor)
     
     def zoomOut(self):
-        self._zoomfactor /= self._zoomstep + 1
-        self.scale(self._zoomfactor, self._zoomfactor)
+        self.scale(1 / self._zoomfactor, 1 / self._zoomfactor)
 
 
 class TurtleScene(QtWidgets.QGraphicsScene):
