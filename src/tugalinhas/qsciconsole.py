@@ -6,7 +6,6 @@ import sys
 import traceback
 from .util import QtCore, splitindent
 from .qscieditor import PythonEditor
-from matplotlib.texmanager import cmd_split
 
 Tab = QtCore.Qt.Key_Tab
 Backtab = QtCore.Qt.Key_Backtab
@@ -23,6 +22,7 @@ Control = QtCore.Qt.ControlModifier
 Home = QtCore.Qt.Key_Home
 Shift = QtCore.Qt.ShiftModifier
 U = QtCore.Qt.Key_U
+D = QtCore.Qt.Key_D
 C = QtCore.Qt.Key_C
 V = QtCore.Qt.Key_V
 X = QtCore.Qt.Key_X
@@ -237,6 +237,10 @@ class PythonConsole(PythonEditor):
                 self.history_idx += delta
             else:
                 self.cancelCurrent()
+                
+        # Ctrl + D deletes the current command
+        elif modifiers & Control and key == D:
+            self.cancelCurrent()
             
         else:
             super().keyPressEvent(ev)

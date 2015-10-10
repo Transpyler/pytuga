@@ -18,6 +18,7 @@ Minus = QtCore.Qt.Key_Minus
 Plus = QtCore.Qt.Key_Plus
 Key_V = QtCore.Qt.Key_V
 Key_Z = QtCore.Qt.Key_Z
+Key_D = QtCore.Qt.Key_D
 
 # Python keywords and common functions for autocompletion
 PYTHON_WORDS = tuple(list(__builtins__) + keyword.kwlist)
@@ -31,31 +32,83 @@ class PythonEditor(Qsci.QsciScintilla):
     A Scintilla based text editor with Python syntax highlight.
     '''
 
-    DEFAULT_COLORS = dict(
-        margins_background='#e3e3dd',
-        caret_line_background='#f0f0d0',
-        background='#eeeedd',
+    NAMED_COLORS_INV = dict(
+        lexer_default='default',
+        lexer_comment='comment',
+        lexer_number='number',
+        lexer_double_quoted_string='string',
+        lexer_single_quoted_string='string',
+        lexer_keyword='keyword',
+        lexer_triple_single_quoted_string='string',
+        lexer_triple_double_quoted_string='string',
+        lexer_class_name='definition',
+        lexer_function_method_name='definition',
+        lexer_operator='default',
+        lexer_identifier='default',
+        lexer_comment_block='comment',
+        lexer_unclosed_string='badstring',
+        lexer_highlighted_identifier='default',
+        lexer_decorator='decorator',
+    )
+    COLOR_NAMES = set(NAMED_COLORS_INV.values())
+    NAMED_COLORS = {'lexer_' + c: [] for c in COLOR_NAMES}
+    for c, v in NAMED_COLORS_INV.items():
+        NAMED_COLORS['lexer_' + v].append(c)
+    
+    DARK_COLORS = dict(
+        margins_background='#000000',
+        margins_foreground='#555753',
+        caret_line_background='#555753',
+        background='#2e3436',
+        
+        # Lexer colors
+        lexer_default='#d3c7cf',
+        lexer_comment='#888a85',
+        lexer_number='#ff6c10',
+        lexer_string='#edd400',
+        lexer_keyword='#ffffff',
+        lexer_definition='#729fcf',
+        lexer_decorator='#ad7fa8',
+        lexer_badstring='#ff0000',
+    )
+    
+    WHITE_COLORS = dict(
+        margins_background='#f6f6f6',
+        margins_foreground='#8d9091',
+        caret_line_background='#eeeeec',
+        background='#ffffff',
         
         # Lexer colors
         lexer_default='#000000',
-        lexer_comment='#000080',
-        lexer_number='#008000',
-        lexer_double_quoted_string='#a00000',
-        lexer_single_quoted_string='#a00000',
-        lexer_keyword='#000080',
-        lexer_triple_single_quoted_string='#a00000',
-        lexer_triple_double_quoted_string='#a00000',
-        lexer_class_name='#000000',
-        lexer_function_method_name='#000000',
-        lexer_operator='#000000',
-        lexer_identifier='#000000',
-        lexer_comment_block='#000080',
-        lexer_unclosed_string='#a00000',
-        lexer_highlighted_identifier='#000000',
-        lexer_decorator='#808000',
+        lexer_comment='#0000ff',
+        lexer_number='#ff00ff',
+        lexer_string='#ff00ff',
+        lexer_keyword='#a52a2a',
+        lexer_definition='#008a8c',
+        lexer_decorator='#a02ff0',
+        lexer_badstring='#ff0000',
     )
     
-    BOLD_STYLES = {5, 9, 10, 14}
+    LIGHT_COLORS = dict(
+        margins_background='#f0f0f0',
+        margins_foreground='#a2a3a3',
+        caret_line_background='#f1f1ef',
+        background='#f6f7f8',
+        
+        # Lexer colors
+        lexer_default='#4d4e53',
+        lexer_comment='#708090',
+        lexer_number='#0077aa',
+        lexer_string='#0077aa',
+        lexer_keyword='#669900',
+        lexer_definition='#4186a8',
+        lexer_decorator='#dd4a68',
+        lexer_badstring='#ff0000',
+    )
+    
+    DEFAULT_COLORS = DARK_COLORS
+    
+    BOLD_STYLES = {1, 5, 9, 14}
     
     LEXER_STYLES = dict(
         Default=0, Comment=1, Number=2, 
@@ -94,6 +147,7 @@ class PythonEditor(Qsci.QsciScintilla):
         # Set font for lexer again?
         bfamily = bytes(fontfamily, encoding='utf8')
         self.SendScintilla(Qsci.QsciScintilla.SCI_STYLESETFONT, 1, bfamily)
+        self.setAllFonts(fontfamily, fontsize, True)
         
         # General indentation behavior
         self.setAutoIndent(True)
@@ -146,6 +200,7 @@ class PythonEditor(Qsci.QsciScintilla):
         self.setMarginWidth(1, 0)
         self.setMarginLineNumbers(0, True)
         
+        
         # Change lexer font
         bfamily = bytes(family, encoding='utf8')
         lexer = self.lexer()
@@ -154,9 +209,9 @@ class PythonEditor(Qsci.QsciScintilla):
             font_bold.setBold(True)
             for style in self.LEXER_STYLES.values():
                 if style in self.BOLD_STYLES:
-                    lexer.setFont(style, font_bold)
+                    lexer.setFont(font_bold, style)
                 else:
-                    lexer.setFont(style, font)
+                    lexer.setFont(font, style)
             self.SendScintilla(Qsci.QsciScintilla.SCI_STYLESETFONT, 1, bfamily)
             
     def setColors(self, **kwds):
@@ -166,6 +221,13 @@ class PythonEditor(Qsci.QsciScintilla):
         `marginsBackgroundColor` property.
         '''
         tasks = []
+        
+        # Handle color names:
+        for k, v in list(kwds.items()):
+            if k in self.NAMED_COLORS:
+                color = kwds.pop(k)
+                for k in self.NAMED_COLORS[k]:
+                    kwds.setdefault(k, v)
         
         # Handle special colors
         text_color = kwds.pop('text', self.color())
@@ -222,6 +284,16 @@ class PythonEditor(Qsci.QsciScintilla):
             self.zoomIn()
         elif modifiers & Control and key == Equal:
             self.zoomTo(1)
+            
+        # Delete a line with Ctrl+D
+        elif modifiers & Control and key == Key_D:
+            if self.hasSelectedText():
+                self.removeSelectedText()
+            else:
+                lineno, _ = self.getCursorPosition()
+                lineend = self.lineLength(lineno)
+                self.setSelection(lineno, 0, lineno, lineend)
+                self.removeSelectedText()
             
         # Passthru to Scintilla
         else:
