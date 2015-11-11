@@ -52,9 +52,9 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self.fps = fps
         self._interval = 1 / fps
         self.startTimer(1000 / fps)
-        self._init(fps=fps, addturtle=True)
+        self._init(fps=fps)
         
-    def _init(self, fps=30, addturtle=False):
+    def _init(self, fps=30):
         self._lines = []
         self._turtles = []
         self._turtle = None
@@ -62,8 +62,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self._pen = QtGui.QPen(QtGui.QColor(0, 0, 0))
         self._pen.setWidth(2)
         self._brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        if addturtle:
-            self.addTurtle(default=True)
+        self.addTurtle(default=True)
 
     def clear(self):
         super().clear()
