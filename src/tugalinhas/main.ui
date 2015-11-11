@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -52,6 +52,7 @@
     <addaction name="actionAmpliar"/>
     <addaction name="actionReduzir"/>
     <addaction name="separator"/>
+    <addaction name="actionLimpar_tela"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTela"/>
@@ -101,6 +102,11 @@
   <action name="actionSalvar_Como">
    <property name="text">
     <string>Salvar como</string>
+   </property>
+  </action>
+  <action name="actionLimpar_tela">
+   <property name="text">
+    <string>Limpar tela</string>
    </property>
   </action>
  </widget>
@@ -218,6 +224,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionLimpar_tela</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>clearScene()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -226,5 +248,6 @@
   <slot>newFile()</slot>
   <slot>zoomIn()</slot>
   <slot>zoomOut()</slot>
+  <slot>clearScene()</slot>
  </slots>
 </ui>
