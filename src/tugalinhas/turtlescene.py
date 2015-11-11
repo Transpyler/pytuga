@@ -6,10 +6,9 @@ these two classes are expected.
 '''
 
 import time
-from .util import QtGui, QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets
 from .mathutil import Vec
 from .turtleobject import Turtle
-
 
 class TurtleView(QtWidgets.QGraphicsView):
     '''
@@ -23,9 +22,12 @@ class TurtleView(QtWidgets.QGraphicsView):
     negative rotations are clockwise.
     
     '''
+
+
     def __init__(self, scene=None):
         if scene is None:
             scene = TurtleScene()
+        self._scene = scene
         super().__init__(scene)
         transform = QtGui.QTransform(1,  0, 
                                      0, -1, 
@@ -38,6 +40,15 @@ class TurtleView(QtWidgets.QGraphicsView):
     
     def zoomOut(self):
         self.scale(1 / self._zoomfactor, 1 / self._zoomfactor)
+
+    # def notifyPosChanged(self, turtle, pos):
+    #     assert isinstance(turtle, Turtle)
+    #     assert isinstance(pos, Vec)
+    #     print("Turtle %s position changed to (%d, %d)" %
+    #           (turtle, pos[0], pos[1]))
+
+    def resizeEvent(self, QResizeEvent):
+        self._scene.viewWasResized()
 
 
 class TurtleScene(QtWidgets.QGraphicsScene):
@@ -63,6 +74,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self._pen.setWidth(2)
         self._brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         self.addTurtle(default=True)
+
+        self.__addPosText()
 
     def clear(self):
         super().clear()
@@ -217,12 +230,44 @@ class TurtleScene(QtWidgets.QGraphicsScene):
                 pos = pos0 + delta * (t / delay)
                 line.setLine(x0, y0, *pos)
                 turtle.setPos(*pos)
+                self.__notifyPosChanged(turtle, pos)
                 t = time.time() - t0
                 yield True
         
         line.setLine(x0, y0, xf, yf)
         turtle.setPos(*endpos)
-        
+        self.__notifyPosChanged(turtle, endpos)
+
     def __setProp(self, prop, value):
         setattr(self._turtle, 'tip_' + prop, value)
         yield
+
+    def __notifyPosChanged(self, turtle, pos):
+        '''Notifies scene view that the position of a turtle has changed,
+        callback way.'''
+
+        # for view in self.views():
+        #     view.notifyPosChanged(turtle, pos)
+        self._posTextItem.setText("x=%d, y=%d" % (pos[0], pos[1]))
+
+    def __addPosText(self):
+        #self._posTextLayout = Q
+        self._posTextItem = QtWidgets.QGraphicsSimpleTextItem('')
+
+    def __getView(self):
+        views = self.views()
+        if len(views) > 0:
+          return views[0]
+        return None
+
+    def viewWasResized(self):
+        self.__updateTextItems
+        assert isinstance(size, QtCore.QSize)
+        t = self._posTextItem
+        r = t.boundingRect()
+        MARGIN = 3
+        x, y =
+        t.setPos(size.width()-r.width()-MARGIN, size.height()-r.height()-MARGIN)
+
+
+        size = self.viewport().size()

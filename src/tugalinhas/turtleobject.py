@@ -2,7 +2,8 @@
 Defines the main turtle object
 '''
 import os
-from .util import QtWidgets, QtGui, QtSvg
+from PyQt5 import QtGui, QtSvg
+from PyQt5.QtCore import pyqtSignal
 from .mathutil import Vec
 
 svg_path = os.path.join(os.path.split(__file__)[0], 'turtleart.svg') 
@@ -41,6 +42,8 @@ class Turtle(QtSvg.QGraphicsSvgItem):
         self.tip_fill = fill
         self.tip_width = width
         self.svg_id = svg_id
+
+        self.oldpos = [None, None]
 
     def copy(self):
         return type(self)(

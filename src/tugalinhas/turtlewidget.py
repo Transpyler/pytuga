@@ -1,4 +1,4 @@
-from .util import QtWidgets
+from PyQt5 import QtWidgets
 from . import ReplEditor, TurtleScene, TurtleView
 
 class TurtleWidget(QtWidgets.QWidget):

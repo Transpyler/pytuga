@@ -5,6 +5,8 @@ import io
 import sys
 import traceback
 from .qscieditor import PythonEditor
+from PyQt5 import QtCore
+
 
 Tab = QtCore.Qt.Key_Tab
 Backtab = QtCore.Qt.Key_Backtab

@@ -1,4 +1,4 @@
-from .util import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore
 from .qsciconsole import PythonConsole
 from .qscieditor import PythonEditor
 

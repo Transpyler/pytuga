@@ -1,6 +1,6 @@
 import os
 import pytuga
-from .util import QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 from . import TurtleWidget
 
 
