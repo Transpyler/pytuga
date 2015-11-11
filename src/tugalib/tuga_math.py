@@ -25,8 +25,7 @@ def raiz(x):
 
     >>> raiz(4)
     2.0
-    ssdsfds
-
+    
 
     Migração
     --------

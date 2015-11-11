@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 NAME = 'pytuga'
 VERSION = '0.6.0'
-REQUIRES = ['PyQt5']  # 'PyQt5.Qsci?',
+REQUIRES = [] #['PyQt5']  # 'PyQt5.Qsci?',
 
 
 # Rewrite __version__.py in tugalib
@@ -74,4 +74,5 @@ setup(
     # Data files
     #
     include_package_data=True,
+    zip_safe=False,
 )

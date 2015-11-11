@@ -1,0 +1,17 @@
+# para cada...
+para cada x de 1 até 10:
+    mostre("Olá %s!" % x)
+    
+# equanto
+enquanto x > 0:
+    se x % 2 == 0:
+        mostre("x =", x)
+    x -= 1
+
+# Laço de repetição simples
+repetir 10 vezes:
+    esquerda(36)
+    repetir 3 vezes:
+        frente(90)
+        esquerda(120)
+        

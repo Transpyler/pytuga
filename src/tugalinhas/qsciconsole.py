@@ -79,7 +79,6 @@ class PythonConsole(PythonEditor):
         self.console_namespace.clear()
         self.console_namespace.update(value)
         
-        
     def setCursorAtEndPosition(self):
         lineno = self.lines() - 1
         lineindex = self.lineLength(lineno)
@@ -134,11 +133,7 @@ class PythonConsole(PythonEditor):
             stdout, stderr = sys.stdout, sys.stderr
             out = sys.stdout = io.StringIO()
             err = sys.sterr = io.StringIO()
-            try:
-                code = compile(cmd, '<input>', mode)
-                exec(code, self.console_namespace)
-            except:
-                traceback.print_exc(file=out)
+            self.runner(cmd, mode, out)
             result = out.getvalue() + err.getvalue()
         finally:
             sys.stdout, sys.stderr = stdout, stderr
@@ -242,6 +237,24 @@ class PythonConsole(PythonEditor):
         elif modifiers & Control and key == D:
             self.cancelCurrent()
             
+        # Passthru
         else:
             super().keyPressEvent(ev)
             
+    def runner_(self, cmd, mode, out):
+        '''Run code in an interpreter'''
+
+        try:
+            code = compile(cmd, '<input>', mode)
+            exec(code, self.console_namespace)
+        except:
+            traceback.print_exc(file=out)
+
+    # Pytuga hack!
+    def runner(self, cmd, mode, out):
+        import pytuga
+        import tugalib
+        tuganames = {k: getattr(tugalib, k) for k in dir(tugalib)}
+        self.console_namespace = {**tuganames, **self.console_namespace}
+        pycmd = pytuga.transpile(cmd)
+        self.runner_(pycmd, mode, out)

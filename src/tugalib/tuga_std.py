@@ -51,7 +51,16 @@ def sair(código_erro):
 #
 # TODO: fazer funções com strings de documentação
 #
-binário = bin
+def binário(x):
+    '''
+    Return the binary representation of an integer.
+
+   >>> bin(2796202)
+   '0b1010101010101010101010
+    '''
+    return bin(x)
+
+
 booleano = bool
 # bytes = bytes
 caractere = chr

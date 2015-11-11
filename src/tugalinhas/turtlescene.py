@@ -27,9 +27,9 @@ class TurtleView(QtWidgets.QGraphicsView):
         if scene is None:
             scene = TurtleScene()
         super().__init__(scene)
-        transform = QtGui.QTransform(+1, +0, 
-                                     +0, -1, 
-                                     +0, +0)
+        transform = QtGui.QTransform(1,  0, 
+                                     0, -1, 
+                                     0,  0)
         self.setTransform(transform)
         self._zoomfactor = 1.2
          

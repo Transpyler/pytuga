@@ -23,7 +23,7 @@ def alias(*args):
     return decorator
 
 
-class TurtleNamespace(MutableMapping):
+class TurtleNamespaceEnglish(MutableMapping):
     '''
     Defines the namespace of turtle functions. 
     
@@ -97,6 +97,15 @@ class TurtleNamespace(MutableMapping):
         
     def _threaded_factory(self, func):
         '''Return a threaded factory function'''
+        
+    #
+    # Speed control
+    #
+    def speed(self, n):
+        '''Set the simulation speed: its a number between 1 and 10, where
+        0 is the slowest and 10 is the fastest'''
+        
+        self._delay = max(0.05/n**2 - 0.0005, 0)
         
     #
     # Direct state control
@@ -249,7 +258,37 @@ class TurtleNamespace(MutableMapping):
             except AttributeError:
                 pass
         print('\n\n'.join(L))
-        
+    
+    
+#
+# Pytuguês -- default temporário
+#    
+class TurtleNamespace(TurtleNamespaceEnglish):
+    '''Quick hack around english namespace'''
+    
+    ns = TurtleNamespaceEnglish
+    frente = ns.forward
+    esquerda = ns.left
+    direita = ns.right
+    trás = ns.backward
+    limpar = ns.clear
+    reiniciar = ns.restart
+    ir_para = ns.goto
+    levanta = ns.penup
+    abaixa = ns.pendown
+    posição = ns.getpos
+    definir_posição = ns.setpos
+    cor_da_linha = ns.getcolor
+    cor_do_fundo = ns.getfill
+    definir_cor_da_linha = ns.setcolor
+    definir_cor_do_fundo = ns.setfill
+    direção = ns.getheading
+    definir_direção = ns.setheading
+    espessura = ns.getwidth
+    definir_espessura = ns.setwidth
+    velocidade = ns.speed
+    del ns
+
         
 def helpstr(*args):
     '''Returns the output of the help() function as a string'''
