@@ -8,8 +8,32 @@ inclusion of exclusion of items.
 import io
 import sys
 from collections import MutableMapping
-from .util import vecargsmethod
 from .mathutil import Vec
+from functools import wraps as _wraps
+from .mathutil import Vec as _Vec
+
+
+def _vecargsmethod(func):
+    '''
+    Decorates a function of a vec object to accept the following signatures:
+
+        func(vec, **kwds)
+        func(x, y, **kwds)
+
+    A Vec object is always passed to the given implementation.
+    '''
+    @_wraps(func)
+    def decorated(self, x, y=None, **kwds):
+        if y is None:
+            try:
+                x, y = x
+            except ValueError:
+                raise ValueError('expected 2 elements, got %s' % len(x))
+
+            return func(self, _Vec(x, y), **kwds)
+        else:
+            return func(self, _Vec(x, y), **kwds)
+    return decorated
 
 
 def alias(*args):
@@ -115,7 +139,7 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         return self._getstate('pos')
     
-    @vecargsmethod
+    @_vecargsmethod
     def setpos(self, value):
         '''Modifies turtle's position (in pixels)
         
@@ -185,18 +209,26 @@ class TurtleNamespaceEnglish(MutableMapping):
         '''Return True if the pen is down or False otherwise'''
         
         return self._getstate('isdown')
-            
+
     #
     # Movement functions
     #
-    @vecargsmethod
+    @_vecargsmethod
     def goto(self, pos):
         '''Goes to the given position.
-        
+
         If the pen is down, it draws a line.'''
-        
-        self._setstate('pos', pos, draw=True, delay=self._delay)
-    
+
+        will_draw = self._getstate('isdown')
+
+        self._setstate('pos', pos, draw=will_draw, delay=self._delay)
+
+    @_vecargsmethod
+    def jumpto(self, pos):
+        '''Goes to the given position without drawing.'''
+
+        self._setstate('pos', pos, draw=False, delay=self._delay)
+
     @alias('fd')
     def forward(self, step):
         '''Move the turtle forward by the given step size (in pixels)'''

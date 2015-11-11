@@ -4,7 +4,6 @@ The main editor with python syntax highlighting
 import io
 import sys
 import traceback
-from .util import QtCore, splitindent
 from .qscieditor import PythonEditor
 
 Tab = QtCore.Qt.Key_Tab
@@ -43,11 +42,11 @@ class PythonConsole(PythonEditor):
     '''
     A Scintilla based console.
     '''
-
-    def __init__(self,
-                 parent=None, *,
+    
+    def __init__(self, 
+                 parent=None, *, 
                  namespace=None,
-                 header_text=None,
+                 header_text=None, 
                  hide_margins=True, **kwds):
         super().__init__(parent, **kwds)
         if hide_margins:
@@ -55,7 +54,7 @@ class PythonConsole(PythonEditor):
             self.setMarginWidth(1, 0)
         self.current_command = []
         self.console_namespace = dict(namespace or {})
-
+        
         # Set header text
         if header_text is None:
             header_text = '>>> '
@@ -67,48 +66,48 @@ class PythonConsole(PythonEditor):
         self.pylexer = self.lexer()
         self.history = []
         self.history_idx = 0
-
+        
     def addPrompt(self, newline=True):
         data = '\n' if newline else ''
         self.setCursorAtEndPosition()
         self.insert('%s>>> ' % data)
         self.setCursorAtEndPosition()
         self.lockAtCurrent()
-
+        
     def setNamespace(self, value):
         self.console_namespace.clear()
         self.console_namespace.update(value)
-
+        
     def setCursorAtEndPosition(self):
         lineno = self.lines() - 1
         lineindex = self.lineLength(lineno)
         self.setCursorPosition(lineno, lineindex)
-
+        
     def lockAtCurrent(self):
         lineno, lineindex = self.getCursorPosition()
         self.locked = (lineno, lineindex - 1)
-
+        
     def processCurrentCommand(self):
-        '''Process the current command.
-
+        '''Process the current command. 
+        
         Return the output of the command.'''
-
+        
         cmd = '\n'.join(self.current_command)
         self.current_command.clear()
         if not cmd:
             self.addPrompt(newline=False)
         else:
             result = self.executeCommand(cmd)
-
+            
             # Insert result in text
             self.insert(result)
             self.addPrompt(newline=bool(result))
             self.history.append(cmd)
         return cmd
-
+        
     def currentCommandIsComplete(self):
         '''Return True or False depending if the current command is complete'''
-
+        
         cmd = self.current_command
         if cmd[-1].rstrip().endswith(':'):
             return False
@@ -119,15 +118,15 @@ class PythonConsole(PythonEditor):
                 return True
             else:
                 return False
-
+        
     def executeCommand(self, cmd, mode='single'):
         '''Return a string with the print messages yielded after the execution
         of a command string.
-
+        
         This would possibly change an internal state such as the
         `console_namespace` attribute.
         '''
-
+        
         cmd = cmd.rstrip() + '\n'
         try:
             stdout, stderr = sys.stdout, sys.stderr
@@ -137,22 +136,22 @@ class PythonConsole(PythonEditor):
             result = out.getvalue() + err.getvalue()
         finally:
             sys.stdout, sys.stderr = stdout, stderr
-
+            
         return result
-
+        
     def cancelCurrent(self):
         '''Cancel de current command and clear all input lines'''
-
+        
         self.current_command.clear()
         i, j = self.locked
         m = self.lines()
         n = self.lineLength(m)
         self.setSelection(i, j + 1, m, n)
         self.removeSelectedText()
-
+        
     def replaceCurrentBy(self, cmd):
         '''Replaces the current command by the given command'''
-
+        
         cmd_lines = cmd.splitlines()
         cmd_lines[1:] = ['... ' + line for line in cmd_lines[1:]]
         self.cancelCurrent()
@@ -160,10 +159,10 @@ class PythonConsole(PythonEditor):
         self.insert('\n'.join(cmd_lines))
         self.setCursorAtEndPosition()
         self.current_command[:] = cmd.splitlines()[:-1]
-
+        
     def runCommand(self, cmd):
-        '''Run command in the console as if it was inserted by the user'''
-
+        '''Run command in the console as if it was inserted by the user''' 
+        
         self.cancelCurrent()
         result = self.executeCommand(cmd, 'exec')
         if result:
@@ -171,7 +170,7 @@ class PythonConsole(PythonEditor):
             self.addPrompt()
         self.history_idx = 0
         return result
-
+    
     def keyPressEvent(self, ev):
         key = ev.key()
         modifiers = ev.modifiers()
@@ -186,7 +185,7 @@ class PythonConsole(PythonEditor):
                 super().keyPressEvent(ev)
             else:
                 return
-
+        
         # We are not in a locked area
         # Return control command execution in various ways
         if key in (Return, Enter):
@@ -194,37 +193,33 @@ class PythonConsole(PythonEditor):
                 return
 
             self.setCursorAtEndPosition()
-            lineno, lineindex = self.getCursorPosition()
+            lineno, lineindex = self.getCursorPosition()            
             line = self.text(lineno)
             super().keyPressEvent(ev)
 
-            # Detect autocompletion
-            if self.lineLength(lineno) !=  lineindex + 1:
-                return
-
             # Add current line to the command list
             self.current_command.append(line[4:])
-
+            
             # Process command, if complete
             if self.currentCommandIsComplete():
                 self.processCurrentCommand()
-
-            # Keep adding '... ' lines at the right indentation until the
-            # command is complete
+            
+            # Keep adding '... ' lines at the right indentation until the 
+            # command is complete 
             else:
                 lineno, lineindex = self.getCursorPosition()
-                indent, _ = splitindent(self.current_command[-1])
+                indent, _ = _splitindent(self.current_command[-1])
                 self.insertAt('... ' + indent, lineno, 0)
                 self.setCursorPosition(lineno, lineindex + 4 + len(indent))
-
+            
         # Prevents it from deleting the first locked whitespace
         elif key in (Backspace, Backtab):
             if (lineno, lineindex - 1) > self.locked:
                 super().keyPressEvent(ev)
-
+                
         # Chooses commands in history
         elif key in (Up, Down):
-            delta = 1 if key else 1
+            delta = 1 if key else 1 
             N = len(self.history)
             if N:
                 idx = (N - self.history_idx - delta) % N
@@ -232,15 +227,15 @@ class PythonConsole(PythonEditor):
                 self.history_idx += delta
             else:
                 self.cancelCurrent()
-
+                
         # Ctrl + D deletes the current command
         elif modifiers & Control and key == D:
             self.cancelCurrent()
-
+            
         # Passthru
         else:
             super().keyPressEvent(ev)
-
+            
     def runner_(self, cmd, mode, out):
         '''Run code in an interpreter'''
 
@@ -259,3 +254,14 @@ class PythonConsole(PythonEditor):
         self.console_namespace = tuganames
         pycmd = pytuga.transpile(cmd)
         self.runner_(pycmd, mode, out)
+
+
+def _splitindent(line):
+    '''Split a string into an indentation part and the rest of the string.
+
+    Only process indentation of the first line of the string.'''
+
+    idx = 0
+    while line[idx] in [' ', '\t']:
+        idx += 1
+    return line[:idx], line[idx:]
