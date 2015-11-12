@@ -44,7 +44,8 @@ class TurtleView(QtWidgets.QGraphicsView):
 
         w = self._posLabel = QtWidgets.QLabel(self)
         # http://stackoverflow.com/questions/7928519/how-to-make-the-qlabel-background-semi-transparent
-        w.setStyleSheet('color: rgba(0, 0, 0, 128); '
+        # Fourth parameter in color tuple is alpha: 0-transparent; 255-opaque
+        w.setStyleSheet('color: rgba(0, 0, 0, 196); '
                         'background-color: rgba(0, 0, 0, 5);'
                         'padding: %d' % _LABEL_PADDING)
         w.setAlignment(QtCore.Qt.AlignRight)
