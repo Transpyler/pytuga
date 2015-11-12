@@ -7,16 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c81ed6c5-005f-41af-b2b1-f2410b8a5a53" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/__main__.py" afterPath="$PROJECT_DIR$/src/tugalinhas/__main__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/mainwindow.py" afterPath="$PROJECT_DIR$/src/tugalinhas/mainwindow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/qsciconsole.py" afterPath="$PROJECT_DIR$/src/tugalinhas/qsciconsole.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/qscieditor.py" afterPath="$PROJECT_DIR$/src/tugalinhas/qscieditor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/qscirepleditor.py" afterPath="$PROJECT_DIR$/src/tugalinhas/qscirepleditor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/turtlenamespace.py" afterPath="$PROJECT_DIR$/src/tugalinhas/turtlenamespace.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/turtleobject.py" afterPath="$PROJECT_DIR$/src/tugalinhas/turtleobject.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/turtlescene.py" afterPath="$PROJECT_DIR$/src/tugalinhas/turtlescene.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/turtlewidget.py" afterPath="$PROJECT_DIR$/src/tugalinhas/turtlewidget.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/util.py" afterPath="$PROJECT_DIR$/src/tugalinhas/util.py" />
     </list>
     <ignored path="pytuga.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,8 +31,8 @@
       <file leaf-file-name="turtlescene.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tugalinhas/turtlescene.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.52473116">
-              <caret line="263" column="30" selection-start-line="263" selection-start-column="30" selection-end-line="263" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#169#180#0" expanded="true" />
               </folding>
@@ -529,13 +520,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/src/tugalinhas/turtlescene.py</url>
-          <line>249</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
@@ -758,8 +742,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tugalinhas/turtlescene.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52473116">
-          <caret line="263" column="30" selection-start-line="263" selection-start-column="30" selection-end-line="263" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#169#180#0" expanded="true" />
           </folding>

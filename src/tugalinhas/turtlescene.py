@@ -10,6 +10,10 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from .mathutil import Vec
 from .turtleobject import Turtle
 
+_LABEL_FONT = QtGui.QFont('Helvetica', 8)
+_LABEL_FONT.setStyleStrategy(QtGui.QFont.NoAntialias)
+_LABEL_PADDING = 2
+
 class TurtleView(QtWidgets.QGraphicsView):
     '''
     A TurtleView is a widget that can be inserted anywhere in the GUI and is
@@ -23,7 +27,6 @@ class TurtleView(QtWidgets.QGraphicsView):
     
     '''
 
-
     def __init__(self, scene=None):
         if scene is None:
             scene = TurtleScene()
@@ -34,21 +37,48 @@ class TurtleView(QtWidgets.QGraphicsView):
                                      0,  0)
         self.setTransform(transform)
         self._zoomfactor = 1.2
-         
+
+        # This will crash if I put it in the module namespace, probably
+        # because the QApplication instance does not exist yet
+        _LABEL_HEIGHT = QtGui.QFontMetrics(_LABEL_FONT).height()+2*_LABEL_PADDING
+
+        w = self._posLabel = QtWidgets.QLabel(self)
+        # http://stackoverflow.com/questions/7928519/how-to-make-the-qlabel-background-semi-transparent
+        w.setStyleSheet('color: rgba(0, 0, 0, 128); '
+                        'background-color: rgba(0, 0, 0, 5);'
+                        'padding: %d' % _LABEL_PADDING)
+        w.setAlignment(QtCore.Qt.AlignRight)
+        w.setFont(_LABEL_FONT)
+        w.setGeometry(0, 0, 100, _LABEL_HEIGHT)
+        self.__posLabel_makeText((0, 0))
+        self.__posLabel_position()
+
     def zoomIn(self):
         self.scale(self._zoomfactor, self._zoomfactor)
     
     def zoomOut(self):
         self.scale(1 / self._zoomfactor, 1 / self._zoomfactor)
 
-    # def notifyPosChanged(self, turtle, pos):
-    #     assert isinstance(turtle, Turtle)
-    #     assert isinstance(pos, Vec)
-    #     print("Turtle %s position changed to (%d, %d)" %
-    #           (turtle, pos[0], pos[1]))
+    def notifyPosChanged(self, turtle, pos):
+        assert isinstance(turtle, Turtle)
+        assert isinstance(pos, Vec)  # May remove these assertions later
+        self.__posLabel_makeText(pos)
 
-    def resizeEvent(self, QResizeEvent):
-        self._scene.viewWasResized()
+    def resizeEvent(self, QResizeEvent):  # Qt override
+        # self._scene.viewWasResized()
+        self.__posLabel_position()
+
+    def __posLabel_position(self):
+        size = self.viewport().size()
+        w = self._posLabel
+        MARGIN = 3
+        w.move(size.width()-w.width()-MARGIN, size.height()-w.height()-MARGIN)
+
+    def __posLabel_makeText(self, pos):
+        s = "x=%d, y=%d" % (pos[0], pos[1])
+        self._posLabel.setText(s)
+        print(s, self._posLabel.width())
+
 
 
 class TurtleScene(QtWidgets.QGraphicsScene):
@@ -74,8 +104,6 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self._pen.setWidth(2)
         self._brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         self.addTurtle(default=True)
-
-        self.__addPosText()
 
     def clear(self):
         super().clear()
@@ -246,13 +274,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         '''Notifies scene view that the position of a turtle has changed,
         callback way.'''
 
-        # for view in self.views():
-        #     view.notifyPosChanged(turtle, pos)
-        self._posTextItem.setText("x=%d, y=%d" % (pos[0], pos[1]))
-
-    def __addPosText(self):
-        #self._posTextLayout = Q
-        self._posTextItem = QtWidgets.QGraphicsSimpleTextItem('')
+        for view in self.views():
+            view.notifyPosChanged(turtle, pos)
 
     def __getView(self):
         views = self.views()
@@ -260,14 +283,3 @@ class TurtleScene(QtWidgets.QGraphicsScene):
           return views[0]
         return None
 
-    def viewWasResized(self):
-        self.__updateTextItems
-        assert isinstance(size, QtCore.QSize)
-        t = self._posTextItem
-        r = t.boundingRect()
-        MARGIN = 3
-        x, y =
-        t.setPos(size.width()-r.width()-MARGIN, size.height()-r.height()-MARGIN)
-
-
-        size = self.viewport().size()
