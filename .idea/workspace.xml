@@ -7,7 +7,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c81ed6c5-005f-41af-b2b1-f2410b8a5a53" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tugalinhas/turtlescene.py" afterPath="$PROJECT_DIR$/src/tugalinhas/turtlescene.py" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\console.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\constants.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\lexer.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\pygments.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\run.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\pytuga\util.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\tuga_draw.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\tuga_io.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\tuga_math.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\tuga_std.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalib\tuga_strings.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\about.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\editor.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\filer.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\interpreter.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\main.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\main_window.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\mde.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\pen.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\settings.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\splash.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\thread.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugalinhas\util.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\completer.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\contrib\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\contrib\asyncssh_repl.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\entry_points\__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\entry_points\run_ptpython.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\filters.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\key_bindings.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\layout.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\python_input.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\repl.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\style.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\utils.py" afterPath="" />
+      <change type="DELETED" beforePath="E:\projects\pybr11\pytuga\build\lib\tugashell\validator.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/source/install.rst" afterPath="$PROJECT_DIR$/doc/source/install.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/source/intro.rst" afterPath="$PROJECT_DIR$/doc/source/intro.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pytuga/doc/make.bat" afterPath="$PROJECT_DIR$/src/pytuga/doc/make.bat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/makedocs.sh" afterPath="$PROJECT_DIR$/makedocs.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="pytuga.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +73,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="turtlescene.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.2924731">
+              <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="turtlescene.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tugalinhas/turtlescene.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
@@ -36,6 +91,16 @@
               <folding>
                 <element signature="e#169#180#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,16 +127,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tugalinhas/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="turtleobject.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tugalinhas/turtleobject.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -80,16 +135,6 @@
               <folding>
                 <element signature="e#39#48#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tugalinhas/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="140" column="21" selection-start-line="140" selection-start-column="21" selection-end-line="140" selection-end-column="21" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -148,7 +193,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/tugalinhas/__init__.py" />
         <option value="$PROJECT_DIR$/src/tugalinhas/qsciconsole.py" />
         <option value="$PROJECT_DIR$/src/tugalinhas/turtlenamespace.py" />
@@ -160,6 +204,7 @@
         <option value="$PROJECT_DIR$/src/tugalinhas/mainwindow.py" />
         <option value="$PROJECT_DIR$/src/tugalinhas/__main__.py" />
         <option value="$PROJECT_DIR$/src/tugalinhas/turtlescene.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -551,14 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm40/system/python_stubs/685466790/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -602,22 +639,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/lib/tugalinhas/main_window.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="141" column="0" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/lib/tugalinhas/pen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="940" column="13" selection-start-line="940" selection-start-column="13" selection-end-line="940" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -747,6 +768,22 @@
           <folding>
             <element signature="e#169#180#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2924731">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
