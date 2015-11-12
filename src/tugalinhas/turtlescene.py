@@ -6,7 +6,8 @@ these two classes are expected.
 '''
 
 import time
-from .util import QtGui, QtWidgets
+from collections import deque
+from PyQt5 import QtGui, QtWidgets
 from .mathutil import Vec
 from .turtleobject import Turtle
 
@@ -49,7 +50,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     
     def __init__(self, parent=None, fps=30):
         super().__init__(parent)
-        self.fps = fps
+        self._fps = fps
         self._interval = 1 / fps
         self.startTimer(1000 / fps)
         self._init(fps=fps)
@@ -58,7 +59,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self._lines = []
         self._turtles = []
         self._turtle = None
-        self._tasks = []
+        self._tasks = deque()
         self._pen = QtGui.QPen(QtGui.QColor(0, 0, 0))
         self._pen.setWidth(2)
         self._brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -66,15 +67,24 @@ class TurtleScene(QtWidgets.QGraphicsScene):
 
     def clear(self):
         super().clear()
-        self._init(self.fps)
-        
+        self._init(self._fps)
+
+    #
+    # Task control
+    #
+    def cancelTasks(self):
+        '''Cancel all pending tasks'''
+
+        self._tasks = deque()
+
     def iterTasks(self):
-        '''Iterate over all _tasks.'''
+        '''Iterate over all tasks.'''
+
         while self._tasks:
             for task in self._tasks[0]:
                 yield task
             else:
-                self._tasks.pop(0)
+                self._tasks.popleft()
         yield True
 
     def consumeTask(self):
@@ -86,14 +96,18 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         for result in self.iterTasks():
             if result:
                 return 
-        
+
     def timerEvent(self, timer):
         '''Scheduled to be executed at some given framerate. 
         
         It process all queued animation _tasks.'''
         
         self.consumeTask()
-        
+
+
+    #
+    # Turtle control
+    #
     def addTurtle(self, turtle=None, *, default=False, **kwds):
         '''Adds new _turtle to the scene.'''
         
@@ -123,7 +137,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         return TurtleNamespace(self, D, **kwds)
 
     #
-    # Communication with the TurtleNamespace object is done exclusivelly through
+    # Communication with the TurtleNamespace object is done exclusively through
     # the two functions bellow
     #
     def turtleState(self, name):

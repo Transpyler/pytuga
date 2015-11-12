@@ -123,7 +123,7 @@ class PythonEditor(Qsci.QsciScintilla):
             fontsize=11, fontfamily='monospace', 
             autocompletion_words=(), autocomplete_python=True,
             **kwds
-            ): 
+        ):
         super().__init__(parent)
         
         # Fonts
