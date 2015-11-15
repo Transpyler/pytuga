@@ -1,7 +1,10 @@
-*.pyc
-**/__pycache__/**
-//build
-//dist/
-//src/pytuga.egg-info/
-//doc/build/
-//teste.pytg
+__pycache__
+build/
+dist/
+src/pytuga.egg-info/
+.idea/
+examples/teste.pytg
+.gitignore
+.project
+.pydevproject
+

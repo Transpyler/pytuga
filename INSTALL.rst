@@ -19,13 +19,14 @@ instaladas
 
 ::
 
-    $ sudo apt-get install python3-all python3-pyqt4 python3-pyqt4.qsci python3-pip
+    $ sudo apt-get install python3-all python3-pyqt5 python3-pyqt5.qsci python3-pyqt5.qtsvg python3-pip
         
 Se quiser apenas fazer a instalação local, o comando fica::
 
     $ pip3 install pytuga --user
     
-Uma vez instalado, você pode atualizar a versão do Pytuguês usando::
+(Ignore a opção --user, caso queira instalar para todos os usuários). Uma vez
+instalado, você pode atualizar a versão do Pytuguês usando::
     
     $ pip3 install pytuga -U --user 
     
@@ -54,18 +55,18 @@ Os pacotes variam um pouco caso seu Windows seja de 32 ou 64 bits:
 
 32 bits
     * Python__
-    * PyQt4__
+    * PyQt5__
     
 .. __: https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi
-.. __: http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x32.exe
+.. __: http://sourceforge.net/projects/pyqt/
 
 
 64 bits
     * Python__
-    * PyQt4__
+    * PyQt5__
 
 .. __: https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi
-.. __: http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt4-4.11.4-gpl-Py3.4-Qt4.8.7-x64.exe
+.. __: http://sourceforge.net/projects/pyqt/
 
 É importante marcar a opção "Add python.exe to your path" durante a instalação.
 Depois disto abra o terminal do Windows (Win+R e digite "cmd") e execute os 
