@@ -7,13 +7,15 @@ from collections import namedtuple as _namedtuple
 
 _dg = _math.pi / 180
 
+
 def cos(angle):
     '''Cosine of an angle (in degrees)'''
     return _math.cos(angle * _dg) 
 
+
 def sin(angle):
     '''Sine of an angle (in degrees)'''
-    return _math.sin(angle * _dg) 
+    return _math.sin(angle * _dg)
 
 
 class Vec(_namedtuple('Vec', ['x', 'y'])):
@@ -31,7 +33,7 @@ class Vec(_namedtuple('Vec', ['x', 'y'])):
         return super(Vec, cls).__new__(cls, x + 0.0, y + 0.0)
     
     def __repr__(self):
-        return '%s(%s, %s)' % (type(self).__name__, self.x, self.y)
+        return '%s(%.1f, %.1f)' % (type(self).__name__, self.x, self.y)
 
     def __add__(self, other):
         x, y = other

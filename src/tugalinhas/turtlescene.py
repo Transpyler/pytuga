@@ -78,7 +78,7 @@ class TurtleView(QtWidgets.QGraphicsView):
                size.height()-w.height() - margin)
 
     def __posLabel_makeText(self, pos):
-        s = "x=%d, y=%d" % (pos[0], pos[1])
+        s = "x=%s, y=%s" % (round(pos[0]), round(pos[1]))
         self._posLabel.setText(s)
 
 
