@@ -3,7 +3,8 @@ The main editor with python syntax highlighting
 '''
 
 import keyword
-from .util import Qsci, QtGui, QColor, QFont, QtCore
+from PyQt5 import Qsci, QtGui, QtCore
+from PyQt5.QtGui import QColor, QFont
 
 Return = QtCore.Qt.Key_Return
 Enter = QtCore.Qt.Key_Enter

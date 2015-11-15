@@ -52,7 +52,7 @@ class TurtleNamespaceEnglish(MutableMapping):
     Defines the namespace of turtle functions. 
     
     The TurtleFunction namespace behaves like a dictionary and requires a 
-    TurtleScene as a first argument. Additional keyworkd arguments are 
+    TurtleScene as a first argument. Additional keyword arguments are
     inserted into the dictionary. 
     '''
     
