@@ -3,8 +3,8 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.6.0'
-REQUIRES = [] #['PyQt5']  # 'PyQt5.Qsci?',
+VERSION = '0.7.0'
+REQUIRES = [] # ['PyQt5']
 
 
 # Rewrite __version__.py in tugalib
@@ -14,8 +14,8 @@ with open(version_file, 'w') as F:
     F.write('__version__ = %r\n' % VERSION)
 
 # Fix possible bug in Windows which does not generate the gui script
-console_scripts = ['pytuga = pytuga.main:run']
-gui_scripts = ['tugalinhas = tugalinhas.main:run']
+console_scripts = ['pytuga = pytuga.__main__:main']
+gui_scripts = ['tugalinhas = tugalinhas.__main__:main']
 if sys.platform.startswith('win'):
     gui_scripts = ['tugalinhas_window = tugalinhas.__main__:main']
     console_scripts.append('tugalinhas = tugalinhas.__main__:main')

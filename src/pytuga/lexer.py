@@ -1,37 +1,181 @@
-from collections import deque
+import keyword
 import tokenize
 from tokenize import TokenInfo
-from tokenize import (
-    COLON, COMMA, DEDENT, ENDMARKER, LPAR, RPAR, NAME, OP, NUMBER)
-from pytuga import constants as cte
+from tokenize import (NAME, OP, NEWLINE, EXACT_TOKEN_TYPES, NUMBER)
+
 
 __all__ = ['transpile', 'compile', 'exec']
+TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
+                            if attr.isupper() and isinstance(tt, int)}
+TOKEN_TRANSLATIONS = dict(
+    # Loops
+    enquanto='while',
+    para='for',
+    quebre='break',
+    quebrar='break',
+    continuar='continue',
+    # continue='continue',
+    # para cada='for'
 
-TYPE_MAP = {':': COLON, '(': LPAR, ')': RPAR, ',': COMMA}
+    # Conditions
+    se='if',
+    senão='else',
+    # ou então se='elif'
+    # ou se='elif'
 
+    # Singleton values
+    Falso='False',
+    falso='False',
+    Verdadeiro='True',
+    verdadeiro='True',
+    nulo='None',
+    Nulo='None',
 
-class delta(object):
+    # Operators
+    é='is',
+    e='and',
+    ou='or',
+    não='not',
+    em='in',
+    na='in',
+    no='in',
+    como='as',
 
-    def __init__(self, a, b):
-        self.vdiff = a
-        self.hdiff = b
+    # Function definition
+    função='def',
+    definir='def',
+    defina='def',
+    retorne='return',
+    retornar='return',
+    gere='yield',
+    gerar='yield',
 
-    def __add__(self, other):
-        if isinstance(other, delta):
-            return delta(self.vdiff + other.vdiff, self.hdiff + other.hdiff)
+    # Error handling
+    tente='try',
+    tentar='try',
+    exceção='except',
+    finalmente='finally',
+    # jogue erro='raise'?
 
-        a, b = other
-        return (a + self.vdiff, b + self.hdiff)
+    # Other
+    apague='del',
+    prossiga='pass',
+    classe='class',
+    importe='import',
+    importar='import',
+    #abrir='with'?
+    # global='global',
+)
+PURE_PYTG_KEYWORDS = set(TOKEN_TRANSLATIONS)
+PURE_PYTG_KEYWORDS.update({'repetir', 'repita', 'vezes', 'cada', 'de', 'até'})
+KEYWORDS = set(PURE_PYTG_KEYWORDS)
+KEYWORDS.update(keyword.kwlist)
 
-    def __radd__(self, other):
-        return self + other
+class Token:
+
+    '''Mutable token object.'''
+
+    def __init__(self, data, type=None, start=None, end=None, line=None):
+
+        # Start from TokenInfo object
+        if isinstance(data, TokenInfo):
+            assert all(x is None for x in [type, start, end, line])
+            type, data, start, end, line = data
+
+        elif isinstance(data, Token):
+            assert all(x is None for x in [type, start, end, line])
+            data, type, start, end, line = data
+
+        elif isinstance(data, (int, float)):
+            type = data
+            data = None
+
+        if start is not None:
+            start = TokenPosition(start)
+            if end is None:
+                end = start + (0, len(data))
+        if end is not None:
+            end = TokenPosition(end)
+        if type is None:
+            # We are not using exact token types: the tokenizer converts all
+            # of them to OP.
+            if data in EXACT_TOKEN_TYPES:
+                type = OP
+            else:
+                if data.isidentifier():
+                    type = NAME
+                else:
+                    raise TypeError('could not recognize token: %r' % data)
+
+        self.string = data
+        self.type = type
+        self.start = start
+        self.end = end
+        self.line = line
+
+    def __eq__(self, other):
+        if isinstance(other, Token):
+            # Compares type only if string is not given
+            if self.string is None or other.string is None:
+                return self.type == other.type
+
+            if self.string != other.string or self.type != other.type:
+                return False
+
+            for (x, y) in [(self.start, other.start),
+                           (self.end, other.end),
+                           (self.line, other.line)]:
+                if x != y and None not in (x, y):
+                    return False
+            return True
+        elif isinstance(other, (str, TokenInfo)):
+            return self == Token(other)
+        elif isinstance(other, (tuple, list)):
+            if len(other) == 2:
+                return self.string == other[0] and self.type == other[1]
+            return self == Token(*other)
+        else:
+            return NotImplemented
+
+    def __str__(self):
+        return 'Token(%r, %s, %r, %r, %r)' % (self.string, TOKEN_TYPE_NAME[self.type],
+                                              self.start, self.end, self.line)
 
     def __repr__(self):
-        return 'delta(%r, %r)' % (self.vdiff, self.hdiff)
+        tname = TOKEN_TYPE_NAME[self.type]
+        if self.string.isspace():
+            return tname
+        else:
+            return '%s(%r)' % (tname, self.string)
+
+    def __len__(self):
+        return 5
+
+    def __getitem__(self, idx):
+        if idx == 0:
+            return self.string
+        elif idx == 1:
+            return self.type
+        elif idx == 2:
+            return self.start
+        elif idx == 3:
+            return self.end
+        elif idx == 4:
+            return self.line
+        elif -5 <= idx < 0:
+            return self[5 + idx]
+        else:
+            raise IndexError(idx)
 
     def __iter__(self):
-        yield self.vdiff
-        yield self.hdiff
+        yield from (self[i] for i in range(5))
+
+
+    def to_token_info(self):
+        '''Convert to TokenInfo object used by Python's tokenizer.'''
+
+        return TokenInfo(
+            self.type, self.string, self.start, self.end, self.line)
 
 
 class TokenPosition(tuple):
@@ -39,18 +183,10 @@ class TokenPosition(tuple):
     '''Represent the start or end position of a token and accept some basic
     arithmetic operations'''
 
-    def __new__(self, x, y=None):
+    def __new__(cls, x, y=None):
         if y is None:
             x, y = x
-        return tuple.__new__(self, [x, y])
-
-    @property
-    def line_no(self):
-        return self[0]
-
-    @property
-    def col(self):
-        return self[1]
+        return tuple.__new__(cls, [x, y])
 
     def __add__(self, other):
         x, y = self
@@ -70,201 +206,175 @@ class TokenPosition(tuple):
         a, b = other
         return TokenPosition(a - x, b - y)
 
-
-class Token(object):
-
-    '''Mutable token object.
-
-    All methods that make changes inplace start with an "i".'''
-
-    def __init__(self, string, type=None, start=None, end=None, line=None):
-
-        # Start from TokenInfo object
-        if isinstance(string, TokenInfo):
-            assert all(x is None for x in [type, start, end, line])
-            type, string, start, end, line = string
-
-        if start is not None:
-            start = TokenPosition(start)
-            if end is None:
-                end = start + (0, len(string))
-        if end is not None:
-            end = TokenPosition(end)
-        if type is None:
-            try:
-                type = TYPE_MAP[string]
-            except KeyError:
-                raise TypeError
-
-        self.string = string
-        self.type = type
-        self.start = start
-        self.end = end
-        self.line = line
-
-    def to_token_info(self):
-        '''Convert to TokenInfo object used by Python's tokenize.'''
-
-        return TokenInfo(
-            self.type, self.string, self.start, self.end, self.line)
-
-    #
-    # Magic methods
-    #
-    def __repr__(self):
-        return 'Token(%r, %r, %r, %r)' % (tuple(self)[:-1])
-
-    def __len__(self):
-        return 5
-
-    def __getitem__(self, idx):
-        if idx == 0:
-            return self.string
-        elif idx == 1:
-            return self.type
-        elif idx == 2:
-            return self.start
-        elif idx == 3:
-            return self.end
-        elif idx == 4:
-            return self.line
-        elif idx < 0 and idx >= -5:
-            return self[5 + idx]
-        else:
-            raise IndexError(idx)
-
-    def __iter__(self):
-        yield from (self[i] for i in range(5))
-
-
-class TokenStream(deque):
-
-    '''Represents a group of tokens'''
+    @property
+    def lineno(self):
+        return self[0]
 
     @property
-    def start(self):
-        return self[0].start
-
-    @property
-    def end(self):
-        return self[-1].end
-
-
-def transpile(src):
-    r'''Converte Pytuguês em Python
-
-    Exemplo
-    -------
-
-    >>> src = \
-    ... """para cada x em [1, 2, 3]:
-    ...     mostre(x ou z)"""
-    >>> print(transpile(src))
-    for x in [1, 2, 3]:
-        mostre(x or z)
-    '''
-
-    # O trabalho duro é feito pela função transpile_tk()
-    if not src or src.isspace():
-        return src
-    else:
-        try:
-            return tostring(transpile_tk(fromstring(src)))
-        except Exception:
-            print('Bad code')
-            print('--------\n')
-            print(src)
-            raise
+    def col(self):
+        return self[1]
 
 
 def compile(source, filename, mode, flags=0, dont_inherit=False):
-    '''Se comporta como a função built-in compile(), mas para código em
-    Pytuguês'''
+    '''Similar to the built-in function compile().
+
+    Works with Pytuguês code.'''
 
     source = transpile(source)
     return __builtins__['compile'](source, filename, mode, flags, dont_inherit)
 
 
 def exec(object, locals=None, globals=None):
-    '''Se comporta como a função built-in exec(), mas para código em
-    Pytuguês'''
+    '''Similar to the built-in function exec().
+
+    Works with Pytuguês code.'''
 
     if isinstance(object, str):
         object = transpile(object)
     return __builtins__['exec'](object, locals, globals)
 
 
-###############################################################################
-#                     Transpilação baseada em Tokens
-# ----------------------------------------------------------------------------
-#
-# O ponto de entrada da transpilação é a função transpile_tk(). Ela delega a
-# transpilação dos casos não trivial para as sub-funções registradas pelo
-# decorador @handle_token() definido abaixo.
-#
-TK_HANDLER = {}
+def transpile(src):
+    '''Convert a Pytuguês (Pytuguese?) source to Python.'''
+
+    # Avoid problems with empty token streams
+    if not src or src.isspace():
+        return src
+
+    # Convert and process...
+    else:
+        tokens = fromstring(src)
+        transpiled_tokens = transpile_tk(tokens)
+        result = tostring(transpiled_tokens)
+        return result
 
 
 def transpile_tk(tokens):
-    '''Transpila uma sequência de tokens de Pytuguês para Python'''
+    '''Transpile a sequence of Token objects representing a Pytuguês code into
+    Python'''
 
-    if not tokens:
-        return TokenStream()
-    tokens = as_TokenStream(tokens)
-    out = TokenStream()
-    tk = tokens.popleft()
+    # We pass several times through the token stream looking for direct
+    # translations of Pytuguês tokens to Python.
 
-    # Processa todos tokens triviais
-    while tk.string not in TK_HANDLER:
+    # First we look for invalid sequences that could be erroneously validated
+    # in future passes
+    matches = [
+        ('faça', 'faça'), ('faça', 'fazer'), ('fazer', 'faça'),
+        ('então', 'então'),
+    ]
+    iterator = token_find(tokens, matches)
+    while False:
         try:
-            name = cte.TOKEN_TRANSLATIONS[tk.string]
-            token = tkcopy(tk, string=name, fixend=True)
-            delta = len(name) - len(tk.string)
-            tokens = hshift(tokens, delta)
-        except KeyError:
-            token = tk
-        out.append(token)
-        if tokens:
-            tk = tokens.popleft()
-        else:
-            return out
+            idx, match = next(iterator)
+            iterator.send(['raise', SyntaxError])
+        except StopIteration:
+            break
 
-    # Processa tokens especiais
-    if tokens:
-        handler = TK_HANDLER[tk.string]
-        tokens = handler(tk, tokens)
-        if tokens is not None:
-            out.extend(tokens)
-        else:
-            raise RuntimeError(
-                'handler for "%s" returned a null value' % tk.string)
-    return out
+    # The second step is to handle sequence of Pytuguês tokens that can be
+    # replaced by equivalent sequences of Python tokens
+    convs = {
+        # Block ending
+        ('faça', ':') : Token(':'),
+        ('fazer', ':'): Token(':'),
+
+        # Loops
+        ('para', 'cada'): Token('for'),
+
+        # Conditions
+        ('então', 'faça'): Token('faça'),
+        ('então', ':'): Token(':'),
+        ('ou', 'então', 'se'): Token('elif'),
+        ('ou', 'se'): Token('elif'),
+
+        # Definitions
+        ('definir', 'função'): Token('def'),
+        ('defina', 'função'): Token('def'),
+        ('definir', 'classe'): Token('class'),
+        ('defina', 'classe'): Token('class'),
+    }
+    iterator = token_find(tokens, convs)
+    while True:
+        try:
+            idx, match = next(iterator)
+            iterator.send(['subs', [convs[match]]])
+        except StopIteration:
+            break
+
+    # Now we apply simple single token translations
+    for i, tk in enumerate(tokens):
+        new = TOKEN_TRANSLATIONS.get(tk.string, tk)
+        if new is not tk:
+            new = Token(new, start=tk.start)
+            tokens[i] = new
+
+    # Handle special Pytuguês-only commands
+    tokens = process_repeat_command(tokens)
+    tokens = process_range_command(tokens)
+
+    return tokens
 
 
-def handle_token(tkname):
-    '''Decorador que sinaliza as funções que lidam com cada tipo de token
-    especial.
+def token_find(tokens, matches, start=0):
+    '''Coroutine that iterates over list of tokens yielding pairs of
+    (index, match) for each match in the token stream. The `matches` attribute
+    must be a sequence of token sequences.
 
-    Tokens não modificadas ou tokens com tradução trivial são manipuladas
-    diretamente pela função transpile_tk()
+    The caller may send commands to the coroutine to take some action for each
+    match found.
+
+    There are a few supported actions:
+        it.send('raise'):
+            Raises a SyntaxError for an unexpected token in the matched position
+        it.send(['subs', L])
+            Substitute the match by the list of tokens L.
+        it.send(['seek', index])
+            Jumps iteration to the given index.
     '''
 
-    def decorator(func):
-        TK_HANDLER[tkname] = func
-        return func
-    return decorator
+    matches = list(matches)
+    tk_matches = \
+        [tuple(Token(tk) for tk in seq) for seq in matches]
+    tk_matches = \
+        [tuple((tk.string, tk.type) for tk in seq) for seq in tk_matches]
+    tk_idx = start
+
+    while tk_idx < len(tokens):
+        for match_idx, tkmatch in enumerate(tk_matches):
+            if tk_idx + len(tkmatch) > len(tokens):
+                continue
+
+            if all(tokens[tk_idx + k] == tk for (k, tk) in enumerate(tkmatch)):
+                matchsize = len(tkmatch)
+
+                # Yield value and try to receive commands from sender
+                cmd = yield (tk_idx, matches[match_idx])
+                while cmd:
+                    cmd, value = cmd
+                    if cmd == 'raise':
+                        raise value
+                    elif cmd == 'subs':
+                        line = tokens[tk_idx].line
+                        for _ in range(max(len(value) - matchsize, 0)):
+                            tokens.insert(tk_idx, None)
+                        for _ in range(max(matchsize - len(value), 0)):
+                            del tokens[tk_idx]
+                        tokens[tk_idx:tk_idx + len(value)] = value
+                        for tk in value:
+                            tk.line = line
+                    elif cmd == 'seek':
+                        tk_idx = value - 1
+                    else:
+                        raise ValueError('invalid command: %r' % cmd)
+                    cmd = yield
+                tk_idx += 1
+        tk_idx += 1
+    return
 
 
-# -----------------------------------------------------------------------------
-#                               Delegates
-# -----------------------------------------------------------------------------
+def process_repeat_command(tokens):
+    '''Handles "repita/repetir".
 
-@handle_token('repita')
-@handle_token('repetir')
-def _transpile_repetir(tk, tokens):
-    '''Processa uma token do tipo "repita/repetir".
-
-    Aparece no comando::
+    Converts command::
 
         repetir <N> vezes:
             <BLOCO>
@@ -272,846 +382,143 @@ def _transpile_repetir(tk, tokens):
         repita <N> vezes:
             <BLOCO>
 
-    É transpilado para::
+    into::
 
         for ___ in range(<N>):
             <BLOCO>
     '''
 
-    try:
-        arg_tokens, _sep, tail = partition(tokens, 'vezes')
-    except MissingSeparatorError:
-        raise SyntaxError(
-            'comando repetir malformado.\n'
-            '    Espera comando do tipo\n\n'
-            '        repetir <N> vezes:\n'
-            '            <BLOCO>\n\n'
-            '    Palavra chave "vezes" está faltando!')
+    matches = [('repetir',), ('repita',), ('vezes',), (NEWLINE,)]
+    iterator = token_find(tokens, matches)
+    for idx, match in iterator:
+        # Waits for a repetir/repita token to start
+        if match[0] not in ['repetir', 'repita']:
+            continue
 
-    tail = transpile_tk(tail)
-    arg_tokens = transpile_tk(arg_tokens)
-    arg_tokens = parens(arg_tokens)
-    range_tokens = fromstring('for ___ in range', tk.start)
-    return join(range_tokens, arg_tokens, tail)
+        # Send tokens for the beginning of the equivalent "for" loop
+        starttokens = [Token(x) for x in ['for', '___', 'in', 'range', '(']]
+        iterator.send(['subs', starttokens ])
 
-
-@handle_token('para')
-def _transpile_para(tk, tokens):
-    '''Processa uma token do tipo "para".
-
-    Aparece nos comandos::
-
-        para [cada] <nome> em <sequência> [faça]:
-            <BLOCO>
-
-        para [cada] <nome> de <início> até <fim> [a cada <passo>] [faça]:
-            <BLOCO>
-    '''
-
-    # Troca "para" por "for"
-    tokens = hshift(tokens, -1)
-    if tokens[0].string == 'cada':
-        tokens.popleft()
-        tokens = hshift(tokens, -5)
-    tokens.appendleft(tkcopy(tk, string='for', fixend=True))
-
-    # Remove o "faça" opcional no fim do bloco
-    tokens = remove_before_colon(tokens, 'faça')
-
-    # Testa se <nome> é um token válido
-    if tokens[1].type != NAME:
-        raise SyntaxError('esperava um nome no comando "para cada <nome> ..."')
-
-    # Verifica o tipo de comando: mapa em sequência
-    if tokens[2].string in 'em':
-        tokens[2].string = 'in'
-        return transpile_tk(tokens)
-
-    # Mapa numérico
-    elif tokens[2].string == 'de':
-        # Separa cada elemento que caracteriza o loop
-        tk_for, varname, tk_de, *tail = tokens
-        tokens = TokenStream([tk_for, varname, tkcopy(tk_de, string='in')])
-        tokens.append(tkcopy(tail[0], 'range', NAME, fixend=True))
-        tokens.append(tkcopy(tail[0], '(', LPAR, hshift=5, fixend=True))
-
-        # Recupera o primeiro elemento do range
-        start, _tk_até, tail = partition(tail, 'até')
-        start = hshift(transpile_tk(start), 6)
-        tokens.extend(start)
-
-        # Adiciona a vírgula
-        tokens.append(Token(',', start=tokens[-1].end))
-
-        # Recupera o final do range -- primeiro verifica se define o passo
-        try:
-            end, _, tail = partition(tail, 'cada')
-            if end[-1].string == 'a':
-                end.pop()
-            end = transpile_tk(end)
-
-        # O passo *não está* definido
-        except MissingSeparatorError:
-            end, colon_tk, tail = partition(tail, ':')
-            end = transpile_tk(end)
-            step = None
-
-        # O passo *está* definido
+        # Matches the 'vezes' token
+        idx, match = next(iterator)
+        if match[0] != 'vezes':
+            lineno = tokens[idx].start[0]
+            raise SyntaxError(
+                'comando repetir malformado na linha %s.\n'
+                '    Espera comando do tipo\n\n'
+                '        repetir <N> vezes:\n'
+                '            <BLOCO>\n\n'
+                '    Palavra chave "vezes" está faltando!' % (lineno))
         else:
-            step, colon_tk, tail = partition(tail, ':')
-            step = transpile_tk(step)
+            iterator.send(['subs', [Token(')')]])
 
-        # Adiciona o fim do range
-        tokens.extend(halign(end, tokens[-1].end + (0, 1)))
-        tokens.append(Token('+', OP, tokens[-1].end + (0, 1)))
-        tokens.append(Token('1', NUMBER, tokens[-1].end + (0, 1)))
-
-        # Adiciona passo, se necessário
-        if step:
-            tokens.append(Token(',', COMMA, tokens[-1].end))
-            tokens.extend(halign(step, tokens[-1].end + (0, 1)))
-
-        # Fecha parênteses do range e finaliza
-        tokens.append(Token(')', RPAR, tokens[-1].end))
-        tokens.append(Token(':', COLON, tokens[-1].end))
-
-        # Continua processamento
-        tail_sep = tail[0].start[1] - colon_tk.end[1]
-        tail = halign(transpile_tk(tail), tokens[-1].end)
-        tail = hshift(tail, tail_sep)
-        tokens.extend(tail)
-        return tokens
-
-    else:
-        raise SyntaxError(
-            'esperava "de" ou "em" no comando "para cada <nome> de|em ..."')
-
-
-@handle_token('enquanto')
-def _transpile_enquanto(tk, tokens):
-    '''Processa uma token do tipo "repetir".
-
-    Aparece no comando::
-
-        enquanto <condição> [faça]:
-            <BLOCO>
-
-    É transpilado para::
-
-        while <condição>:
-            <BLOCO>
-    '''
-
-    tokens.appendleft(tkcopy(tk, string='while'))
-    tokens = remove_before_colon(tokens, 'faça')
-    return transpile_tk(tokens)
-
-
-@handle_token('se')
-def _transpile_se(tk, tokens):
-    '''Processa uma token do tipo "se".
-
-    Aparece no comando::
-
-        se <condição> [então] [faça]:
-            <BLOCO>
-
-    É transpilado para::
-
-        if <condição>:
-            <BLOCO>
-    '''
-
-    tokens.appendleft(tkcopy(tk, string='if'))
-    tokens = remove_before_colon(tokens, 'faça')
-    tokens = remove_before_colon(tokens, 'então')
-    return transpile_tk(tokens)
-
-
-@handle_token('ou')
-def _transpile_ou(tk, tokens):
-    '''Processa uma token do tipo "ou".
-
-    Pode aparecer em contextos diferentes. Em um bloco do tipo "ou então se"::
-
-        ou [então] se <condição> [então] [faça]:
-            <BLOCO>
-
-    É transpilado para::
-
-        elif <condição>:
-            <BLOCO>
-
-    Também pode aparecer como expressão lógica:
-
-        A ou B  <==> A or B
-    '''
-
-    # Caso trivial: simplesmente traduz
-    if tokens[0].string not in ['então', 'se']:
-        tokens.appendleft(tkcopy(tk, string='or'))
-        return transpile_tk(tokens)
-
-    # Remove "então se"
-    shift = -3
-    if tokens[0].string == 'então':
-        tokens.popleft()
-        shift -= 6
-    if tokens[0].string != 'se':
-        raise SyntaxError('faltando "se" depois de "ou [então]"')
-    tokens.popleft()
-
-    tokens = hshift(tokens, shift)
-    tokens.appendleft(tkcopy(tk, string='elif'))
-    tokens = remove_before_colon(tokens, 'faça')
-    tokens = remove_before_colon(tokens, 'então')
-    return transpile_tk(tokens)
-
-
-@handle_token('senão')
-def _transpile_senão(tk, tokens):
-    '''Processa uma token do tipo "se".
-
-    Aparece no comando::
-
-        senão [faça]:
-            <BLOCO>
-
-    É transpilado para::
-
-        else:
-            <BLOCO>
-    '''
-
-    tokens.appendleft(tkcopy(tk, string='else'))
-    tokens = remove_before_colon(tokens, 'faça')
-    return transpile_tk(tokens)
-
-
-@handle_token('defina')
-@handle_token('definir')
-def _transpile_definir(tk, tokens):
-    '''Processa uma token do tipo "definir".
-
-    Aparece no comando::
-
-        defina [função] <nome>(<argumentos>):
-            <BLOCO>
-
-        definir [função] <nome>(<argumentos>):
-            <BLOCO>
-
-    É transpilado para::
-
-        def <nome>(<argumentos>):
-            <BLOCO>
-    '''
-
-    if tokens[0].string == 'função':
-        return hshift(transpile_tk(tokens), -len(tk.string) - 1)
-    else:
-        tokens = hshift(transpile_tk(tokens), -(len(tk.string) - 3))
-        tokens.appendleft(tkcopy(tk, string='def', fixend=True))
     return tokens
 
 
-#
-# Utility
-#
-def remove_before_colon(tokens, tkname):
-    try:
-        head, sep, tail = partition(tokens, ':')
-    except MissingSeparatorError:
-        raise SyntaxError(
-            'comando enquanto malformado. Espera ":" para sinalizar fim de '
-            'bloco')
+def process_range_command(tokens):
+    '''Handles command::
 
-    # Remove o comando opcional "tkname"
-    N = len(tkname)
-    if head[-1].string == tkname:
-        head.pop()
-        head.append(tkcopy(sep, hshift=-N - 1))
-        head.extend(hshift(tail, -N - 1))
-    else:
-        return tokens
-    return head
+        de <X> até <Y> [a cada <Z>]
 
+    and converts it to::
 
-#
-# Utilidades
-#
-def hshift_range(range, value):
-    a, b = range
-    return (a, b + value)
-
-
-def tk_hshift(tk, value):
-    name, tt, start, end, line = tk
-    start = hshift_range(start, value)
-    end = hshift_range(end, value)
-    return Token(name, tt, start, end, line)
-
-
-def tkcopy(tk, string=None, type=None, start=None, end=None, line=None,
-           hshift=0, vshift=0, fixend=False):
-    tn, tt, ts, te, tl = tk
-    type = type or tt
-    string = string or tn
-    start = start or ts
-    end = end or te
-    line = line or tl
-
-    start = start[0] + vshift, start[1] + hshift
-    end = end[0] + vshift, end[1] + hshift
-
-    delta = len(tk.string) - len(string)
-    if fixend and delta:
-        end = end[0], end[1] - delta
-
-    return Token(string, type, start, end, line)
-
-
-def tkprint(tk_list):
-    print([tk.string or str(tk) for tk in tk_list])
-
-
-def as_TokenStream(L):
-    '''Retorna iterável como uma TokenStream'''
-
-    if isinstance(L, TokenStream):
-        return L
-    else:
-        return TokenStream(L)
-
-
-class MissingSeparatorError(ValueError):
-    pass
-
-
-def partition(tokens, sep):
-    tokens = iter(tokens)
-    pre = TokenStream()
-    for tk in tokens:
-        if tk.string == sep:
-            sep = tk
-            break
-        else:
-            pre.append(tk)
-    else:
-        raise MissingSeparatorError('expected separator not present: %r' % sep)
-    pen_pos = TokenStream(tokens)
-    return pre, sep, pen_pos
-
-
-def tknew(type, string, start=None, end=None, line=None):
-    return Token(string, type, start, end, line)
-
-
-def get_delta_separator(tk1, tk2):
-    '''Retorna um objeto do tipo delta() com a separação mínima que deve haver
-    entre as token tk1 e tk2 a partir dos seus respectivos tipos.
-
-    Esta função ignora os valores de start e end de cada token.
+        in range(<X>, <Y> + 1[, <Z>])
     '''
 
-    if tk1.end[0] != tk2.end[0]:
-        return delta(0, 0)
-    elif tk1.type == tk2.type == tokenize.NAME and tk1.end[1] >= tk2.start[0]:
-        return delta(0, 1)
-    else:
-        return delta(0, 0)
+    matches = [('de',), ('até',), ('a', 'cada',), (NEWLINE,), (':',)]
+    iterator = token_find(tokens, matches)
+    one_tk = Token('1', NUMBER)
+    for idx, match in iterator:
+        # Waits for a 'de' token to start processing
+        if match[0] != 'de':
+            continue
 
+        # Send tokens for the beginning of the equivalent in range(...) test
+        starttokens = [Token(x) for x in ['in', 'range', '(']]
+        iterator.send(['subs', starttokens])
 
-def join(*args, sep=False):
-    '''Junta várias sequencias de tokens. Se sep=True, adiciona um espaço em
-    branco entre os tokens vizinhos mesmo quando isso não for necessário.'''
-
-    if len(args) > 2:
-        L1, *tail = args
-        return join(L1, join(*tail, sep=sep), sep=sep)
-    elif len(args) == 2:
-        L1, L2 = args
-    else:
-        raise TypeError('expect at least 2 arguments')
-
-    # Retorna outra lista caso uma delas esteja vazia
-    if not L1:
-        return TokenStream(L2)
-    if not L2:
-        return TokenStream(L1)
-
-    # Une as duas listas de tokens
-    if sep:
-        dh = delta(0, 1)
-    else:
-        dh = get_delta_separator(L1[-1], L2[0])
-
-    head = TokenStream(L1)
-    tail = halign(L2, L1[-1].end + dh)
-    head.extend(tail)
-    return head
-
-
-def comma_join(*args, sep=False):
-    '''Junta as sequências de tokens unindo-os por vírgulas'''
-
-    last, *other = reversed(args)
-    other = [suffix(elem, tknew(tokenize.COMMA, ',')) for elem in other]
-    other.reverse()
-    other.append(last)
-    return join(*other, sep=sep)
-
-
-def parens(tokens):
-    r'''Envolve tokens com parênteses, ajustando o alinhamento horizontal
-
-    Exemplo
-    -------
-
-    >>> tokens = parens(fromstring('x + y'))
-    >>> tkprint(tokens)
-    ['(', 'x', '+', 'y', ')']
-    '''
-
-    # Abre parênteses
-    tk = tknew(tokenize.LPAR, '(')
-    tokens = prefix(tokens, tk, sep=False)
-
-    # Fecha parênteses
-    tk = tknew(tokenize.RPAR, ')')
-    tokens = suffix(tokens, tk, sep=False)
-    return tokens
-
-
-def tkhdelta(tk):
-    if tk.start is None or tk.end is None:
-        return len(tk.string)
-    if tk.end[0] != tk.start[0]:
-        raise ValueError('cannot compute hdelta of multiline token')
-    return tk.end[1] - tk.start[1]
-
-
-def prefix(tokens, prefix, sep=False):
-    '''Adiciona token prefix antes da lista de tokens e ajusta alinhamento
-    horizontal'''
-
-    if not tokens:
-        raise ValueError('lista de tokens vazia')
-
-    # Alinha prefix
-    start = tokens[0].start
-    diff = delta(0, tkhdelta(prefix))
-    prefix = tkcopy(prefix, start=start, end=start + diff)
-    prefix = tkcopy(prefix, line=prefix.line or tokens[0].line)
-
-    return join(TokenStream([prefix]), tokens, sep=sep)
-
-
-def suffix(tokens, suffix, sep=False):
-    '''Adiciona token suffix após da lista de tokens e ajusta alinhamento
-    horizontal'''
-
-    if not tokens:
-        raise ValueError('lista de tokens vazia')
-
-    # Remove endmarker and trailing newline if necessary
-    end = None
-    newline = None
-    if tokens[-1].type == tokenize.ENDMARKER:
-        end = tokens.pop()
-    if tokens[-1].type == tokenize.NEWLINE:
-        newline = tokens.pop()
-
-    # Alinha suffix
-    start = tokens[-1].end
-    diff = delta(0, tkhdelta(suffix))
-    suffix = tkcopy(suffix, start=start, end=start + diff)
-    suffix = tkcopy(suffix, line=suffix.line or tokens[-1].line)
-    tokens = join(tokens, TokenStream([suffix]), sep=sep)
-
-    # Restaura endmarker e newline
-    if newline is not None:
-        tokens = add_newline(tokens)
-    if end is not None:
-        tokens.append(end)
-    return tokens
-
-
-def add_newline(tokens):
-    '''Adciona uma token de newline ao final da sequência'''
-
-    start = tokens[-1].end + delta(0, 1)
-    end = start + delta(0, 1)
-    line = tokens[-1].line
-    tokens.append(tknew(tokenize.NEWLINE, '\n', start, end, line))
-    return tokens
-
-
-def hshift(tokens, shift):
-    # Retorna lista vazia
-    if not tokens:
-        return TokenStream()
-
-    line_no = tokens[0].start[0]
-
-    # Cria lista de tokens alinhados
-    aligned = TokenStream()
-    tokens = iter(tokens)
-    for tk in tokens:
-        if tk.start[0] == line_no:
-            aligned.append(tkcopy(tk, hshift=shift))
+        # Matches the 'até' token and insert a comma separator
+        idx, match = next(iterator)
+        if match[0] == 'até':
+            iterator.send(['subs', [Token(',')]])
         else:
-            aligned.append(tk)
-            aligned.extend(tokens)
-            break
+            raise SyntaxError(match)
 
-    return aligned
+        idx, match = next(iterator)
 
+        # Matches "a cada" or the end of the line
+        if match == ('a', 'cada'):
+            middletokens = [Token(x) for x in ['+', one_tk, ',']]
+            iterator.send(['subs', middletokens])
 
-def halign(tokens, tk_start):
-    '''Move tokens para a direita ou esquerda para se alinharem com tk_start'''
+            # Proceed to the end of the line
+            idx, match = next(iterator)
+            if match[0] not in (NEWLINE, ':'):
+                raise SyntaxError(match)
+            endtokens = [Token(')'), tokens[idx]]
+            iterator.send(['subs', endtokens])
 
-    # Retorna lista vazia
-    if not tokens:
-        return TokenStream()
+        # Finish command
+        elif match[0] in (NEWLINE, ':'):
+            endtokens = [Token(x) for x in ['+', one_tk, ')']]
+            endtokens.append(tokens[idx])
+            iterator.send(['subs', endtokens])
 
-    # Impede que tokens comece em uma linha antes tk_start
-    start = tokens[0].start
-    if start[0] > tk_start[0]:
-        return TokenStream(tokens)
-    elif start[0] < tk_start[0]:
-        raise ValueError(('começa em linha anterior à tk_start:\n'
-                          '    linha: %s\n'
-                          '    align: %s') % (start, tk_start))
-
-    # Calcula o shift horizontal
-    line_no, start = tk_start
-    hshift = start - tokens[0].start[1]
-
-    # Cria lista de tokens alinhas
-    aligned = TokenStream()
-    tokens = iter(tokens)
-    for tk in tokens:
-        if tk.start[0] == line_no:
-            aligned.append(tkcopy(tk, hshift=hshift))
+        # Unexpected token
         else:
-            aligned.append(tk)
-            aligned.extend(tokens)
-            break
+            raise SyntaxError(match)
 
-    return aligned
+    return tokens
 
 
-def fromstring(src, start=None):
-    '''Retorna lista de tokens a partir de uma string'''
+def fromstring(src):
+    '''Convert source string to a list of tokens'''
 
-    # Realinha as tokens se start for fornecido
-    if start is not None:
-        line_no, col = start
-        tokens = fromstring(src)
-
-        # Alinha horizontalmente
-        for idx, tk in enumerate(tokens):
-            if tk.start[0] != 1:
-                break
-            tokens[idx] = tkcopy(tk, hshift=col)
-
-        # Alinha verticalmente
-        return [tkcopy(tk, vshift=line_no - 1) for tk in tokens]
-
-    # Cria novas tokens começando na primeira linha
     current_string = src
 
     def iterlines():
         nonlocal current_string
+
         if current_string:
             line, sep, current_string = current_string.partition('\n')
             return line + sep
         else:
             raise StopIteration
 
-    tokens = TokenStream(tokenize.generate_tokens(iterlines))
+    tokens = list(tokenize.generate_tokens(iterlines))
     tokens = list(map(Token, tokens))
-    while tokens[-1].type == ENDMARKER:
-        tokens.pop()
     return tokens
-
-#     if keep_endings:
-#         return tokens
-#     else:
-#
-#         if tokens[-1].type == tokenize.NEWLINE:
-#             tokens.pop()
-#         return tokens
 
 
 def tostring(tokens):
     '''Converte lista de tokens para string'''
 
-    last_pos = tokens[0].start
+    # Align tokens
+    lastpos = TokenPosition(1, 0)
+    last_is_fragile = False
 
-    while tokens[-1].type == DEDENT:
-        tokens.pop()
+    def itertokens():
+        nonlocal lastpos, last_is_fragile
 
-    if tokens[-1].type != ENDMARKER:
-        start = end = tokens[-1].end
-        tokens.append(tknew(ENDMARKER, '', start, end, line=''))
+        for tk in tokens:
+            if tk.start is None:
+                tk.start = lastpos
+            if tk.start < lastpos:
+                tk.start, tk.end = lastpos, None
+            if last_is_fragile and tk.string.isidentifier() and tk.start == lastpos:
+                tk.start += (0, 1)
+                tk.end = None
+            if tk.end is None:
+                tk.end = tk.start + (0, len(tk.string))
 
-    # tkprint(tokens)
+            assert tk.end >= tk.start, str(tk)
+            assert tk.start >= lastpos, str(tk)
+            skip = tk.string.count('\n')
+            if skip:
+                lastpos = TokenPosition(tk.end.lineno + skip, 0)
+            else:
+                lastpos = tk.end
+            last_is_fragile = tk.string.isidentifier()
+            yield tk.to_token_info()
 
-    tokens = [tk.to_token_info() for tk in tokens]
-    try:
-        return tokenize.untokenize(tokens)
-    except ValueError:
-        for idx, tk in enumerate(tokens):
-            a, b = tk.start
-            c, d = last_pos
-            if (a < c) or (a == c and d > b):
-                fmt = idx, tokens[idx - 1], tk
-                print(tokens)
-                raise ValueError(
-                    'tokens sobrepõe a partir de #%s:\n\t%s\n\t%s)' % fmt)
-            last_pos = tk.end
-        else:
-            raise
-
-
-###############################################################################
-#
-# Testes
-#
-# FIXME: criar suite de testes
-
-if __name__ == '__main__':
-
-    # Básico
-    # prefix
-    src = tostring(prefix(fromstring('+ y'), tknew(1, 'x'), sep=True))
-    assert src == 'x + y', repr(src)
-
-    # suffix
-    src = tostring(suffix(fromstring('x +'), tknew(1, 'y'), sep=True))
-    assert src == 'x + y', repr(src)
-
-    src = tostring(parens(fromstring('x + y')))
-    assert src == '(x + y)', repr(src)
-
-    # Trivial
-    # Ops matemáticas
-    for ptsrc in ['1 + 2', '1 + 2.0', '[1, 2, 3]', 'x and y']:
-        assert transpile(ptsrc) == ptsrc, transpile(ptsrc)
-
-    # Traduções
-    ptsrc = 'x e y'
-    pysrc = 'x and y'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'x é verdadeiro'
-    pysrc = 'x is True'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Laços - repetir
-    ptsrc = 'repetir 4 vezes: mostre(42)'
-    pysrc = 'for ___ in range(4): mostre(42)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'repetir 4 vezes:\n    mostre(42)'
-    pysrc = 'for ___ in range(4):\n    mostre(42)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Laços - para cada
-    ptsrc = 'para cada x em [1, 2, 3]: mostre(x)'
-    pysrc = 'for x in [1, 2, 3]: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para cada x em [1, 2, 3]:\n    mostre(x)'
-    pysrc = 'for x in [1, 2, 3]:\n    mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para cada x em [1, 2, 3] faça: mostre(x)'
-    pysrc = 'for x in [1, 2, 3]: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Laços - para (range)
-    ptsrc = 'para x de 1 até 10: mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 1 até 10:\n    mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1):\n    mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 1 até 10 faça: mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 1 até 10 a cada 2: mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1, 2): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 1 até 10 a cada 2 faça: mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1, 2): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 1 até 10 a cada 2 faça:\n    mostre(x)'
-    pysrc = 'for x in range(1, 10 + 1, 2):\n    mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Laços - enquanto
-    ptsrc = 'enquanto x < 1: mostre(x)'
-    pysrc = 'while x < 1: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'enquanto x < 1 faça: mostre(x)'
-    pysrc = 'while x < 1: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'enquanto x < 1 faça:\n    mostre(x)'
-    pysrc = 'while x < 1:\n    mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Condicional - se
-    ptsrc = 'se x < 1 então: mostre(x)'
-    pysrc = 'if x < 1: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'se x < 1: mostre(x)'
-    pysrc = 'if x < 1: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'se x < 1 então:\n    mostre(x)'
-    pysrc = 'if x < 1:\n    mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Condicional - se/senão
-    ptsrc = '''
-se x < 1 então:
-    mostre(x)
-senão:
-    mostre(-x)
-'''
-    pysrc = '''
-if x < 1:
-    mostre(x)
-else:
-    mostre(-x)
-'''
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Condicional - se/ou então/senão
-    ptsrc = '''
-se x < 1 então:
-    mostre(x)
-ou então se x > 3:
-    mostre(0)
-senão:
-    mostre(-x)
-'''
-    pysrc = '''
-if x < 1:
-    mostre(x)
-elif x > 3:
-    mostre(0)
-else:
-    mostre(-x)
-'''
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Função
-    ptsrc = 'função foo(x): retorne x'
-    pysrc = 'def foo(x): return x'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'definir foo(x): retorne x'
-    pysrc = 'def foo(x): return x'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'definir função foo(x): retorne x'
-    pysrc = 'def foo(x): return x'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'definir função foo(x):\n    retorne x'
-    pysrc = 'def foo(x):\n    return x'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    # Integração
-    ptsrc = 'para cada x em [1, 2, 3]:\n    mostre(x ou z)'
-    pysrc = 'for x in [1, 2, 3]:\n    mostre(x or z)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    #
-    # Recursos do Python não suportados com tradução
-    #
-    # classes, geradores, with, assert, ...
-
-    #
-    # Bug tracker
-    #
-    ptsrc = '\n\n\nrepetir 5 vezes:\n    mostre(42)'
-    pysrc = '\n\n\nfor ___ in range(5):\n    mostre(42)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = '\n\npara cada x em [1, 2, 3]: mostre(x)'
-    pysrc = '\n\nfor x in [1, 2, 3]: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'mostre(1)\n\n\n\npara cada x em [1, 2, 3]: mostre(x)'
-    pysrc = 'mostre(1)\n\n\n\nfor x in [1, 2, 3]: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'mostre(1)\n\n\n\npara x de 1 até 3: mostre(x)'
-    pysrc = 'mostre(1)\n\n\n\nfor x in range(1, 3 + 1): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'enquanto não x: mostre(x)'
-    pysrc = 'while not x: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'se não x: mostre(x)'
-    pysrc = 'if not x: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = '\n\n\nse não x: mostre(x)'
-    pysrc = '\n\n\nif not x: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = '\n\n\nsenão: mostre(x)'
-    pysrc = '\n\n\nelse: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = '\n\n\nsenão faça: mostre(x)'
-    pysrc = '\n\n\nelse: mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para x de 10 até 20: mostre(x)'
-    pysrc = 'for x in range(10, 20 + 1): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    ptsrc = 'para xx de 10 até 20: mostre(x)'
-    pysrc = 'for xx in range(10, 20 + 1): mostre(x)'
-    assert transpile(ptsrc) == pysrc, transpile(ptsrc)
-
-    #
-    # Possíveis extensões para a linguagem
-    #
-    # switch/case
-    ptsrc = '''
-    se x for:
-        igual à 2:
-            mostre(x)arg
-        igual à 3:
-            mostre(x + 2)
-        senão:
-            pass
-    '''
-
-    # do/while?
-    ptsrc = '''
-    faça:
-        mostre(x)
-    enquanto x < 2
-    '''
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    return tokenize.untokenize(itertokens())

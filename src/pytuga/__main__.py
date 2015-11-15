@@ -1,6 +1,3 @@
-'''
-Script principal pytuga
-'''
 import os
 import sys
 import argparse
@@ -10,19 +7,19 @@ from pytuga import __version__ as version
 
 
 def start_interactive():
-    '''Inicia REPL'''
+    '''Start Pytuga REPL'''
 
     from pytuga.console import run_console
     run_console()
 
 
-def run():
-    '''Função principal de execução'''
+def main():
+    '''Executes the main pytuga program in the console.'''
 
     if len(sys.argv) <= 1:
         return start_interactive()
 
-    # Processa argumentos
+    # Process arguments
     parser = argparse.ArgumentParser(description='Executa código Pytuguês')
     parser.add_argument(
         'arquivo', help='nome do arquivo a ser executado')
@@ -38,18 +35,17 @@ def run():
         '--versão', '-v',
         help='mostra a versão do interpretador de pytuguês',
         action='version', version='Pytuga %s' % version)
-
     # parser.add_argument('--warning', '-w', action='store_const',
     #                   help='ativa avisos de compatibilidade com o python')
     args = parser.parse_args()
 
-    # Processa erros
+    # Process errors
     if os.path.splitext(args.arquivo)[1] != '.pytg':
         print('Aviso: Pytuga deve processar apenas arquivos .pytg!')
     if not os.path.exists(args.arquivo):
         raise SystemExit('O arquivo %s não existe!' % args.arquivo)
 
-    # Processa arquivo
+    # Process file
     if args.mostre_python:
         with open(args.arquivo) as F:
             print(transpile(F.read()))
@@ -64,4 +60,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    main()

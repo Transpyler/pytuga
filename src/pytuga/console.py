@@ -5,6 +5,7 @@ import tugalib
 from pytuga import lexer
 from pytuga import __version__
 
+
 pytuga_banner = \
     '''pytuga %s, o interpretador de Pytuguês.
 [Python 3.4, GCC] em linux
