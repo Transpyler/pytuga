@@ -63,7 +63,7 @@ def ler_número(mensagem):
     return int(num) if int(num) == num else num
 
 
-@synonyms('leia_arquivo')
+@synonyms('leia_arquivo', 'leia_ficheiro', 'ler_ficheiro')
 def ler_arquivo(arquivo):
     '''
     Lê conteúdo de um arquivo texto e retorna uma string de texto.
@@ -77,7 +77,7 @@ def ler_arquivo(arquivo):
     return open(arquivo).read()
 
 
-@synonyms('salve_arquivo')
+@synonyms('salve_arquivo', 'salvar_ficheiro', 'salve_ficheiro')
 def salvar_arquivo(arquivo, texto):
     '''
     Salva o conteúdo de texto no arquivo indicado, apagando qualquer
@@ -94,6 +94,7 @@ def salvar_arquivo(arquivo, texto):
 
     with open(arquivo) as F:
         F.write(str(texto))
+
 
 if __name__ == '__main__':
     import doctest
