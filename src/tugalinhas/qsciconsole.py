@@ -10,6 +10,8 @@ import threading
 from collections import deque
 from PyQt5 import QtCore
 from .qscieditor import PythonEditor
+from PyQt5 import QtCore
+
 
 
 Tab = QtCore.Qt.Key_Tab

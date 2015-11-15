@@ -1,5 +1,6 @@
 import sys
-from tugalinhas import QtWidgets, Tugalinhas
+from PyQt5 import QtWidgets
+from tugalinhas import Tugalinhas
 
 
 def main():
