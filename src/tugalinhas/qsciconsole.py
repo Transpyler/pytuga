@@ -5,7 +5,6 @@ import io
 import sys
 import traceback
 import abc
-#import multiprocessing
 import threading
 from collections import deque
 from PyQt5 import QtCore
