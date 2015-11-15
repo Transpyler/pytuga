@@ -1,6 +1,6 @@
-'''
+"""
 The main editor with python syntax highlighting
-'''
+"""
 import io
 import sys
 import traceback
@@ -9,13 +9,13 @@ import threading
 from collections import deque
 from PyQt5 import QtCore
 from .qscieditor import PythonEditor
-from PyQt5 import QtCore
 
 
-
+_stdout = sys.stdout
 Tab = QtCore.Qt.Key_Tab
 Backtab = QtCore.Qt.Key_Backtab
 Backspace = QtCore.Qt.Key_Backspace
+Escape = QtCore.Qt.Key_Escape
 Left = QtCore.Qt.Key_Left
 Right = QtCore.Qt.Key_Right
 Return = QtCore.Qt.Key_Return
@@ -53,49 +53,49 @@ UnlockedShiftKeys = set()
 class AbstractRunner(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def checkComplete(self, src):
-        '''Return True if source code can represent a complete command.'''
+        """Return True if source code can represent a complete command."""
 
         return True
 
     @abc.abstractmethod
     def checkValidSyntax(self, src):
-        '''Return True if source code has a valid syntax.'''
+        """Return True if source code has a valid syntax."""
 
         return False
 
     @abc.abstractmethod
     def runSingle(self, src):
-        '''Runs command in 'single' mode: returns a string with the representation
-        of the command output.'''
+        """Runs command in 'single' mode: returns a string with the representation
+        of the command output."""
 
         raise NotImplementedError
 
     @abc.abstractmethod
     def runExec(self, src):
-        '''Runs command in "exec" mode: returns a string with all prints during
-        the command's execution.'''
+        """Runs command in "exec" mode: returns a string with all prints during
+        the command's execution."""
 
         raise NotImplementedError
 
     @abc.abstractmethod
     def kill(self):
-        '''Kills runner processs'''
+        """Kills runner processs"""
 
         raise NotImplementedError
 
     def poll(self):
-        '''Poll runner and return a boolean telling if runner is running'''
+        """Poll runner and return a boolean telling if runner is running"""
 
         return False
 
     def cancel(self):
-        '''Cancel execution of a runner process'''
+        """Cancel execution of a runner process"""
 
         raise NotImplementedError
 
 
 class PythonRunner(AbstractRunner):
-    '''Runs code in a Python 3 interpreter'''
+    """Runs code in a Python 3 interpreter"""
 
     # TODO: make this run as a subprocess
 
@@ -150,7 +150,7 @@ class PythonRunner(AbstractRunner):
 class PyTranspilableRunner(PythonRunner):
     @abc.abstractmethod
     def transpile(self, src):
-        '''Transpile source to Python 3'''
+        """Transpile source to Python 3"""
 
         raise NotImplementedError
 
@@ -182,16 +182,16 @@ class CRunner(AbstractRunner):
         self._cdll = None
 
     def getSymbols(self, src):
-        '''Return a mapping from {name: type} for all symbols defined in the
-        source'''
+        """Return a mapping from {name: type} for all symbols defined in the
+        source"""
 
     def forceExtern(self, src):
-        '''Convert all declarations in C source to extern declarations.'''
+        """Convert all declarations in C source to extern declarations."""
 
         return src
 
     def compile(self, src):
-        '''Compiles and saves the ctypes cdll object internally'''
+        """Compiles and saves the ctypes cdll object internally"""
 
     def runSingle(self, src):
         raise NotImplementedError('CRunner cannot run in single mode')
@@ -203,9 +203,9 @@ class CRunner(AbstractRunner):
 
 
 class PythonConsole(PythonEditor):
-    '''
+    """
     A Scintilla based console.
-    '''
+    """
     
     def __init__(self, 
                  parent=None, runner=None, *,
@@ -272,7 +272,7 @@ class PythonConsole(PythonEditor):
         self._locked_position = (lineno, lineindex - 1)
 
     def currentCommandIsComplete(self):
-        '''Returns a boolean telling if the current command is complete'''
+        """Returns a boolean telling if the current command is complete"""
 
         cmd = self._current_command
         if cmd[-1].rstrip().endswith(':'):
@@ -286,7 +286,7 @@ class PythonConsole(PythonEditor):
                 return False
 
     def processCurrentCommand(self):
-        '''Process the current command.'''
+        """Process the current command."""
 
         cmd = '\n'.join(self._current_command)
         self._current_command.clear()
@@ -295,6 +295,8 @@ class PythonConsole(PythonEditor):
         else:
             def run_command():
                 if cmd.strip():
+                    self._history.append(cmd)
+                    self._history_idx = 0
                     result = self.run(cmd.strip() + '\n', 'single')
                 else:
                     result = ''
@@ -302,32 +304,46 @@ class PythonConsole(PythonEditor):
                 # Insert result in text
                 self.insert(result)
                 self.addPrompt(newline=bool(result))
-                self._history.append(cmd)
             self.scheduleBackgroundTask(run_command)
 
     def executeCommand(self, cmd):
-        '''Run command in the console as if it was inserted by the user'''
+        """Run command in the console as if it was inserted by the user"""
 
         self.cancelCurrent()
         def run_command():
             if not cmd.strip():
                 return ''
+            self._history_idx = 0
             result = self.run(cmd.strip() + '\n', 'exec')
 
             if result:
                 self.insert('...\n' + result)
                 self.addPrompt()
-            self._history_idx = 0
+
         self.scheduleBackgroundTask(run_command)
 
     def run(self, cmd, mode):
+        """Call the runner to execute the given command (either in 'single' or
+        in 'exec' mode)."""
+
         if mode == 'exec':
             return self._runner.runExec(cmd)
         elif mode == 'single':
             return self._runner.runSingle(cmd)
 
+    def cancelExecution(self):
+        """Cancel execution of current command"""
+
+        is_running, thread = self._background_tasks.popleft()
+        if is_running:
+            try:
+                thread.join(0)
+            except TimeoutError:
+                pass
+            self.addPrompt()
+
     def cancelCurrent(self):
-        '''Cancel de current command and clear all input lines'''
+        """Cancel de current command and clear all input lines"""
         
         self._current_command.clear()
         i, j = self._locked_position
@@ -337,7 +353,7 @@ class PythonConsole(PythonEditor):
         self.removeSelectedText()
 
     def replaceCurrentBy(self, cmd):
-        '''Replaces the current command by the given command'''
+        """Replaces the current command by the given command"""
 
         cmd_lines = cmd.splitlines()
         cmd_lines[1:] = ['... ' + line for line in cmd_lines[1:]]
@@ -356,7 +372,9 @@ class PythonConsole(PythonEditor):
         # just passthru
         is_locked = bool(self._background_tasks)
         if (lineno, lineindex) <= self._locked_position or is_locked:
-            if (key in UnlockedNavKeys or
+            if key == Escape and is_locked:
+                self.cancelExecution()
+            elif (key in UnlockedNavKeys or
                     modifiers & Control and key in UnlockedControlKeys or
                     modifiers & Shift and key in UnlockedShiftKeys):
                 super().keyPressEvent(ev)
@@ -388,12 +406,12 @@ class PythonConsole(PythonEditor):
                 indent, _ = _splitindent(self._current_command[-1])
                 self.insertAt('... ' + indent, lineno, 0)
                 self.setCursorPosition(lineno, lineindex + 4 + len(indent))
-            
+
         # Prevents it from deleting the first locked whitespace
         elif key in (Backspace, Backtab):
             if (lineno, lineindex - 1) > self._locked_position:
                 super().keyPressEvent(ev)
-                
+
         # Chooses commands in history
         elif key in (Up, Down):
             delta = 1 if key else 1 
@@ -415,9 +433,9 @@ class PythonConsole(PythonEditor):
 
 
 def _splitindent(line):
-    '''Split a string into an indentation part and the rest of the string.
+    """Split a string into an indentation part and the rest of the string.
 
-    Only process indentation of the first line of the string.'''
+    Only process indentation of the first line of the string."""
 
     idx = 0
     while line[idx] in [' ', '\t']:

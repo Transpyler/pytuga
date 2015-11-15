@@ -34,7 +34,6 @@ class Turtle(QtSvg.QGraphicsSvgItem):
         self.setPos(*pos)
         self.setZValue(1.0)
         self.setRotation(heading)
-        
         self.tip_pos = Vec(*pos)
         self.tip_heading = 0
         self.tip_isdown = isdown
@@ -42,7 +41,6 @@ class Turtle(QtSvg.QGraphicsSvgItem):
         self.tip_fill = fill
         self.tip_width = width
         self.svg_id = svg_id
-
         self.oldpos = [None, None]
 
     def copy(self):
@@ -50,4 +48,3 @@ class Turtle(QtSvg.QGraphicsSvgItem):
             pos=self.tip_pos, heading=self.tip_heading, isdown=self.tip_isdown,
             color=self.tip_color, fill=self.tip_fill, width=self.tip_width,
             svg_id=self.svg_id)
-        
