@@ -62,7 +62,7 @@ class ReplEditor(QtWidgets.QWidget):
     def runCode(self):
         text = self.editor.text()
         if text:
-            result = self.console.runCommand(text)
+            result = self.console.executeCommand(text)
             if result and self.console.isHidden():
                 self.toggleConsoleVisibility()
     

@@ -5,8 +5,9 @@ import io
 import sys
 import traceback
 import abc
-import multiprocessing
-import subprocess
+#import multiprocessing
+import threading
+from collections import deque
 from PyQt5 import QtCore
 from .qscieditor import PythonEditor
 
@@ -81,12 +82,23 @@ class AbstractRunner(metaclass=abc.ABCMeta):
 
         raise NotImplementedError
 
+    def poll(self):
+        '''Poll runner and return a boolean telling if runner is running'''
+
+        return False
+
+    def cancel(self):
+        '''Cancel execution of a runner process'''
+
+        raise NotImplementedError
+
 
 class PythonRunner(AbstractRunner):
     '''Runs code in a Python 3 interpreter'''
 
+    # TODO: make this run as a subprocess
+
     def __init__(self, namespace=None):
-        self._pool = multiprocessing.Pool()
         self._namespace = dict(namespace or {})
 
     def checkComplete(self, src):
@@ -100,25 +112,38 @@ class PythonRunner(AbstractRunner):
         except SyntaxError:
             return False
 
+    def kill(self):
+        raise NotImplementedError
+
+    def updateNamespace(self, D):
+        self._namespace.update(D)
+
     def runSingle(self, src):
-        self._pool.apply(self._runWorker, args=(src, 'single'))
+        return self._run_worker(src, 'single', self._namespace)
 
     def runExec(self, src):
-        self._pool.apply(self._runWorker, args=(src, 'exec'))
+        return self._run_worker(src, 'exec', self._namespace)
 
     @staticmethod
-    def _runWorker(self, cmd, mode, io_out):
+    def _run_worker(cmd, mode, ns):
+        stdout, stderr = sys.stdout, sys.stderr
+        out = sys.stdout = io.StringIO()
+        err = sys.sterr = io.StringIO()
         try:
-            stdout, stderr = sys.stdout, sys.stderr
-            out = sys.stdout = io.StringIO()
-            err = sys.sterr = io.StringIO()
             code = compile(cmd, '<input>', mode)
-            exec(code, self._namespace)
+            exec(code, ns)
         except:
             traceback.print_exc(file=out)
         finally:
             sys.stdout, sys.stderr = stdout, stderr
-            return out.getvalue() + err.getvalue()
+            data = out.getvalue() + err.getvalue()
+            return data
+
+    @staticmethod
+    def _set_subprocess_globals(namespace):
+        print(namespace)
+        D = globals()
+        D.update(namespace)
 
 
 class PyTranspilableRunner(PythonRunner):
@@ -141,11 +166,11 @@ class PyTugaRunner(PyTranspilableRunner):
         import tugalib
 
         self._pytuga = pytuga
-        namespace = {k: v
+        _namespace = {k: v
             for (k, v) in vars(tugalib).items()
                 if not k.startswith('_')}
-        namespace.update(dict(namespace or {}))
-        super().__init__(namespace=namespace)
+        _namespace.update(dict(namespace or {}))
+        super().__init__(namespace=_namespace)
 
     def transpile(self, src):
         return self._pytuga.transpile(src)
@@ -200,22 +225,42 @@ class PythonConsole(PythonEditor):
             header_text = '%s\n>>> ' % header_text
         self.setText(header_text)
         lineno = header_text.count('\n')
-        self._locked = (lineno, 3)
+        self._locked_position = (lineno, 3)
         self._pylexer = self.lexer()
         self._history = []
         self._history_idx = 0
-        
+
+        # Configure timer for polling runner object (60 fps)
+        self.startTimer(100 / 6)
+        self._background_tasks = deque()
+
+    def timerEvent(self, timer):
+        if self._background_tasks:
+            started, thread = self._background_tasks[0]
+            if not started:
+                thread.start()
+                self._background_tasks[0] = (True, thread)
+            if not thread.is_alive():
+                self._background_tasks.popleft()
+
+    def scheduleBackgroundTask(self, func, args=()):
+        thread = threading.Thread(target=func, args=args)
+        started = False
+        if not self._background_tasks:
+            thread.start()
+            started = True
+        self._background_tasks.append((started, thread))
+
     def addPrompt(self, newline=True):
         data = '\n' if newline else ''
         self.setCursorAtEndPosition()
         self.insert('%s>>> ' % data)
         self.setCursorAtEndPosition()
         self.lockAtCurrent()
-        
+
     def setNamespace(self, value):
-        self._console_namespace.clear()
-        self._console_namespace.update(value)
-        
+        self._runner.updateNamespace(value)
+
     def setCursorAtEndPosition(self):
         lineno = self.lines() - 1
         lineindex = self.lineLength(lineno)
@@ -223,10 +268,10 @@ class PythonConsole(PythonEditor):
         
     def lockAtCurrent(self):
         lineno, lineindex = self.getCursorPosition()
-        self._locked = (lineno, lineindex - 1)
+        self._locked_position = (lineno, lineindex - 1)
 
     def currentCommandIsComplete(self):
-        '''Return True or False depending if the current command is complete'''
+        '''Returns a boolean telling if the current command is complete'''
 
         cmd = self._current_command
         if cmd[-1].rstrip().endswith(':'):
@@ -240,71 +285,51 @@ class PythonConsole(PythonEditor):
                 return False
 
     def processCurrentCommand(self):
-        '''Process the current command.
-
-        Return the output of the command.'''
+        '''Process the current command.'''
 
         cmd = '\n'.join(self._current_command)
         self._current_command.clear()
         if not cmd:
             self.addPrompt(newline=False)
         else:
-            result = self.executeCommand(cmd)
+            def run_command():
+                if cmd.strip():
+                    result = self.run(cmd.strip() + '\n', 'single')
+                else:
+                    result = ''
 
-            # Insert result in text
-            self.insert(result)
-            self.addPrompt(newline=bool(result))
-            self._history.append(cmd)
-        return cmd
+                # Insert result in text
+                self.insert(result)
+                self.addPrompt(newline=bool(result))
+                self._history.append(cmd)
+            self.scheduleBackgroundTask(run_command)
 
-    def executeCommand(self, cmd, mode='single'):
-        '''Return a string with the print messages yielded after the execution
-        of a command string.
-        
-        This would possibly change an internal state such as the
-        `console_namespace` attribute.
-        '''
-        
-        cmd = cmd.rstrip() + '\n'
-        try:
-            stdout, stderr = sys.stdout, sys.stderr
-            out = sys.stdout = io.StringIO()
-            err = sys.sterr = io.StringIO()
-            self.runner(cmd, mode, out)
-            result = out.getvalue() + err.getvalue()
-        finally:
-            sys.stdout, sys.stderr = stdout, stderr
-
-        return result
-
-    def runCommand(self, cmd):
+    def executeCommand(self, cmd):
         '''Run command in the console as if it was inserted by the user'''
 
         self.cancelCurrent()
-        result = self.executeCommand(cmd, 'exec')
-        if result:
-            self.insert('...\n' + result)
-            self.addPrompt()
-        self._history_idx = 0
-        return result
+        def run_command():
+            if not cmd.strip():
+                return ''
+            result = self.run(cmd.strip() + '\n', 'exec')
 
-    def run(self, cmd, mode, out):
+            if result:
+                self.insert('...\n' + result)
+                self.addPrompt()
+            self._history_idx = 0
+        self.scheduleBackgroundTask(run_command)
+
+    def run(self, cmd, mode):
         if mode == 'exec':
-            return self._runner.runExec(src)
-
-        import pytuga
-        import tugalib
-        tuganames = {k: getattr(tugalib, k) for k in dir(tugalib)}
-        tuganames.update(self._console_namespace)
-        self._console_namespace = tuganames
-        pycmd = pytuga.transpile(cmd)
-        self.runner_(pycmd, mode, out)
+            return self._runner.runExec(cmd)
+        elif mode == 'single':
+            return self._runner.runSingle(cmd)
 
     def cancelCurrent(self):
         '''Cancel de current command and clear all input lines'''
         
         self._current_command.clear()
-        i, j = self._locked
+        i, j = self._locked_position
         m = self.lines()
         n = self.lineLength(m)
         self.setSelection(i, j + 1, m, n)
@@ -328,7 +353,8 @@ class PythonConsole(PythonEditor):
 
         # We are in a locked area. Only a few key take effect, and many of these
         # just passthru
-        if (lineno, lineindex) <= self._locked:
+        is_locked = bool(self._background_tasks)
+        if (lineno, lineindex) <= self._locked_position or is_locked:
             if (key in UnlockedNavKeys or
                     modifiers & Control and key in UnlockedControlKeys or
                     modifiers & Shift and key in UnlockedShiftKeys):
@@ -364,7 +390,7 @@ class PythonConsole(PythonEditor):
             
         # Prevents it from deleting the first locked whitespace
         elif key in (Backspace, Backtab):
-            if (lineno, lineindex - 1) > self._locked:
+            if (lineno, lineindex - 1) > self._locked_position:
                 super().keyPressEvent(ev)
                 
         # Chooses commands in history
