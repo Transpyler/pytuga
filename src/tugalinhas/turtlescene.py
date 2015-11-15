@@ -1,9 +1,9 @@
-'''
-The main TurtleScene and TurtleView classes. 
+"""
+The main TurtleScene and TurtleView classes.
 
 These are derived from QGraphicsScene and QGraphicsView and can be used anywhere
 these two classes are expected.
-'''
+"""
 
 import time
 from collections import deque
@@ -15,26 +15,26 @@ _LABEL_FONT = QtGui.QFont('Helvetica', 8)
 _LABEL_FONT.setStyleStrategy(QtGui.QFont.NoAntialias)
 _LABEL_PADDING = 2
 
+
 class TurtleView(QtWidgets.QGraphicsView):
-    '''
+    """
     A TurtleView is a widget that can be inserted anywhere in the GUI and is
     responsible to render and display a TurtleScene.
-    
-    By default, the TurtleView applies a transforms that inverts the 
-    y-coordinate so that it point upwards instead of downwards (as is the 
+
+    By default, the TurtleView applies a transforms that inverts the
+    y-coordinate so that it point upwards instead of downwards (as is the
     default in many computer graphics applications). This transform also invert
-    the direction of rotations: positive rotations are counter-clockwise and 
+    the direction of rotations: positive rotations are counter-clockwise and
     negative rotations are clockwise.
-    
-    '''
+    """
 
     def __init__(self, scene=None):
         if scene is None:
             scene = TurtleScene()
         self._scene = scene
         super().__init__(scene)
-        transform = QtGui.QTransform(1,  0, 
-                                     0, -1, 
+        transform = QtGui.QTransform(1,  0,
+                                     0, -1,
                                      0,  0)
         self.setTransform(transform)
         self._zoomfactor = 1.2
@@ -47,7 +47,7 @@ class TurtleView(QtWidgets.QGraphicsView):
         # http://stackoverflow.com/questions/7928519/how-to-make-the-qlabel-background-semi-transparent
         # Fourth parameter in color tuple is alpha: 0-transparent; 255-opaque
         w.setStyleSheet('color: rgba(0, 0, 0, 196); '
-                        'background-color: rgba(0, 0, 0, 5);'
+                        'background-color: rgba(0, 0, 0, 0);'
                         'padding: %d' % _LABEL_PADDING)
         w.setAlignment(QtCore.Qt.AlignRight)
         w.setFont(_LABEL_FONT)
@@ -57,7 +57,7 @@ class TurtleView(QtWidgets.QGraphicsView):
 
     def zoomIn(self):
         self.scale(self._zoomfactor, self._zoomfactor)
-    
+
     def zoomOut(self):
         self.scale(1 / self._zoomfactor, 1 / self._zoomfactor)
 
@@ -66,15 +66,16 @@ class TurtleView(QtWidgets.QGraphicsView):
         assert isinstance(pos, Vec)  # May remove these assertions later
         self.__posLabel_makeText(pos)
 
-    def resizeEvent(self, QResizeEvent):  # Qt override
-        # self._scene.viewWasResized()
+    def resizeEvent(self, QResizeEvent):
         self.__posLabel_position()
+        super().resizeEvent(QResizeEvent)
 
     def __posLabel_position(self):
         size = self.viewport().size()
         w = self._posLabel
-        MARGIN = 3
-        w.move(size.width()-w.width()-MARGIN, size.height()-w.height()-MARGIN)
+        margin = 3
+        w.move(size.width() - w.width() - margin,
+               size.height()-w.height() - margin)
 
     def __posLabel_makeText(self, pos):
         s = "x=%d, y=%d" % (pos[0], pos[1])
@@ -83,19 +84,19 @@ class TurtleView(QtWidgets.QGraphicsView):
 
 
 class TurtleScene(QtWidgets.QGraphicsScene):
-    '''
+    """
     The TurtleScene defines the scene in which geometric objects resides.
-    
+
     It controls the Turtle object and how it draws in the screen.
-    '''
-    
+    """
+
     def __init__(self, parent=None, fps=30):
         super().__init__(parent)
         self._fps = fps
         self._interval = 1 / fps
         self.startTimer(1000 / fps)
         self._init(fps=fps)
-        
+
     def _init(self, fps=30):
         self._lines = []
         self._turtles = []
@@ -114,12 +115,12 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     # Task control
     #
     def cancelTasks(self):
-        '''Cancel all pending tasks'''
+        """Cancel all pending tasks"""
 
         self._tasks = deque()
 
     def iterTasks(self):
-        '''Iterate over all tasks.'''
+        """Iterate over all tasks."""
 
         while self._tasks:
             for task in self._tasks[0]:
@@ -129,20 +130,20 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         yield True
 
     def consumeTask(self):
-        '''Consumes a task in the queue of _turtle modifications.
+        """Consumes a task in the queue of _turtle modifications.
 
         Each task return a True/False value telling if the scheduler should
-        wait for the next frame to process the next task.'''
-        
+        wait for the next frame to process the next task."""
+
         for result in self.iterTasks():
             if result:
-                return 
-        
+                return
+
     def timerEvent(self, timer):
-        '''Scheduled to be executed at some given framerate. 
-        
-        It process all queued animation _tasks.'''
-        
+        """Scheduled to be executed at some given framerate.
+
+        It process all queued animation _tasks."""
+
         self.consumeTask()
 
 
@@ -150,8 +151,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     # Turtle control
     #
     def addTurtle(self, turtle=None, *, default=False, **kwds):
-        '''Adds new _turtle to the scene.'''
-        
+        """Adds new _turtle to the scene."""
+
         if turtle is None:
             turtle = Turtle(**kwds)
             self.addItem(turtle)
@@ -160,21 +161,21 @@ class TurtleScene(QtWidgets.QGraphicsScene):
             self.addItem(turtle)
         if default:
                 self.setTurtle(turtle)
-    
+
     def turtle(self):
-        '''Return the active turtle'''
-        
+        """Return the active turtle"""
+
         return self._turtle
 
     def setTurtle(self, turtle):
-        '''Configures the active Turtle object'''
-         
+        """Configures the active Turtle object"""
+
         self._turtle = turtle
-        
+
     def getNamespace(self, D={}, **kwds):
-        '''Return a mapping with all _turtle module functions.'''
-        
-        from .turtlenamespace import TurtleNamespace 
+        """Return a mapping with all _turtle module functions."""
+
+        from .turtlenamespace import TurtleNamespace
         return TurtleNamespace(self, D, **kwds)
 
     #
@@ -182,8 +183,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     # the two functions bellow
     #
     def turtleState(self, name):
-        '''Return the requested variable value in current _turtle's state tip.'''
-        
+        """Return the requested variable value in current _turtle's state tip."""
+
         if name == 'pos':
             return self._turtle.tip_pos
         elif name == 'heading':
@@ -198,14 +199,14 @@ class TurtleScene(QtWidgets.QGraphicsScene):
             return self._turtle.tip_width
         else:
             raise ValueError('invalid _turtle property: %r' % name)
-        
+
     def setTurtleState(self, name, value, *, draw=True, delay=0):
-        '''Deffered update of _turtle's state.
-        
-        It modifies the tip and queues changes to be applied to the actual 
-        _turtle's state. If delay is given, the complete modification to _turtle's 
-        state may requires more that one frame of animation.'''
-        
+        """Deffered update of _turtle's state.
+
+        It modifies the tip and queues changes to be applied to the actual
+        _turtle's state. If delay is given, the complete modification to _turtle's
+        state may requires more that one frame of animation."""
+
         if name == 'pos':
             subtasks = self.__setPos(value, delay, draw)
         elif name == 'heading':
@@ -220,11 +221,11 @@ class TurtleScene(QtWidgets.QGraphicsScene):
             subtasks = self.__setProp('width', value)
         else:
             raise ValueError('invalid _turtle property: %r' % name)
-        
+
         subtasks = iter(subtasks)
         next(subtasks)
-        self._tasks.append(subtasks) 
-        
+        self._tasks.append(subtasks)
+
     #
     # Set state helpers
     #
@@ -232,21 +233,21 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         startangle = self._turtle.tip_heading
         self._turtle.tip_heading = angle
         yield
-        
+
         if delay:
             t0 = time.time()
             t = 0
             delta = angle - startangle
-            
+
             while t < delay:
                 theta = startangle + delta * t / delay
                 self._turtle.setRotation(theta)
                 t = time.time() - t0
                 yield True
-                
+
         self._turtle.setRotation(angle)
-        
-            
+
+
     def __setPos(self, pos, delay, draw):
         # Update tip
         turtle = self._turtle
@@ -254,7 +255,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         endpos = pos = Vec(*pos)
         turtle.tip_pos = pos
         yield
-        
+
         # Create a line and draw
         xf, yf = pos
         line = self.addLine(x0, y0, x0, y0, self._pen)
@@ -262,12 +263,12 @@ class TurtleScene(QtWidgets.QGraphicsScene):
             self.removeItem(line)
         else:
             self._lines.append(line)
-        
+
         if delay:
             t0 = time.time()
             t = 0
             delta = pos - pos0
-            
+
             while t < delay:
                 pos = pos0 + delta * (t / delay)
                 line.setLine(x0, y0, *pos)
@@ -275,7 +276,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
                 self.__notifyPosChanged(turtle, pos)
                 t = time.time() - t0
                 yield True
-        
+
         line.setLine(x0, y0, xf, yf)
         turtle.setPos(*endpos)
         self.__notifyPosChanged(turtle, endpos)
@@ -285,8 +286,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         yield
 
     def __notifyPosChanged(self, turtle, pos):
-        '''Notifies scene view that the position of a turtle has changed,
-        callback way.'''
+        """Notifies scene view that the position of a turtle has changed,
+        callback way."""
 
         for view in self.views():
             view.notifyPosChanged(turtle, pos)
@@ -296,4 +297,3 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         if len(views) > 0:
           return views[0]
         return None
-

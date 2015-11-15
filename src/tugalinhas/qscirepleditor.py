@@ -16,8 +16,8 @@ class ReplEditor(QtWidgets.QWidget):
         
         # Create buttons and connect buttons
         run_button = QtWidgets.QPushButton('Run')
-        hideup_button = QtWidgets.QPushButton('^')
-        hidedown_button = QtWidgets.QPushButton('v')
+        hideup_button = QtWidgets.QPushButton('\u25b2')
+        hidedown_button = QtWidgets.QPushButton('\u25bc')
         run_button.setMaximumWidth(100)
         hideup_button.setFixedWidth(35)
         hidedown_button.setFixedWidth(35)
