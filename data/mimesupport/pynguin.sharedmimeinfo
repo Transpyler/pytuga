@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/x-pynguin">
-<mime-type type="application/x-pynguin">
-  <comment xml:lang="en">Pynguin</comment>
-  <glob pattern="*.pyn"/>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/x-pytuga">
+<mime-type type="application/x-pytuga">
+  <comment xml:lang="en">Pytuga</comment>
+  <glob pattern="*.pytg"/>
 </mime-type>
 </mime-info>

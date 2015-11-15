@@ -1,5 +1,6 @@
-# Funções recursivas
 função koch(passo, nível):
+    '''Desenha a curva de koch com o nível dado'''
+
     se nível == 0:
         frente(passo)
     senão:

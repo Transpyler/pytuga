@@ -1,8 +1,7 @@
 *.pyc
 **/__pycache__/**
-/build
-/dist/
-/src/pytuga.egg-info/
-/doc/build/
-/teste.pytg
-.gitignore
+//build
+//dist/
+//src/pytuga.egg-info/
+//doc/build/
+//teste.pytg

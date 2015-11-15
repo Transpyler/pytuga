@@ -1,1 +1,1 @@
-application/x-pynguin; pynguin %s; ; test=test -n "$DISPLAY"
+application/x-pytuga; pytuga %s; ; test=test -n "$DISPLAY"
