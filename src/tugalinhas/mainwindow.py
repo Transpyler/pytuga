@@ -6,6 +6,7 @@ from . import TurtleWidget
 
 VERSION = pytuga.__version__
 
+
 class Tugalinhas(QtWidgets.QMainWindow):
     '''
     Main window for Tugalinhas
@@ -27,7 +28,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
     # File operations
     #
     def openFile(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file')[0]  # @UndefinedVariable
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file')[0]
         if fname:
             with open(fname) as F:
                 data = F.read()
@@ -43,7 +44,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 F.write(self._turtlewidget.text())
 
     def saveFileAs(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file')[0]  # @UndefinedVariable
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file')[0]
         if fname:
             with open(fname, 'w') as F:
                 F.write(self._turtlewidget.text())

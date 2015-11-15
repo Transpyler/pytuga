@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from .qsciconsole import PythonConsole
 from .qscieditor import PythonEditor
 
+
 class ReplEditor(QtWidgets.QWidget):
     def __init__(self, parent=None, *,
                  header_text=None,
