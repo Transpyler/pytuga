@@ -3,8 +3,8 @@ Dirty c-level hacks inspired by the forbiddenfruit module.
 """
 
 import os
-import unidecode
 import ctypes
+from .util import unidecode, accented_keywords, synonyms
 
 
 __all__ = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
@@ -20,11 +20,13 @@ class Lista(list):
     >>> L = [1, 2, 3, 4]
     """
 
+    @synonyms('acrescente')
     def acrescentar(self, elemento):
         """Acrescenta um elemento no final da lista."""
 
         self.append(elemento)
 
+    @synonyms('limpe')
     def limpar(self):
         """Remove todos os elementos, ficando vazio."""
 
@@ -35,11 +37,13 @@ class Lista(list):
 
         return self.copy()
 
+    @synonyms('conte')
     def contar(self, valor):
         """Retorna o número de ocorrências do valor dado."""
 
         return self.count(valor)
 
+    @synonyms('estenda')
     def estender(self, seq):
         """Adiciona todos os elementos da sequência dada no fim da lista."""
 
@@ -56,54 +60,51 @@ class Lista(list):
 
         return self.index(valor, i, j)
 
+    @accented_keywords
+    @synonyms('insira')
     def inserir(self, índice, valor):
         """Insere o elemento dado na posição dada pelo índice."""
 
         self.insert(índice, valor)
 
+    @synonyms('remova')
     def remover(self, valor):
         """Remove primeira ocorrência de um elemento com o valor fornecido."""
 
         self.remove(valor)
 
+    @synonyms('inverta')
     def inverter(self):
         """Reordena a lista na ordem inversa."""
 
         self.reverse()
 
+    @synonyms('ordene')
     def ordenar(self, **kwds):
         """Ordena a lista."""
 
         self.sort(**kwds)
 
+    @accented_keywords
+    @synonyms('ordene_por')
     def ordenar_por(self, função, invertido=False):
         """Ordena a lista a partir segundo o resultado da aplicação da função
         dada em cada elemento."""
 
         self.sort(key=função, reverse=invertido)
 
+    @synonyms('retire', 'retirar_último', 'retire_último')
     def retirar(self, *args):
         """Remove o último elemento da lista e o retorna."""
 
         return self.pop(*args)
 
+    @accented_keywords
+    @synonyms('retire_de')
     def retirar_de(self, índice):
         """Remove o elemento no índice dado e o retorna."""
 
         return self.pop(índice)
-
-    # Sinônimos
-    acrescente = acrescentar
-    limpe = limpar
-    conte = contar
-    estenda = estender
-    insira = inserir
-    remova = remover
-    inverta = inverter
-    ordene = ordenar
-    ordene_por = ordenar_por
-    retire = retirar
-    retire_de = retirar_de
 
 
 class Tupla(tuple):
@@ -261,13 +262,11 @@ CURSES = {
 }
 
 _cpython = ctypes.pythonapi
-_Py_ssize_t = (hasattr(_cpython, 'Py_InitModule4_64') and ctypes.c_int64 or
-               ctypes.c_int)
 
 
 class SlotsProxy(ctypes.Structure):
     _fields_ = [
-        ('ob_refcnt', _Py_ssize_t),
+        ('ob_refcnt', ctypes.c_ssize_t),
         ('ob_type', ctypes.py_object),
         ('dict', ctypes.py_object),
     ]
@@ -289,7 +288,7 @@ def _apply_curse(tt, curse):
         _curse(tt, attr, value)
 
         # Adds non-accented version
-        no_accents = unidecode.unidecode(attr)
+        no_accents = unidecode(attr)
         if attr != no_accents and not hasattr(tt, no_accents):
             _curse(tt, no_accents, value)
 
@@ -306,49 +305,34 @@ def _apply_all_curses():
 
 class _object:
     """Generic type we use to inspect the location of the generic C-level
-     repr and str functions."""
+     repr and str functions.
 
-    def __repr__(self):
-        return ''
+     All methods supported must provide a placeholder implementation here."""
 
-    def __str__(self):
-        return ''
-
-
-def _wordsize():
-    """Return the wordsize"""
-
-    return None.__sizeof__() // 2  # None only has a refcount + pointer to type
+    __repr__ = __str__ = lambda self: ''
 
 
 def _repr_offset():
     """How many bytes after id(type) can we find the tp_repr pointer?"""
 
-    return 11 * 8
+    return 11 * ctypes.sizeof(ctypes.c_ssize_t)
 
 
 def _str_offset():
     """How many bytes after id(type) can we find the tp_str pointer?"""
 
     # str is just 6 places after repr in the type specification
-    return _repr_offset() + 6 * _wordsize()
+    return _repr_offset() + 6 * ctypes.sizeof(ctypes.c_ssize_t)
 
 
 def _assure_generic_c_level_function(tt, offset):
     """Makes sure that the given type tt uses the generic c-level function
     for some of the magic methods such as repr(), str(), etc."""
 
-    wordsize = _wordsize()
-    if wordsize == 8:
-        ref_from_address = ctypes.c_long.from_address
-    elif wordsize == 4:
-        ref_from_address = ctypes.c_int.from_address
-    else:
-        raise RuntimeError('unsuupported word size: %r' % wordsize)
-
-    generic = ref_from_address(id(_object) + offset)
-    cpointer = ref_from_address(id(tt) + offset)
-    cpointer.value = generic.value
+    ref_from_address = ctypes.c_ssize_t.from_address
+    tp_func_object = ref_from_address(id(_object) + offset)
+    tp_func_cursed = ref_from_address(id(tt) + offset)
+    tp_func_cursed.value = tp_func_object.value
 
 
 def _change_bool_repr():

@@ -5,7 +5,7 @@ Outras funções
 Outras funções que não se encaixam em nenhuma categoria específica.
 """
 import time as _time
-from tugalib.util import synonyms
+from tugalib.util import synonyms, accented_keywords
 
 
 #
@@ -283,9 +283,10 @@ def ordenado(seq, chave=None):
     [1, 2, 3, 4, 5]
     """
     return sorted(seq, key=chave)
-    
 
-def texto(obj, codificação=None):
+
+@accented_keywords
+def texto(obj, codificacao=None):
     """
     Cria um novo texto a partir do objeto fornecido.
     
