@@ -26,8 +26,10 @@ from .tuga_math import *
 from .tuga_io import *
 from .tuga_draw import *
 
-# Registra funções sinônimas
+# Register synonims
 from . import util
+from . import tuga_forbidden
 util.register_synonyms(globals())
 del synonyms
 del util
+del tuga_forbidden

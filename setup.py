@@ -3,8 +3,8 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.1.post3'
-REQUIRES = [] # 'PyQt5' is not supported in PyPI
+VERSION = '0.7.2'
+REQUIRES = ['unidecode'] # 'PyQt5' is not supported in PyPI
 
 try:
     import PyQt5.QtSvg
@@ -12,9 +12,9 @@ try:
 except ImportError:
     import warnings
     warnings.warn(
-        'Please install PyQt5.QtSvg and PyQt5.Qsci!\n'
+        'Please install PyQt5, PyQt5.QtSvg and PyQt5.Qsci!\n'
         'Check your distribution packages or go to the website bellow:\n'
-        '    https://riverbankcomputing.com/software/pyqt/download5')
+        '    https://riverbankcomputing.com/software/pyqt/download5\n')
 
 # Rewrite __version__.py in tugalib
 base, _ = os.path.split(__file__)

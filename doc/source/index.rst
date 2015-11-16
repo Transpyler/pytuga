@@ -11,12 +11,13 @@ Conteúdo:
 
 .. toctree::
    :maxdepth: 2
-   
+
    intro.rst
    install.rst
    tutorial.rst
    referência.rst
    python.rst
+   design.rst
 
 
 Tabelas e índices
@@ -25,4 +26,3 @@ Tabelas e índices
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

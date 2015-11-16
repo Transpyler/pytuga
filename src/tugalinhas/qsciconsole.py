@@ -217,7 +217,7 @@ class PythonConsole(PythonEditor):
             self.setMarginWidth(0, 0)
             self.setMarginWidth(1, 0)
         self._current_command = []
-        self._runner = runner or PythonRunner(dict(namespace or {}))
+        self._runner = runner or PyTugaRunner(dict(namespace or {}))
         
         # Set header text
         if header_text is None:
