@@ -82,7 +82,6 @@ class TurtleView(QtWidgets.QGraphicsView):
         self._posLabel.setText(s)
 
 
-
 class TurtleScene(QtWidgets.QGraphicsScene):
     """
     The TurtleScene defines the scene in which geometric objects resides.
@@ -146,7 +145,6 @@ class TurtleScene(QtWidgets.QGraphicsScene):
 
         self.consumeTask()
 
-
     #
     # Turtle control
     #
@@ -173,7 +171,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self._turtle = turtle
 
     def getNamespace(self, D={}, **kwds):
-        """Return a mapping with all _turtle module functions."""
+        """Return a mapping with all turtle module functions."""
 
         from .turtlenamespace import TurtleNamespace
         return TurtleNamespace(self, D, **kwds)
@@ -246,7 +244,6 @@ class TurtleScene(QtWidgets.QGraphicsScene):
                 yield True
 
         self._turtle.setRotation(angle)
-
 
     def __setPos(self, pos, delay, draw):
         # Update tip

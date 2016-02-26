@@ -97,7 +97,18 @@ class TurtleNamespaceEnglish(MutableMapping):
                 D[alias] = func
 
         self._data.update(D)
-        
+
+    @classmethod
+    def _getaliases(cls):
+        D = {}
+        blacklist = set(cls._BLACKLIST)
+
+        for name in dir(cls):
+            # Add to dictionary
+            func = getattr(cls, name)
+            for alias in getattr(func, 'alias_list', ()):
+                D[alias] = name
+        return D
 
     def _getstate(self, name):
         """Get the current (tip) value of the state of the current turtle."""
@@ -368,7 +379,7 @@ class TurtleNamespace(TurtleNamespaceEnglish):
         self.penup()
 
     @alias('abaixe')
-    def abaixe(self):
+    def abaixar(self):
         """Abaixa a caneta do Tuga.
 
         Deslocamentos na tela produzirão desenho."""
@@ -396,6 +407,7 @@ class TurtleNamespace(TurtleNamespaceEnglish):
     espessura = ns.getwidth
     definir_espessura = ns.setwidth
     velocidade = ns.speed
+    ajuda = ns.turtlehelp
     del ns
 
         
@@ -423,4 +435,3 @@ def function_description(method):
     if alias:
         data += '\n' + (', '.join(alias)).rjust(20)
     return data
-    

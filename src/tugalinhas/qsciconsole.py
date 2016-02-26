@@ -6,10 +6,12 @@ import sys
 import traceback
 import abc
 import threading
+import functools
+import time
 from collections import deque
 from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 from .qscieditor import PythonEditor
-
 
 _stdout = sys.stdout
 Tab = QtCore.Qt.Key_Tab
@@ -50,7 +52,13 @@ UnlockedShiftKeys = set()
 #
 # Classes
 #
-class AbstractRunner(metaclass=abc.ABCMeta):
+class QMeta(abc.ABCMeta, type(QtCore.QObject)):
+    pass
+
+
+class AbstractRunner(QtCore.QObject, metaclass=QMeta):
+    input_received = QtCore.pyqtSignal(str)
+
     @abc.abstractmethod
     def checkComplete(self, src):
         """Return True if source code can represent a complete command."""
@@ -99,8 +107,29 @@ class PythonRunner(AbstractRunner):
 
     # TODO: make this run as a subprocess
 
-    def __init__(self, namespace=None):
+    def __init__(self, namespace=None, input_signal=None):
+        super().__init__()
         self._namespace = dict(namespace or {})
+        self._input_signal = input_signal
+        self._waiting = False
+        self._last_input = None
+        self.input_received.connect(self.setInputValueSlot)
+
+        @functools.wraps(input)
+        def input_function(msg=None):
+            self._waiting = True
+            self._last_input = None
+            self._input_signal.emit(str(msg or ''))
+            while self._waiting:
+                time.sleep(0.05)
+            return self._last_input
+
+        self._namespace['input'] = input_function
+
+    @QtCore.pyqtSlot(str)
+    def setInputValueSlot(self, value):
+        self._last_input = value
+        self._waiting = False
 
     def checkComplete(self, src):
         header, *_ = src.splitlines()
@@ -162,16 +191,20 @@ class PyTranspilableRunner(PythonRunner):
 
 
 class PyTugaRunner(PyTranspilableRunner):
-    def __init__(self, namespace=None):
+    def __init__(self, namespace=None, **kwds):
         import pytuga
         import tugalib
+        import tugalib.tuga_io
 
+        # Configure the default namespace and initialize runner
         self._pytuga = pytuga
-        _namespace = {k: v
-            for (k, v) in vars(tugalib).items()
-                if not k.startswith('_')}
+        _namespace = {k: v for (k, v) in vars(tugalib).items()
+                      if not k.startswith('_')}
         _namespace.update(dict(namespace or {}))
-        super().__init__(namespace=_namespace)
+        super().__init__(namespace=_namespace, **kwds)
+
+        # Update some functions to use the correct input() implementation
+        tugalib.tuga_io.input = self._namespace['input']
 
     def transpile(self, src):
         return self._pytuga.transpile(src)
@@ -206,19 +239,29 @@ class PythonConsole(PythonEditor):
     """
     A Scintilla based console.
     """
-    
-    def __init__(self, 
-                 parent=None, runner=None, *,
+
+    _ask_input_signal = QtCore.pyqtSignal(str)
+    _print_to_console = QtCore.pyqtSignal(str, bool)
+
+    def __init__(self,
+                 parent=None, *,
+                 runner=None,
                  namespace=None,
-                 header_text=None, 
+                 header_text=None,
                  hide_margins=True, **kwds):
         super().__init__(parent, **kwds)
         if hide_margins:
             self.setMarginWidth(0, 0)
             self.setMarginWidth(1, 0)
         self._current_command = []
-        self._runner = runner or PyTugaRunner(dict(namespace or {}))
-        
+
+        # Input signals
+        self._runner = runner or PyTugaRunner(dict(namespace or {}), input_signal=self._ask_input_signal)
+        self._ask_input_signal.connect(self.inputDialogSlot)
+
+        # Qt
+        self._print_to_console.connect(self.printToConsoleSlot)
+
         # Set header text
         if header_text is None:
             header_text = '>>> '
@@ -227,6 +270,8 @@ class PythonConsole(PythonEditor):
         self.setText(header_text)
         lineno = header_text.count('\n')
         self._locked_position = (lineno, 3)
+
+        # Start lexer and history
         self._pylexer = self.lexer()
         self._history = []
         self._history_idx = 0
@@ -234,6 +279,18 @@ class PythonConsole(PythonEditor):
         # Configure timer for polling runner object (60 fps)
         self.startTimer(100 / 6)
         self._background_tasks = deque()
+
+    @QtCore.pyqtSlot(str)
+    def inputDialogSlot(self, message):
+        """Ask user for input. Return a string with the user supplied value."""
+
+        text, ok = QtWidgets.QInputDialog.getText(None, 'Input text', message or 'Input:')
+        self._runner.input_received.emit(text)
+
+    @QtCore.pyqtSlot(str, bool)
+    def printToConsoleSlot(self, text, add_newline):
+        self.insert(text)
+        self.addPrompt(newline=add_newline)
 
     def timerEvent(self, timer):
         if self._background_tasks:
@@ -302,8 +359,9 @@ class PythonConsole(PythonEditor):
                     result = ''
 
                 # Insert result in text
-                self.insert(result)
-                self.addPrompt(newline=bool(result))
+                if result:
+                    self._print_to_console.emit(result, bool(result))
+
             self.scheduleBackgroundTask(run_command)
 
     def executeCommand(self, cmd):
@@ -317,8 +375,8 @@ class PythonConsole(PythonEditor):
             result = self.run(cmd.strip() + '\n', 'exec')
 
             if result:
-                self.insert('...\n' + result)
-                self.addPrompt()
+                self.print_to_console.emit('...\n' + result, True)
+
 
         self.scheduleBackgroundTask(run_command)
 
@@ -399,8 +457,8 @@ class PythonConsole(PythonEditor):
             if self.currentCommandIsComplete():
                 self.processCurrentCommand()
 
-            # Keep adding '... ' lines at the right indentation until the 
-            # command is complete 
+            # Keep adding '... ' lines at the right indentation until the
+            # command is complete
             else:
                 lineno, lineindex = self.getCursorPosition()
                 indent, _ = _splitindent(self._current_command[-1])

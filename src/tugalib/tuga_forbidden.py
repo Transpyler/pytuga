@@ -4,7 +4,7 @@ Dirty c-level hacks inspired by the forbiddenfruit module.
 
 import os
 import ctypes
-from .util import unidecode, accented_keywords, synonyms
+from .util import unidecode, accented_keywords, synonyms, collect_synonyms
 
 
 __all__ = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
@@ -117,7 +117,7 @@ class Tupla(tuple):
     >>> pto = (1, 2, 3)
     """
 
-    conte = contar = Lista.contar
+    contar = Lista.contar
     índice = Lista.índice
     índice_em_intervalo = Lista.índice_em_intervalo
 
@@ -132,9 +132,9 @@ class Conjunto(set):
 
     # Single element operations
     adicionar = adicione = set.add
-    retirar = retire = Lista.retirar
-    remover = remova = Lista.remover
-    limpar = limpe = Lista.limpar
+    retirar = Lista.retirar
+    remover = Lista.remover
+    limpar = Lista.limpar
     cópia = Lista.cópia
     descartar = descarte = set.discard
 
@@ -168,7 +168,7 @@ class Dicionário(dict):
     >>> D = {"um": 1, "dois": 2, "três": 3}
     """
 
-    limpar = limpe = Lista.limpar
+    limpar = Lista.limpar
     cópia = Lista.copy
 
     # = dict.fromkeys
@@ -282,18 +282,16 @@ def _apply_curse(tt, curse):
     """Monkey patch the builtin type tt to have all methods of curse. Name and
      docstring are also updated."""
 
-    for attr, value in vars(curse).items():
-        if attr.startswith('_') and not hasattr(tt, attr):
-            continue
-        _curse(tt, attr, value)
+    namespace = {k: v for (k, v) in vars(curse).items() if not k[0] == '_'}
+    functions = collect_synonyms(namespace)
+    for name, func in functions.items():
+        if hasattr(tt, name):
+            tname = tt.__name__
+            raise ValueError('%s already has a %s() method' % (tname, name))
+        _curse(tt, name, func)
 
-        # Adds non-accented version
-        no_accents = unidecode(attr)
-        if attr != no_accents and not hasattr(tt, no_accents):
-            _curse(tt, no_accents, value)
-
-        # Apply docstring (not working)
-        _curse(tt, '__doc__', curse.__doc__)
+    # Apply docstring (not working)
+    _curse(tt, '__doc__', curse.__doc__)
 
 
 def _apply_all_curses():

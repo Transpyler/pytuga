@@ -11,6 +11,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
     '''
     Main window for Tugalinhas
     '''
+
     def __init__(self):
         super().__init__()
         self._filename = 'turtle-test.py'
