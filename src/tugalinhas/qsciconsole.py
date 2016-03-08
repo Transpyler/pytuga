@@ -467,9 +467,27 @@ class PythonConsole(PythonEditor):
                 self.insertAt('... ' + indent, lineno, 0)
                 self.setCursorPosition(lineno, lineindex + 4 + len(indent))
 
-        # Prevents it from deleting the first locked whitespace
+        # Prevents it from deleting the first locked whitespace.
+        # Completely delete the margins with a single backspace stroke
         elif key in (Backspace, Backtab):
-            if (lineno, lineindex - 1) > self._locked_position:
+            lock_line, lock_idx = self._locked_position
+            if (lineno, lineindex - 1) <= self._locked_position:
+                pass
+            elif lineno > lock_line and lineindex <= 4:
+                line_size = self.lineLength(lineno)
+                self.setSelection(lineno, 0, lineno, line_size)
+                self.replaceSelectedText('')
+                new_lineno = lineno - 1
+                new_lineidx = self.lineLength(new_lineno) - 1
+                self.setCursorPosition(new_lineno, new_lineidx)
+            elif lineno > lock_line:
+                line = list(self.text(lineno)[4:lineindex])
+                if all(c == ' ' for c in line):
+                    for i in range(max(3, len(line))):
+                        super().keyPressEvent(ev)
+                else:
+                    super().keyPressEvent(ev)
+            else:
                 super().keyPressEvent(ev)
 
         # Chooses commands in history
