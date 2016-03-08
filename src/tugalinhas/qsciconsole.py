@@ -11,7 +11,6 @@ import time
 from collections import deque
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-from PyQt5 import QtGui
 from .qscieditor import PythonEditor
 
 _stdout = sys.stdout

@@ -1,6 +1,6 @@
 import os
 import pytuga
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, QtGui, uic
 from . import TurtleWidget
 
 
@@ -24,6 +24,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self._layout.setContentsMargins(2, 0, 2, 2)
         self.setMinimumSize(800, 600)
         self.updateTitle()
+        self.setWindowIcon(_window_icon())
 
     #
     # File operations
@@ -69,6 +70,19 @@ class Tugalinhas(QtWidgets.QMainWindow):
     def clearScene(self):
         self._turtlescene.clear()
 
+    #
+    # help menu
+    #
+    def openDocumentation(self):
+        pass
+
+    def about(self):
+        QtWidgets.QMessageBox.about(
+                self,
+                'Pytuguês',
+                'Pytuguês é uma linguagem para o ensino de programação em '
+                'português. Aqui aprendemos a programar em português e dentro '
+                'de um ambiente gráfico e lúdico.')
 
     #
     # Other commands and utility methods
@@ -84,3 +98,12 @@ if not hasattr(Tugalinhas, 'setUnifiedTitleAndToolBarOnMac'):
         pass
 
     Tugalinhas.setUnifiedTitleAndToolBarOnMac = setUnifiedTitleAndToolBarOnMac
+
+
+#
+# Utility function
+#
+def _window_icon():
+    dirpath = os.path.dirname(__file__)
+    icon_path = os.path.join(dirpath, 'icon.svg')
+    return QtGui.QIcon(icon_path)
