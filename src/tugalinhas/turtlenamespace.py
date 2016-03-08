@@ -288,18 +288,15 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         Clear all elements on the screen and put turtle black to the 
         default position"""
-        
-        self._scene.clear()
-        self._scene.addTurtle(default=True)
+
+        self._scene.restart_screen_signal.emit()
 
     def clear(self):
         """Clear elements preserving turtle.
         
         Clear all elements on the screen, but preserves turtle state."""
-        
-        turtle = self._scene.turtle().copy()
-        self._scene.clear()
-        self._scene.addTurtle(turtle, default=True)
+
+        self._scene.clear_screen_signal.emit()
 
     def turtlehelp(self):
         """Display a help message of all turtle functions"""
@@ -488,8 +485,8 @@ class TurtleNamespace(TurtleNamespaceEnglish):
         """Modifica a velocidade de desenho do Tuga.
 
         A velocidade corresponde a um número de 1 até 10, onde 1 corresponde
-        ao desenho mais lento e 10 ao desenho mais rápido.""" \
- \
+        ao desenho mais lento e 10 ao desenho mais rápido."""
+
         self.speed(valor)
 
     def ajuda(self):

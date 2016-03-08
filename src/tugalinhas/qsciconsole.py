@@ -241,7 +241,7 @@ class PythonConsole(PythonEditor):
     """
 
     _ask_input_signal = QtCore.pyqtSignal(str)
-    _print_to_console = QtCore.pyqtSignal(str, bool)
+    _print_to_console_signal = QtCore.pyqtSignal(str, bool)
 
     def __init__(self,
                  parent=None, *,
@@ -260,7 +260,7 @@ class PythonConsole(PythonEditor):
         self._ask_input_signal.connect(self.inputDialogSlot)
 
         # Qt
-        self._print_to_console.connect(self.printToConsoleSlot)
+        self._print_to_console_signal.connect(self.printToConsoleSlot)
 
         # Set header text
         if header_text is None:
@@ -363,7 +363,7 @@ class PythonConsole(PythonEditor):
 
                 # Insert result in text
                 if result:
-                    self._print_to_console.emit(result, bool(result))
+                    self._print_to_console_signal.emit(result, bool(result))
 
             self.scheduleBackgroundTask(run_command)
 
@@ -378,7 +378,7 @@ class PythonConsole(PythonEditor):
             result = self.run(cmd.strip() + '\n', 'exec')
 
             if result:
-                self._print_to_console.emit('...\n' + result, True)
+                self._print_to_console_signal.emit('...\n' + result, True)
 
         self.scheduleBackgroundTask(run_command)
 

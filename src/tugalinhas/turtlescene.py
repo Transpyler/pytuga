@@ -96,6 +96,10 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         self.startTimer(1000 / fps)
         self._init(fps=fps)
 
+        # Connect signals to slots
+        self.clear_screen_signal.connect(self.clearScreen)
+        self.restart_screen_signal.connect(self.restartScreen)
+
     def _init(self, fps=30):
         self._lines = []
         self._turtles = []
@@ -109,6 +113,22 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     def clear(self):
         super().clear()
         self._init(self._fps)
+
+    #
+    # Events and signals
+    #
+    clear_screen_signal = QtCore.pyqtSignal()
+    restart_screen_signal = QtCore.pyqtSignal()
+
+    @QtCore.pyqtSlot()
+    def clearScreen(self):
+        state = self.fullTurtleState()
+        self.clear()
+        self.setFullTurtleState(state)
+
+    @QtCore.pyqtSlot()
+    def restartScreen(self):
+        self.clear()
 
     #
     # Task control
@@ -181,7 +201,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     # the two functions bellow
     #
     def turtleState(self, name):
-        """Return the requested variable value in current _turtle's state tip."""
+        """Return the requested variable value in current turtle's state
+        tip."""
 
         if name == 'pos':
             return self._turtle.tip_pos
@@ -190,7 +211,7 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         elif name == 'isdown':
             return self._turtle.tip_isdown
         elif name == 'color':
-            return self._turtle.self.tip_color
+            return self._turtle.tip_color
         elif name == 'fill':
             return self._turtle.tip_fill
         elif name == 'width':
@@ -199,10 +220,10 @@ class TurtleScene(QtWidgets.QGraphicsScene):
             raise ValueError('invalid _turtle property: %r' % name)
 
     def setTurtleState(self, name, value, *, draw=True, delay=0):
-        """Deffered update of _turtle's state.
+        """Deferred update of turtle's state.
 
         It modifies the tip and queues changes to be applied to the actual
-        _turtle's state. If delay is given, the complete modification to _turtle's
+        turtle's state. If delay is given, the complete modification to turtle's
         state may requires more that one frame of animation."""
 
         if name == 'pos':
@@ -223,6 +244,16 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         subtasks = iter(subtasks)
         next(subtasks)
         self._tasks.append(subtasks)
+
+    def fullTurtleState(self):
+        state = {}
+        for attr in ['pos', 'heading', 'isdown', 'color', 'fill', 'width']:
+            state[attr] = self.turtleState(attr)
+        return state
+
+    def setFullTurtleState(self, state):
+        for attr, value in state.items():
+            self.setTurtleState(attr, value, draw=False, delay=0)
 
     #
     # Set state helpers
