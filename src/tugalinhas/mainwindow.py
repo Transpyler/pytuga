@@ -1,6 +1,6 @@
 import os
 import pytuga
-from PyQt5 import QtWidgets, QtGui, uic
+from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from . import TurtleWidget
 
 
@@ -22,9 +22,11 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self._layout = QtWidgets.QVBoxLayout(self.centralwidget)
         self._layout.addWidget(self._turtlewidget)
         self._layout.setContentsMargins(2, 0, 2, 2)
+        self._documentation_view = None
         self.setMinimumSize(800, 600)
         self.updateTitle()
         self.setWindowIcon(_window_icon())
+
 
     #
     # File operations
@@ -74,7 +76,37 @@ class Tugalinhas(QtWidgets.QMainWindow):
     # help menu
     #
     def openDocumentation(self):
-        pass
+        try:
+            from PyQt5 import QtWebKitWidgets
+        except ImportError:
+            QtWidgets.QMessageBox.critical(
+                    parent=self,
+                    title='qt5-webkit não está instalado',
+                    text='Por favor instale o pacote Qt5 Webkit para visualizar '
+                         'a documentação. Caso não possa instalar o pacote, vá'
+                         'para o site: http://fabiommendes.github.io/pytuga/'
+            )
+
+        if self._documentation_view is not None:
+            self._documentation_view.show()
+        else:
+            dirname = os.path.dirname(__file__)
+            filename = os.path.join(dirname, 'doc', 'html', 'index.html')
+            view = QtWebKitWidgets.QWebView()
+            view.load(QtCore.QUrl("file://%s" % filename))
+            page = view.page()
+
+            window = self._documentation_view = QtWidgets.QWidget()
+            window.setWindowTitle('Documentação')
+            toolbar = QtWidgets.QToolBar()
+            toolbar.addAction(view.pageAction(page.Back))
+            toolbar.addAction(view.pageAction(page.Forward))
+
+            layout = QtWidgets.QVBoxLayout(window)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.addWidget(toolbar)
+            layout.addWidget(view)
+            window.show()
 
     def about(self):
         QtWidgets.QMessageBox.about(

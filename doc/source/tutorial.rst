@@ -35,8 +35,8 @@ máximo possível com um pseudocódigo em português. Queremos que o significado
 dos programas mais simples seja óbvio para um usuário que não conhece a
 linguagem ou que nunca programou na vida e que a linguagem seja fácil de
 aprender e pareça natural para programadores iniciantes. O Python oferece
-isto para falantes do inglês, queremos oferecer o mesmo para Brasileiros,
-Portugueses, Angolanos, etc.
+isto para falantes do inglês, o Pytuguês oferece o mesmo para brasileiros,
+portugueses, angolanos, etc.
 
 Esta seção vai percorrer os principais recursos do Pytuguês para que você possa
 começar a programar em poucos minutos. Normalmente a primeira interação com o
@@ -57,7 +57,7 @@ condicional, interação com o usuário, etc.
 
 **Desafio!**
 
-Faça um programa que desenhe uma figura regular como quadrado, triângulo, ou
+Utilize estes comandos para desenhar uma figura regular como quadrado, triângulo, ou
 pentágono.
 
 ----------------
@@ -130,10 +130,10 @@ A variável ``nome`` contêm o texto que o usuário digitou como sendo o seu nom
 a variável ``idade`` guarda a idade em um formato numérico. A diferença entre
 ``leia_número(msg)`` e ``leia_texto(msg)`` está em que a primeira salva o
 resultado em formato numérico e obriga o usuário a digitar um número válido. A
-segunda conterá sempre um texto, mesmo quando o usuário digitar um número. Note
-que existe uma diferença entre um número e um texto que contêm um número:
+segunda conterá sempre um texto, mesmo quando o usuário digitar um número. Observe
+a diferença que existe entre um número e um texto que contêm um número:
 enquanto o primeiro admite as operações matemáticas, o segundo corresponde a um
-valor textual que por um acaso é ser interpretado (por nós humanos, não pelo
+valor textual que por um acaso pode ser interpretado (por nós humanos, não pelo
 computador!) como um número.
 
 
@@ -156,9 +156,8 @@ Controle de fluxo de código
 ---------------------------
 
 Alguns comandos do Pytuguês executam ações imediatas, como por exemplo, o
-comando ``frente(passo)``. Podemos construir programas interessantes como uma
-receita de bolo encadeando vários destes comandos. O programa abaixo, por
-exemplo, desenha um triângulo::
+comando ``frente(passo)``. Podemos construir programas interessantes encadeando
+vários destes comandos. O programa abaixo, por exemplo, desenha um triângulo::
 
     frente(100)
     esquerda(120)
@@ -188,11 +187,8 @@ de instruções pelo número dado de vezes::
         frente(100)
         esquerda(120)
 
-Em programação, chamamos cada uma destas repetições de uma "iteração" do loop
-*repetir*. Neste caso, aplicamos 3 iterações da sequência de comandos
-``frente/esquerda``.
-
-No exemplo acima ele repete os comandos ``frente(100)`` e ``esquerda(120)`` três
+Em programação, chamamos cada uma destas repetições de uma "iteração". No exemplo
+acima, repetimos o os comandos ``frente(100)`` e ``esquerda(120)`` três
 vezes, nesta ordem. De modo mais abstrato, podemos descrever o comando repetir
 como::
 
@@ -204,7 +200,8 @@ Onde o campo <número> representa qualquer número inteiro ou variável numéric
 ``frente(100)/esquerda(90)`` dada anteriormente. Devemos nos atentar para os
 espaços em branco durante a definição do bloco de instruções. São eles que
 delimitam o bloco de instruções e dizem para o Pytuguês quais instruções devem
-ser repetidas e quais não fazem parte do bloco de instruções.
+ser repetidas e quais não fazem mais parte do bloco de repetição e serão
+executadas após o término de todas iterações.
 
 O código abaixo, por exemplo, é muito semelhate ao anterior, mas o comando
 ``esquerda(120)`` està alinhado ao início da linha. Isto fáz com que apenas a
@@ -231,11 +228,13 @@ Muitas vezes queremos repetir um bloco de comandos onde em cada iteração uma
 variável deve mudar de valor de forma previsível. Por exemplo, se quisermos
 cumprimentar várias pessoas numa lista, é possível escrever algo como::
 
-    para cada nome em ["Maria", "João", "José"] faça:
+    lista = ["Maria", "João", "José"]
+
+    para cada nome em lista faça:
         mostre("Olá " + nome)
 
-Neste caso, a variável *nome* assume um valor diferente em cada iteração,
-obtendo-os a partir da lista de nomes fornecida.
+Neste caso, a variável *nome* assume um valor diferente em cada iteração
+percorrendo a lista de nomes fornecida.
 
 É muito comum também realizar iterações sobre sequências numéricas. O comando
 muda ligeiramente, onde especificamos o intervalo de valores inteiros que
@@ -295,7 +294,7 @@ programa seria algo do tipo::
     esquerda(90)
     ...
 
-É lógico que podemos fazer bem melhor com o comando *para cada* (ou até mesmo
+É lógico que podemos fazer algo bem melhor com o comando *para cada* (ou até mesmo
 com o comando repetir).
 
 
@@ -322,11 +321,11 @@ bloco de comandos.
 
 O comando *enquanto* é talvez a forma mais geral das estruturas de repetição.
 Podemos, reescrever todos os laços do tipo *para cada* ou *repetir* utilizando o
-comando *enquanto*. Existe um custo nisto: o código pode ficar mais longo e
+comando *enquanto*. Existe um custo nisto: o código pode ficar mais longo
 confuso e, em alguns casos, até mesmo um pouco mais lento. O código abaixo, por
-exemplo, desenha um triângulo utilizando o comando *enquanto*. No entanto, O
-fato de termos que lidar com variáveis adicionais tira a elegância e concisão do
-comando *repetir*::
+exemplo, desenha um triângulo utilizando o comando *enquanto*. Este código funciona
+sem maiores problemas. No entanto, o fato de termos que lidar com variáveis adicionais
+tira a elegância e concisão da versão que utilizava comando *repetir*::
 
     n_iterações = 0
 
@@ -376,8 +375,8 @@ executada caso o teste x > 10 falhe, basta adicionar um bloco do tipo *senão*::
     senão faça:
         mostre("x é pequeno")
 
-Este código imprime na tela que x é muito grande, caso o usuário diga um número
-maior que 10 ou imprime que x é pequeno, caso contrário. É possível adicionar
+Este código imprime na tela que x é muito grande caso o usuário diga um número
+maior que 10, ou imprime que x é pequeno caso contrário. É possível adicionar
 condições intermediárias usando o bloco *ou então se*. Neste caso, somente a
 primeira condição a ser satisfeita é executada. A sintaxe completa é portanto::
 
@@ -402,8 +401,8 @@ De um modo geral, a estrutura condicional pode ser escrita como::
     senão faça:
         <bloco de código senão>
 
-Onde no máximo um dos blocos de código será executado, sendo o que corresponde à
-primeira condição que é satisfeita. Analogamente aos laços repetição, os termos
+No máximo um dos blocos de código será executado, sendo este o que corresponde à
+primeira condição satisfeita. Analogamente aos laços repetição, os termos
 *então faça* e *faça* são opcionais.
 
 O condicional funciona assim.
@@ -414,7 +413,7 @@ O condicional funciona assim.
 * Caso a condição seja falsa, partimos para a *condição 2*. Se ela for
   satisfeita, executamos o segundo bloco de código e pulamos sobre todos os
   outros.
-* Somente se nenhuma das condições forem satisfeitas, executa-se o bloco senão.
+* Somente se nenhuma das condições for satisfeita, executa-se o bloco senão.
   Caso o bloco senão não exista, nenhum comando é executado.
 
 Talvez fique mais claro em um exemplo::
@@ -439,7 +438,8 @@ será "x é grande", pois apesar de tanto ``x > 10`` quanto ``x % 2 == 0`` serem
 satisfeitos para este valor, a primeira condição é selecionada pois aparece
 primeiro no bloco condicional. Para executarmos o bloco *senão*, é necessário
 utilizar um valor de **x** que viole todas as condições apresentadas. Neste
-caso, qualquer um dos valores 3, 5, 7 e 9 funcionam.
+caso, qualquer um dos valores 3, 5, 7 e 9 funcionam. Você consegue dizer o que acontece
+se **x** for igual a 20?
 
 
 **Desafio!**
@@ -457,3 +457,311 @@ faixa em que ele se situa.
 
 O Pytuguês aceita condições compostas, assim podemos usar o teste ``0 <= idade <=
 3`` para verificar se a idade está no intervalo entre 0 e 3.
+
+
+-----------------
+Funções e módulos
+-----------------
+
+Uma função, em computação é entendida como um comando que recebe zero ou mais argumentos, realiza uma ação e
+opcionalmente pode retornar um valor. Isto é um pouco diferente e mais abrangente que as funções da matemática, que
+devem possuir pelo menos uma entrada em uma única saída. Pense numa função como uma sequência fixa de operações que você
+pode querer executar em um programa.
+
+Pense na função **cubo(x)**, que eleva o argumento de entrada **x** ao cubo e retorna o resultado (ela não existe em
+Pytuguês, mas logo aprenderemos como definí-la). Esta é uma função tanto no sentido matemático como no computacional.
+Neste caso, para calcular o cubo do argumento simplesmente obtemos o resultado da multiplicação ``x * x * x``. Já a
+função ``aleatório()`` que mencionamos anteriormente é uma função no sentido computacional mas não no sentido
+matemático: ela não possui qualquer argumento de entrada e a cada vez que é chamada, retorna um valor diferente::
+
+    x = aleatório()
+    y = aleatório()
+    mostre(x, y)
+
+Ao executarmos o programa acima, vemos que x e y (muito provavelmente) possuem valores diferentes e que a cada execução
+estes valores mudam. ``àleatório()`` não é uma função no sentido matemático. Ela apenas representa a ação de obter um
+número aleatório.
+
+O conceito de funções é muito importante em computação. Podemos compor funções simples para criar funções um pouco mais
+complexas e seguir compondo estas funções em camadas até criar um programa altamente sofisticado. É claro que estamos
+apenas começando e não vamos já de cara desenvolver um editor de textos ou um jogo de tiros em primeira pessoa. Estes
+programas podem involver literalmente milhões de linhas de códigos que são desenvolvidas por grandes times de
+programadores durante longos intervalos de tempo. Vamos, no entanto, aprender a definir funções para dar o primeiro passo
+para virarmos bons programadores.
+
+Definindo uma função
+--------------------
+
+Pense numa função como um pedaço de código reutilizável. Vamos voltar ao exemplo de como construir um quadrado::
+
+    repetir 4 vezes:
+        frente(100)
+        esquerda(90)
+
+Se quisermos fazer algum tipo de arte (ou um programa) que envolva a criação de vários quadrados, copiar e colar este
+código pode se tornar repetitivo. Para evitar muitas repetições, podemos colocar este código dentro de uma função::
+
+    definir função quadrado():
+        repetir 4 vezes:
+            frente(100)
+            esquerda(90)
+
+Simplesmente colocamos o código que queremos reutilizar dentro do corpo da função quadrado(). Note que isto não executa
+a sequência de comandos fornecido. Para isto, é necessário chamar quadrado() explicitamente::
+
+    quadrado()  # desenha um quadrado
+    esquerda(45)
+    quadrado()  # desenha outro quadrado inclinado, pois iniciamos de uma posição inclinada
+
+Compondo funções, é possível criar programas relativamente complexos de forma simples::
+
+    repetir 8 vezes:
+        quadrado()
+        esquereda(45)
+
+O código acima desenha uma mandala a partir de oito quadrados.
+
+
+**Desafio**
+
+Crie duas funções: quadrado_grande() e quadrado_pequeno() e desenhe uma mandala compondo os dois tipos de quadrados,
+chamando suas respectivas funções. Obs.: este exerício pode ser resolvido sem utilizar funções, mas muito provavelmente
+o código ficará mais longo e confuso.
+
+
+Entrada de parâmetros
+---------------------
+
+Vimos como criar uma função que repete uma sequência fixa de comandos. Muitas vezes é necessário alterar o comportamento
+da função a cada chamada passando parâmetros adicionas. No exemplo dos quadrados acima, poderíamos, por exemplo,
+controlar o tamanho do quadrado desenhado em cada chamada passando o mesmo como argumento para a função. O Pytuguês
+suporta este recurso simplesmente escrevendo os parâmetros adicionais na definição da função::
+
+    definir função quadrado(lado):
+        repetir 4 vezes:
+            frente(lado)
+            esquerda(90)
+
+Esta função pode ser chamada como ``quadrado(100)`` para desenhar um quadrado de 100 px de lado. O parâmetro passado
+é atribuído à variável ``lado`` que posteriormente pode ser utilizado no corpo da função como uma variável qualquer.
+Neste caso, ela aparece na linha ``frente(lado)`` que comanda o cursor a andar para frente pelo valor especificado.
+
+Uma função pode possuir qualquer número de parâmetros de entrada, que são passados na mesma ordem de chamada. Considere
+a função que desenha um polígono regular::
+
+    definir função polígono_regular(N, lado):
+        ângulo = 360 / N
+        repetir N vezes:
+            frente(lado)
+            esquerda(ângulo)
+
+Esta função é chamada com dois parâmetros (por exemplo, ``polígono_regular(3, 100)`` desenha um triângulo de lados de
+100px). É importante passar os parâmetros na mesma ordem onde eles aparecem na definição da função. Por exemplo,
+``polígono_regular(100, 3)`` provavelmente é um erro, mas talvez seja um usuário que realmente queira desenhar um
+polígono de 100 lados de tamanho 3px. Não tem como o computador adivinhar a intenção real de quem chamou a função e
+mesmo que isso fosse possível em alguns casos, não é senstato depender da inteligência do computador para acertar nossas
+intenções. Devemos treinar um certo rigor nos comandos que são passados para o computador.
+
+Principalmente em funções com um grande número de parâmetros, lembrar da ordem de cada parâmetro pode ser bastante
+confuso e sujeito a erros. Pensando nisto, o Pytuguês permite passar os parâmetros por nome (e permite até definir
+parâmetros opcionais, mas isto é um tópico mais avançado que não trataremos aqui). Neste caso, podemos chamar
+``polígono_regular(lado=100, N=3)``, passando os argumentos de entrada explicitamente a partir dos seus nomes. Neste
+caso, a ordem dos parâmetros é irrelevante.
+
+**Desafio**
+
+Crie uma função que desenha uma mandala a partir de uma figura regular de N lados utilizando a mesma técnica que fizemos
+anteriormente com o quadrado.
+
+
+Valores de saída
+----------------
+
+Todas as funções em Pytuguês possuem um certo número de parâmetros de entrada e um valor de saída. Isto permite que a
+sua função retorne um resultado potencialmente útil para o usuário, caso isto seja necesário. Podemos, por exemplo,
+definir uma função ``cubo(x)`` que retorna o valor terceira potência do argumento ``x``. Para retornar um valor
+explícito, é necessário inserir a cláusula ``retornar <valor>`` no corpo da função::
+
+    definir função cubo(x):
+        resultado = x * x * x
+        retornar resultado
+
+A partir daí podemos utilizar esta função para calcular o cubo de qualquer valor fornecido::
+
+    valor = cubo(2)
+    mostre(valor)
+
+Neste caso, o programa mostrará o número 8.
+
+Observe que as funções que não terminam com uma cláusula do tipo ``retornar`` implicitamente retornam o valor ``nulo``,
+como em::
+
+    valor = polígono_regular(4, 100)
+    mostre(valor)
+
+Isto irá mostrar ``nulo`` na tela.
+
+
+**Desafio**
+
+Crie uma função que calcula e retorna o alcance de um projétil a partir do ângulo de arremesso e da velocidade de saída.
+Lembre-se das aulas de física: o alcance é dado por $\frac{v_0^2 sin(2\theta)}{g}$.
+
+
+-------------------
+Estruturas de dados
+-------------------
+
+Vimos até agora apenas alguns tipos de variáveis bem simples: números e, de forma superficial, textos (strings) e
+variáveis lógicas. As variávies em Pytuguês podem assumir vários outros tipos de valores (e inclusive você poderá criar
+os seus próprios tipos quando estiver mais experiente em programação). Nesta seção discutimos principalmente os tipos de
+sequêcias e agrupamentos e as relações entre eles. O tipo mais básico e intuitivo talvez sejam as listas. Definimos
+uma lista simplesmente enumerando seus elementos dentro de colchetes::
+
+    L = [1, 2, 9, 16]
+
+Podemos acessar os elementos da lista utilizando a notação de índices. Em Pytuguês os índices começam em zero, assim
+o primeiro elemento da lista pode ser acessado por L[0], o segundo como L[1] e assim por diante. Desta forma, cada
+elemento da lista anterior pode ser acessada como::
+
+    L[0] --> 1
+    L[1] --> 2
+    L[2] --> 9
+    L[3] --> 16
+    o
+Índices negativos podem ser utilizados para acessar a lista de trás para frente. Desta forma L[-1] corresponde ao último
+elemento, L[-2] ao penúltimo e assim por diante.
+
+Podemos encontrar o número de elementos da lista utilizando a função ``tamanho(L)``. Muitas vezes utilizamos a função
+tamanho para determinar os índices sobre o qual queremos iterar::
+
+    N = tamanho(L)
+    para cada i de 0 até N - 1 faça:
+        mostre(i, L[i])
+
+Se quisermos percorrer os elementos sem importarmos com os índices podemos realizar um laço do tipo ``para cada``
+diretamente sobre a lista::
+
+    para cada x em L:
+        mostre(x)
+
+
+Modificando a lista
+-------------------
+
+Podemos alterar os elementos de uma lista, apagá-los, ou inserir novos elementos. Modificamos o valor contido em um
+determinado local da lista como::
+
+    >>> L[2] = 0  # altera o terceiro elemento da lista para zero
+
+Para apagar um elemento específico da lista utilizamos o comando ``remover``::
+
+    >>> remover L[2]
+    >>> mostre(L)
+    [1, 2, 16]
+
+Observe que o terceiro elemento foi removido e o quarto passou a ocupar o seu lugar.
+
+Podemos inserir elementos na lista utilizando duas funções diferentes. A função ``acrescentar(lista, elemento)`` adiciona
+um novo elemento no final da lista. É muito comum utilizar a função ``acrescentar`` para construir uma lista aos poucos
+a partir de uma lista vazia. No exemplo abaixo, criamos uma lista com os 100 primeiros quadrados perfeitos::
+
+    quadrados = []
+    para cada x de 1 até 100:
+        acrescentar(quadrados, x * x)
+
+Já a função ``inserir(lista, índice, elemento)`` insere um novo elemento no índice dado deslocando todos os elementos
+subsequentes para frente. Podemos ver como isto funciona no exemplo::
+
+    >>> beatles = ['Paul', 'George', 'Ringo']
+    >>> inserir(beatles, 1, 'John')
+    >>> mostre(beatles)
+    ['Paul', 'John', 'George', 'Ringo']
+
+
+**Desafio**
+
+Crie uma lista que começa com ``L = [1, 1]``. Cada novo elemento é criado somando os dois anteriores. Esta regra cria os
+números de Fibonacci, que foram propostos inicialmente para descrever o crescimento de uma população de coelhos.
+Complete este lista até que ela tenha 10 elementos.
+
+
+Texto (strings)
+---------------
+
+Representamos uma variável do tipo texto (string, em inglês) colocando o conteúdo entre aspas, como em
+``msg = "Olá, todo mundo!"``. A variável ``msg`` é do tipo texto e aceita diversas operações como concatenamento,
+conversão entre maiúsculas e minúsculas, etc. Sob vários aspectos, uma variável de texto se assemelha a uma lista de
+caracteres. Podemos, por exemplo, extrair uma letra específica do texto utilizando a notação de indexament::
+
+    >>> [msg[0], msg[1], msg[2], msg[-1]]
+    ['O', 'l', 'á', '!']
+
+Diferentemente das listas, as variáveis de texto não podem ser modificadas. Para realizar uma alteração em uma string é
+sempre necessário criar uma nova string com o valor alterado. Em alguns casos, pode ser necessário converter a string
+para uma lista de caracteres, modificar a lista e finalmente juntá-la numa string final::
+
+    >>> L = lista("hello")
+    >>> L[0] = "H"
+    >>> acrescentar(L, "!")
+    >>> mostre(juntar(L))
+    Hello!
+
+Strings de texto aceitam algumas operações matemáticas úteis. A soma de duas stings corresponde na concatenação::
+
+    >>> "olá" + "mundo"
+    'olámundo'
+
+Já a multiplicação de uma string por um número inteiro corresponde à uma repetição::
+
+    >>> "abc" * 3
+    'abcabcabc'
+
+Existem várias funções auxiliares aplicadas sobre strings que podem ser acessadas pela notação ``<variável>.<método>``
+como por exemplo em::
+
+    >>> nome = "ringo"
+    >>> nome.maiúsculas()
+    'RINGO'
+
+A função ``nome.maiúsculas()`` é conhecida como um método dos objetos do tipo string. Como se trata de uma função com
+aplicação bem restrita (não faz sentido, por exemplo, converter um número para letras maiúsculas), esta função está
+associada somente às variáveis do tipo string. Podemos obter a lista completa de funções associadas a cada tipo usando
+o comando ``ajuda(<nome do tipo>)``, onde substituímos o nome do tipo por ``texto`` para acessar as funções específicas
+de strings. A maior parte das funções é auto-explicativa: explore-as para se familiarizar com os recursos de
+processamento de texto disponíveis no Pytuguês.
+
+
+ **Desafio**
+
+ Crie uma função que remova todos os acentos de uma palavra. Para este exercício considere apenas os acentos que
+ normalmente aparecem em português.
+
+
+Dicionário
+----------
+
+Um dicionário em Pytuguês (algumas vezes chamado de *hash table*) define um mapeamento entre um conjunto de índices (as
+chaves) para um conjunto de valores. Podemos, por exemplo, relacionar um grupo de pessoas às suas respectivas idades::
+
+    D = {'João': 31, 'Maria': 29, 'José': 3}
+
+Note que as chaves podem ser do tipo texto ou qualquer outro valor imutável: você pode utilizar números inteiros ou
+decimais, mesclar textos com números, etc. No entanto não é possível utilizar valores mutáveis como chaves. Podemos
+acessar qual é o valor associado a uma chave no dicionário usando a notação de índices::
+
+    >>> D['José'] + 1
+    4
+
+Para acrescentar valores ao dicionário, basta fazer uma atribuição e o elemento será inserido automaticamente no
+dicionário (caso a chave já exista, substitui-se seu valor)::
+
+    >>> D['Joana'] = 1
+    >>> tamanho(D)
+    4
+
+
+**Desafio**
+
+Crie um programa encriptador de mensagens. Para isto, defina um dicionário que troque algumas letras do alfabeto de
+lugar e até criar uma mensagem incompreensível. Depois crie um outro programa que decodifique a mensagem secreta.

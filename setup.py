@@ -3,8 +3,8 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.2'
-REQUIRES = ['unidecode'] # 'PyQt5' is not supported in PyPI
+VERSION = '0.7.4'
+REQUIRES = []  # 'PyQt5' is not supported in PyPI
 
 try:
     import PyQt5.QtSvg

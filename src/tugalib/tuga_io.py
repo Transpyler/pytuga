@@ -10,12 +10,12 @@ from tugalib.util import synonyms
 
 
 @synonyms('mostre')
-def mostrar(objeto, *args):
+def mostrar(*args):
     """
     Mostra o objeto ou texto fornecido na tela.
 
     Se for chamada com vários argumentos, imprime os mesmos em sequência,
-    separando com um espaço.
+    separando-os com um espaço.
 
     Examples
     --------
@@ -24,7 +24,7 @@ def mostrar(objeto, *args):
     Olá, mundo!
     """
 
-    print(objeto, *args)
+    print(*args)
 
 
 @synonyms('leia_texto')
@@ -40,7 +40,7 @@ def ler_texto(mensagem=''):
     olá, maria
     """
 
-    if isinstance(mensagem, str):
+    if isinstance(mensagem, str) and mensagem:
         mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
     return input(mensagem)
 
