@@ -33,12 +33,14 @@ if sys.platform.startswith('win'):
 # Collect data files
 DATA_FILES = [
     ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
-    ('share/icons/hicolor/scalable/mimetypes',
-     ['data/icons/application-x-pytuga.svg']),
+    (
+    'share/icons/hicolor/scalable/mimetypes', ['data/icons/text-x-pytuga.svg']),
+    ('share/mime', ['data/pytg.xml']),
     ('share/applications', ['data/pytuga.desktop']),
     ('share/doc/pytuga', ['README.rst']),
     ('share/doc/examples', glob('data/examples/*.pytg')),
     ('share/doc/html', glob('doc/build/html/*.*', recursive=True)),
+    ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang'])
 ]
 
 # Run setup() function
