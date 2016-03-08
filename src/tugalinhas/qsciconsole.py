@@ -350,7 +350,7 @@ class PythonConsole(PythonEditor):
 
         cmd = '\n'.join(self._current_command)
         self._current_command.clear()
-        if not cmd:
+        if not cmd.strip():
             self.addPrompt(newline=False)
         else:
             def run_command():
@@ -362,23 +362,23 @@ class PythonConsole(PythonEditor):
                     result = ''
 
                 # Insert result in text
-                if result:
-                    self._print_to_console_signal.emit(result, bool(result))
+                self._print_to_console_signal.emit(result, bool(result))
 
             self.scheduleBackgroundTask(run_command)
 
-    def executeCommand(self, cmd):
+    def executeCommand(self, cmd, cancel_current=True, mode='exec'):
         """Run command in the console as if it was inserted by the user"""
 
-        self.cancelCurrent()
+        if cancel_current:
+            self.cancelCurrent()
+
         def run_command():
             if not cmd.strip():
-                return ''
+                return
+            self._history.append(cmd)
             self._history_idx = 0
-            result = self.run(cmd.strip() + '\n', 'exec')
-
-            if result:
-                self._print_to_console_signal.emit('...\n' + result, True)
+            result = self.run(cmd.strip() + '\n', mode)
+            self._print_to_console_signal.emit('...\n' + result, True)
 
         self.scheduleBackgroundTask(run_command)
 

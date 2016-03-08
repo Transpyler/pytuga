@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>25</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -54,8 +54,16 @@
     <addaction name="separator"/>
     <addaction name="actionLimpar_tela"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Ajuda</string>
+    </property>
+    <addaction name="actionDocumentation"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTela"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionNovo">
    <property name="text">
@@ -107,6 +115,16 @@
   <action name="actionLimpar_tela">
    <property name="text">
     <string>Limpar tela</string>
+   </property>
+  </action>
+  <action name="actionDocumentation">
+   <property name="text">
+    <string>Documentação</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>Sobre</string>
    </property>
   </action>
  </widget>
@@ -240,6 +258,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDocumentation</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>openDocumentation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -249,5 +299,7 @@
   <slot>zoomIn()</slot>
   <slot>zoomOut()</slot>
   <slot>clearScene()</slot>
+  <slot>openDocumentation()</slot>
+  <slot>about()</slot>
  </slots>
 </ui>
