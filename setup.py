@@ -1,9 +1,10 @@
 import os
 import sys
+from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.4'
+VERSION = '0.7.5'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
 
 try:
@@ -28,6 +29,17 @@ gui_scripts = ['tugalinhas = tugalinhas.__main__:main']
 if sys.platform.startswith('win'):
     gui_scripts = ['tugalinhas_window = tugalinhas.__main__:main']
     console_scripts.append('tugalinhas = tugalinhas.__main__:main')
+
+# Collect data files
+DATA_FILES = [
+    ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
+    ('share/icons/hicolor/scalable/mimetypes',
+     ['data/icons/application-x-pytuga.svg']),
+    ('share/applications', ['data/pytuga.desktop']),
+    ('share/doc/pytuga', ['README.rst']),
+    ('share/doc/examples', glob('data/examples/*.pytg')),
+    ('share/doc/html', glob('doc/build/html/*.*', recursive=True)),
+]
 
 # Run setup() function
 setup(
@@ -83,5 +95,6 @@ setup(
     # Data files
     #
     include_package_data=True,
+        data_files=DATA_FILES,
     zip_safe=False,
 )

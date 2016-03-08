@@ -1,0 +1,7 @@
+# Desenhamos uma estrela
+
+repetir
+5
+vezes:
+frente(200)
+esquerda(144)
