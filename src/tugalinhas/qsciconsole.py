@@ -11,6 +11,7 @@ import time
 from collections import deque
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+from PyQt5 import QtGui
 from .qscieditor import PythonEditor
 
 _stdout = sys.stdout
@@ -487,9 +488,23 @@ class PythonConsole(PythonEditor):
         elif modifiers & Control and key == D:
             self.cancelCurrent()
 
+        # Correct paste behavior
+        elif modifiers & Control and key == V:
+            clipboard = QtWidgets.QApplication.clipboard()
+            data = clipboard.text()
+            if '\n' in data:
+                mod_data = ' \n... '.join(data.split('\n'))
+                clipboard.setText(mod_data)
+            super().keyPressEvent(ev)
+            clipboard.setText(data)
+
         # Passthru
         else:
             super().keyPressEvent(ev)
+
+    # Disable context menu
+    def contextMenuEvent(self, e):
+        pass
 
 
 def _splitindent(line):
