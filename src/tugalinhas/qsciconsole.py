@@ -289,6 +289,9 @@ class PythonConsole(PythonEditor):
 
     @QtCore.pyqtSlot(str, bool)
     def printToConsoleSlot(self, text, add_newline):
+        self.printToConsole(text, add_newline)
+
+    def printToConsole(self, text, add_newline=True):
         self.insert(text)
         self.addPrompt(newline=add_newline)
 
@@ -375,8 +378,7 @@ class PythonConsole(PythonEditor):
             result = self.run(cmd.strip() + '\n', 'exec')
 
             if result:
-                self.print_to_console.emit('...\n' + result, True)
-
+                self._print_to_console.emit('...\n' + result, True)
 
         self.scheduleBackgroundTask(run_command)
 

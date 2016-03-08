@@ -1,17 +1,17 @@
-'''
+"""
 Funções de entrada e saída
 ==========================
 
 Funções que realizam a interação com o usuário, seja lendo valores digitados
 ou arquivos, seja mostrando valores na tela.
-'''
+"""
 
 from tugalib.util import synonyms
 
 
 @synonyms('mostre')
 def mostrar(objeto, *args):
-    '''
+    """
     Mostra o objeto ou texto fornecido na tela.
 
     Se for chamada com vários argumentos, imprime os mesmos em sequência,
@@ -22,14 +22,14 @@ def mostrar(objeto, *args):
 
     >>> mostrar("Olá, mundo!")
     Olá, mundo!
-    '''
+    """
 
     print(objeto, *args)
 
 
 @synonyms('leia_texto')
-def ler_texto(mensagem):
-    '''
+def ler_texto(mensagem=''):
+    """
     Pede ao usuário uma entrada de texto.
 
     Examples
@@ -38,7 +38,7 @@ def ler_texto(mensagem):
     >>> nome = ler_texto('Seu nome: ')
     >>> mostrar("olá, " + nome)  # usuário digita "maria"
     olá, maria
-    '''
+    """
 
     if isinstance(mensagem, str):
         mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
@@ -46,8 +46,8 @@ def ler_texto(mensagem):
 
 
 @synonyms('leia_número')
-def ler_número(mensagem):
-    '''
+def ler_número(mensagem=''):
+    """
     Pede ao usuário uma entrada numérica.
 
     Examples
@@ -56,7 +56,7 @@ def ler_número(mensagem):
     >>> x = ler_número('Um número: ')  # usuário digita um 2...
     >>> x + 40
     42
-    '''
+    """
 
     texto = ler_texto(mensagem)
     num = float(texto.replace(',', '.'))
@@ -65,21 +65,21 @@ def ler_número(mensagem):
 
 @synonyms('leia_arquivo', 'leia_ficheiro', 'ler_ficheiro')
 def ler_arquivo(arquivo):
-    '''
+    """
     Lê conteúdo de um arquivo texto e retorna uma string de texto.
 
     Examples
     --------
 
     >>> dados = ler_arquivo("foo.txt")
-    '''
+    """
 
     return open(arquivo).read()
 
 
 @synonyms('salve_arquivo', 'salvar_ficheiro', 'salve_ficheiro')
 def salvar_arquivo(arquivo, texto):
-    '''
+    """
     Salva o conteúdo de texto no arquivo indicado, apagando qualquer
     conteúdo anterior.
 
@@ -90,7 +90,7 @@ def salvar_arquivo(arquivo, texto):
     --------
 
     >>> salvar_arquivo("foo.txt", dados)
-    '''
+    """
 
     with open(arquivo) as F:
         F.write(str(texto))

@@ -12,6 +12,14 @@ from .mathutil import Vec
 from functools import wraps as _wraps
 from .mathutil import Vec as _Vec
 
+COLOR_TRANSLATIOSN = {
+    'azul': 'blue',
+    'amarelo': 'yellow',
+    'vermelho': 'red',
+    'preto': 'black',
+    'branco': 'white',
+}
+
 
 def _vecargsmethod(func):
     """
@@ -156,8 +164,8 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         User can pass the x, y coordinates of the new position or a tuple of 
         (x, y) values."""
-        
-        return self._setstate('pos', value, draw=False, delay=0)
+
+        self._setstate('pos', value, draw=False, delay=0)
     
     def getheading(self):
         """Return current heading of the turtle (in degrees)"""
@@ -166,8 +174,8 @@ class TurtleNamespaceEnglish(MutableMapping):
     
     def setheading(self, value):
         """Modifies turtle's heading (in degrees)"""
-        
-        return self._setstate('heading', value, delay=0)
+
+        self._setstate('heading', value, delay=0)
 
     def getwidth(self):
         """Return the pen width (in pixels)"""
@@ -176,8 +184,8 @@ class TurtleNamespaceEnglish(MutableMapping):
     
     def setwidth(self, value):
         """Modifies the pen width heading (in pixels)"""
-        
-        return self._setstate('width', value)
+
+        self._setstate('width', value)
     
     def getcolor(self):
         """Return a tuple of (R, G, B) with the current pen color"""
@@ -189,8 +197,8 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         Color can be specified as an (R, G, B) tuple or as a hex string or by
         name."""
-        
-        return self._setstate('color', color)
+
+        self._setstate('color', color)
     
     def getfill(self):
         """Return a tuple of (R, G, B) with the current fill color"""
@@ -202,19 +210,19 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         Color can be specified as an (R, G, B) tuple or as a hex string or by
         name."""
-        return self._setstate('fill', color)
+        self._setstate('fill', color)
     
     @alias('pu')
     def penup(self):
         """Raises the turtle pen so it stops drawing"""
-        
-        return self._setstate('isdown', False)
+
+        self._setstate('isdown', False)
     
     @alias('pd')
     def pendown(self):
         """Lower the turtle pen so it can draw in the screen"""
-        
-        return self._setstate('isdown', True)
+
+        self._setstate('isdown', True)
     
     def isdown(self):
         """Return True if the pen is down or False otherwise"""
@@ -248,15 +256,14 @@ class TurtleNamespaceEnglish(MutableMapping):
         delta = Vec.from_angle(self.getheading()) * step
         finalpos = delta + self.getpos()
         self.goto(finalpos)
-        return finalpos
-    
+
     @alias('bk', 'back')
     def backward(self, step):
         """Move the turtle backward by the given step size (in pixels).
 
         Return a vector with final position after the movement."""
-        
-        return self.forward(-step)
+
+        self.forward(-step)
     
     @alias('lt')
     def left(self, angle):
@@ -266,7 +273,6 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         heading = (self.getheading() + angle) % 360
         self._setstate('heading', heading, delay=self._delay)
-        return heading
 
     @alias('rt')
     def right(self, angle):
@@ -274,8 +280,8 @@ class TurtleNamespaceEnglish(MutableMapping):
         
         Negative angles produces counter-clockwise rotation. Return final
         heading."""
-        
-        return self.left(-angle)
+
+        self.left(-angle)
     
     def restart(self):
         """Restart the scene.
@@ -338,17 +344,12 @@ class TurtleNamespace(TurtleNamespaceEnglish):
         return self.backward(passo)
 
     def esquerda(self, ângulo):
-        """Gira o Tuga para a esquerda pelo ângulo fornecido em graus.
-
-        Retorna a orientação final após o movimento."""
+        """Gira o Tuga para a esquerda pelo ângulo fornecido em graus."""
 
         return self.left(ângulo)
 
-
     def direita(self, ângulo):
-        """Gira o Tuga para a direita pelo ângulo fornecido em graus.
-
-        Retorna a orientação final após o movimento."""
+        """Gira o Tuga para a direita pelo ângulo fornecido em graus."""
 
         return self.right(ângulo)
 
@@ -392,25 +393,111 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         return self.isdown()
 
-    ns = TurtleNamespaceEnglish
-    #TODO: terminar a tradução destas funções no TugaNamespace
-    limpar = ns.clear
-    reiniciar = ns.restart
-    posição = ns.getpos
-    definir_posição = ns.setpos
-    cor_da_linha = ns.getcolor
-    cor_do_fundo = ns.getfill
-    definir_cor_da_linha = ns.setcolor
-    definir_cor_do_fundo = ns.setfill
-    direção = ns.getheading
-    definir_direção = ns.setheading
-    espessura = ns.getwidth
-    definir_espessura = ns.setwidth
-    velocidade = ns.speed
-    ajuda = ns.turtlehelp
-    del ns
+    @alias('limpe')
+    def limpar(self):
+        """Limpa todos os desenhos na tela"""
 
-        
+        self.clear()
+
+    @alias('reinicie')
+    def reiniciar(self):
+        """Limpa os desenhos na tela e retorna o Tuga para a orientação
+        orignal"""
+
+        self.restart()
+
+    @alias('posicao')
+    def posição(self):
+        """Retorna um vetor de duas coordenada com a posição do Tuga"""
+
+        return self.getpos()
+
+    @alias('defina_posição', 'defina_posicao')
+    def definir_posição(self, *args):
+        """Define as novas coordenadas do Tuga.
+
+        Pode receber dois argumentos com a nova posição x e y ou um argumento
+        com um vetor ou tupla de duas coordenadas."""
+
+        self.setpos(*args)
+
+    @alias('direcao')
+    def direção(self):
+        """Retorna a orientação do Tuga em graus.
+
+        Medimos a orientação a partir da posição horizontal com o Tuga olhando
+        para a direita."""
+
+        return self.getheading()
+
+    @alias('defina_direção', 'defina_direcao')
+    def definir_direção(self, direção):
+        """Gira o Tuga para a orientação fornecida.
+
+        Medimos a orientação a partir da posição horizontal com o Tuga olhando
+        para a direita."""
+
+        return self.setheading(direção)
+
+    def cor_da_linha(self):
+        """Retorna a cor da linha"""
+
+        return self.getcolor()
+
+    def cor_do_fundo(self):
+        """Retorna a cor do fundo"""
+
+        return self.getfill()
+
+    @alias('defina_cor_da_linha')
+    def definir_cor_da_linha(self, cor):
+        """Define a cor da linha do desenho.
+
+        A cor pode ser especificada pelas coordenadas (R, G, B), por uma string
+        hex ou pelo seu nome em inglês ou português."""
+
+        if isinstance(cor, str):
+            cor = cor.lower()
+            cor = COLOR_TRANSLATIOSN.get(cor, cor)
+        self.setcolor(cor)
+
+    @alias('defina_cor_do_fundo')
+    def definir_cor_do_fundo(self, cor):
+        """Define a cor do preenchimento.
+
+        A cor pode ser especificada pelas coordenadas (R, G, B), por uma string
+        hex ou pelo seu nome em inglês ou português."""
+
+        if isinstance(cor, str):
+            cor = cor.lower()
+            cor = COLOR_TRANSLATIOSN.get(cor, cor)
+        self.setfill(cor)
+
+    def espessura(self):
+        """Retorna a espessura da linha em pixels."""
+
+        return self.getwidth()
+
+    @alias('defina_espessura')
+    def definir_espessura(self, px):
+        """Define a espessura da linha em pixels."""
+
+        self.setwidth(px)
+
+    def velocidade(self, valor):
+        """Modifica a velocidade de desenho do Tuga.
+
+        A velocidade corresponde a um número de 1 até 10, onde 1 corresponde
+        ao desenho mais lento e 10 ao desenho mais rápido.""" \
+ \
+        self.speed(valor)
+
+    def ajuda(self):
+        """Mostra uma ajuda com os principais comandos disponíveis em inglês."""
+
+        self.turtlehelp()
+
+
 def helpstr(*args):
     """Returns the output of the help() function as a string"""
     

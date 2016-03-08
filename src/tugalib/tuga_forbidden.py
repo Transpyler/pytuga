@@ -361,7 +361,7 @@ def _change_none_repr():
 
 
 # Apply curses
-if os.environ.get('FORBIDDEN_PYTUGA', 'true') == 'true':
+if os.environ.get('DEBUG', 'false') == 'true':
     print('''
 ======================
 Aviso aos beta-testers
@@ -373,6 +373,6 @@ interpretador terminar com segfault ou apresentar algum tipo de comportamento
 errático reinicie com a variável de ambiente FORBIDDEN_PYTUGA igual à "false" e
 envie um relatório de erros com a sua plataforma e sistema operacional.
 ''')
-    _apply_all_curses()
-    _change_bool_repr()
-    _change_none_repr()
+_apply_all_curses()
+_change_bool_repr()
+_change_none_repr()
