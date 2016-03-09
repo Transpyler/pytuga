@@ -1,0 +1,18 @@
+função
+koch(passo, nível):
+'''Desenha a curva de koch com o nível dado'''
+
+se
+nível == 0:
+frente(passo)
+senão:
+koch(passo / 3, nível - 1)
+esquerda(60)
+koch(passo / 3, nível - 1)
+direita(120)
+koch(passo / 3, nível - 1)
+esquerda(60)
+koch(passo / 3, nível - 1)
+
+velocidade(9)
+koch(400, 4)

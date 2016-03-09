@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=text/plain;
+Type=Application
+Exec=tugalinhas %u
+Icon=pytuga
+Comment=Pytuguês programming language
+Terminal=false
+Name=Pytuga
+Categories=Application;ComputerScience;Education;
+GenericName=Pytuguês programming language
+GenericName[pt_BR]=Programação em português

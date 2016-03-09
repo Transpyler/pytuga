@@ -7,10 +7,4 @@ examples/teste.pytg
 .gitignore
 .project
 .pydevproject
-
-<<<<<<< HEAD
-=======
-/teste.pytg
-
-.idea
->>>>>>> 2de5757acb2b1f4f9d5c79d5558b64ea208b240a
+pyinstaller

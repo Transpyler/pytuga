@@ -1,0 +1,10 @@
+# Figura simples
+repetir
+10
+vezes:
+esquerda(36)
+repetir
+3
+vezes:
+frente(90)
+esquerda(120)

@@ -1,0 +1,11 @@
+repetir
+15
+vezes:
+repetir
+4
+vezes:
+frente(100)
+esquerda(90)
+esquerda(360 / 15)
+
+pausa()
