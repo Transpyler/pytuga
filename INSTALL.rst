@@ -19,7 +19,7 @@ instaladas
 
 ::
 
-    $ sudo apt-get install python3-all python3-pyqt5 python3-pyqt5.qsci python3-pyqt5.qtsvg python3-pip
+    $ sudo apt-get install python3-all python3-pyqt5 python3-pyqt5.qsci python3-pyqt5.qtsvg python3-pyqt5.qtwebkit python3-pip
         
 Se quiser apenas fazer a instalação local, o comando fica::
 

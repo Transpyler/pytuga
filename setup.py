@@ -5,7 +5,7 @@ from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.6'
+VERSION = '0.7.6-5'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
 
 try:
@@ -111,7 +111,7 @@ setup(
     #
         package_data={
             'tugalinhas': [
-                '*.svg',
+                '*.*',
                 'doc/html/*.*',
                 'doc/html/_modules/*.*',
                 'doc/html/_modules/tugalib/*.*',

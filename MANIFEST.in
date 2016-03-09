@@ -1,6 +1,5 @@
 include README.rst
 include INSTALL.rst
 include setup.cfg
-include data/*
-include src/tugalinhas/*
-include src/tugalinhas/src/*
+recursive-include data *.*
+recursive-include src/tugalinhas *.*

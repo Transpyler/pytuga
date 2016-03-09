@@ -80,9 +80,8 @@ class Tugalinhas(QtWidgets.QMainWindow):
             from PyQt5 import QtWebKitWidgets
         except ImportError:
             QtWidgets.QMessageBox.critical(
-                    parent=self,
-                    title='qt5-webkit não está instalado',
-                    text='Por favor instale o pacote Qt5 Webkit para visualizar '
+                    self, 'qt5-webkit não está instalado',
+                    'Por favor instale o pacote Qt5 Webkit para visualizar '
                          'a documentação. Caso não possa instalar o pacote, vá'
                          'para o site: http://fabiommendes.github.io/pytuga/'
             )
