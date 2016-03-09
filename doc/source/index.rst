@@ -15,7 +15,7 @@ Conteúdo:
    intro.rst
    install.rst
    tutorial.rst
-   referência.rst
+         referencia.rst
    python.rst
    design.rst
 
