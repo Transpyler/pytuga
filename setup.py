@@ -1,11 +1,10 @@
-# -*- coding: utf8 -*-
 import os
 import sys
 from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.6-5'
+VERSION = '0.7.6-8'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
 
 try:

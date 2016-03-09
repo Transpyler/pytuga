@@ -83,7 +83,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
                     self, 'qt5-webkit não está instalado',
                     'Por favor instale o pacote Qt5 Webkit para visualizar '
                          'a documentação. Caso não possa instalar o pacote, vá'
-                         'para o site: http://fabiommendes.github.io/pytuga/'
+                    'para o site: http://pytuga.readthedocs.org/en/latest/'
             )
 
         if self._documentation_view is not None:
