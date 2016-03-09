@@ -191,6 +191,74 @@ def test_funcion_definition():
 
 
 #
+# Simple binary operators
+#
+def test_logical_and():
+    ptsrc = 'x e y'
+    pysrc = 'x and y'
+    assert pytg(ptsrc) == py(pysrc)
+
+
+def test_is_operator():
+    ptsrc = 'x é verdadeiro'
+    pysrc = 'x is True'
+    assert pytg(ptsrc) == py(pysrc)
+
+
+def test_nested_loops():
+    ptsrc = '''
+repetir 2 vezes:
+    repetir 2 vezes:
+        mostre(1)
+'''
+
+    pysrc = '''
+for ___ in range(2):
+    for ___ in range(2):
+        mostre(1)
+'''
+    assert pytg(ptsrc) == py(pysrc)
+
+
+def test_prefixed_nested_repetir_loops():
+    ptsrc = '''
+repetir 2 vezes:
+    1
+    repetir 2 vezes:
+        1
+'''
+
+    pysrc = '''
+for ___ in range(2):
+    1
+    for ___ in range(2):
+        1
+'''
+    print(pytg(ptsrc))
+    print(py(pysrc))
+    assert pytg(ptsrc) == py(pysrc)
+
+
+def test_prefixed_nested_para_cada_loops():
+    ptsrc = '''
+para cada x de 1 até 2:
+    1
+    para cada y de 1 até 2:
+        1
+'''
+
+    pysrc = '''
+for x in range(1, 2 + 1):
+    1
+    for y  in range(1, 2 + 1):
+        1
+'''
+    print(pytg(ptsrc))
+    print(py(pysrc))
+    assert pytg(ptsrc) == py(pysrc)
+
+
+#
 # Bug tracker: these are all examples that have failed in some point and do not
 # belong to any category in special
 #
@@ -210,21 +278,6 @@ def test_separate_command_blocks_regression():
     ptsrc = '\n\n\nsenão faça: mostre(x)'
     pysrc = '\n\n\nelse: mostre(x)'
     assert pytg(ptsrc) == py(pysrc)
-
-
-#
-# Simple binary operators
-#
-def test_logical_and():
-    ptsrc = 'x e y'
-    pysrc = 'x and y'
-    assert transpile(ptsrc) == pysrc
-
-
-def test_is_operator():
-    ptsrc = 'x é verdadeiro'
-    pysrc = 'x is True'
-    assert transpile(ptsrc) == pysrc
 
 
 if __name__ == '__main__':

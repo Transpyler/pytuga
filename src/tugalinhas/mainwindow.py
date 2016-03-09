@@ -1,7 +1,7 @@
 import os
-import pytuga
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
-from . import TurtleWidget
+import pytuga
+from tugalinhas import TurtleWidget
 
 
 VERSION = pytuga.__version__

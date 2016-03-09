@@ -2,3 +2,4 @@ include README.rst
 include INSTALL.rst
 include setup.cfg
 include src/tugalinhas/*
+include src/tugalinhas/src/*

@@ -2,7 +2,7 @@ import keyword
 import tokenize
 from tokenize import TokenInfo
 from tokenize import (NAME, OP, NEWLINE, EXACT_TOKEN_TYPES, NUMBER)
-
+from copy import deepcopy
 
 __all__ = ['transpile', 'compile', 'exec']
 TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
@@ -71,9 +71,9 @@ PURE_PYTG_KEYWORDS.update({'repetir', 'repita', 'vezes', 'cada', 'de', 'até'})
 KEYWORDS = set(PURE_PYTG_KEYWORDS)
 KEYWORDS.update(keyword.kwlist)
 
-class Token:
 
-    '''Mutable token object.'''
+class Token:
+    """Mutable token object."""
 
     def __init__(self, data, type=None, start=None, end=None, line=None):
 
@@ -170,18 +170,16 @@ class Token:
     def __iter__(self):
         yield from (self[i] for i in range(5))
 
-
     def to_token_info(self):
-        '''Convert to TokenInfo object used by Python's tokenizer.'''
+        """Convert to TokenInfo object used by Python's tokenizer."""
 
         return TokenInfo(
             self.type, self.string, self.start, self.end, self.line)
 
 
 class TokenPosition(tuple):
-
-    '''Represent the start or end position of a token and accept some basic
-    arithmetic operations'''
+    """Represent the start or end position of a token and accept some basic
+    arithmetic operations"""
 
     def __new__(cls, x, y=None):
         if y is None:
@@ -216,18 +214,18 @@ class TokenPosition(tuple):
 
 
 def compile(source, filename, mode, flags=0, dont_inherit=False):
-    '''Similar to the built-in function compile().
+    """Similar to the built-in function compile().
 
-    Works with Pytuguês code.'''
+    Works with Pytuguês code."""
 
     source = transpile(source)
     return __builtins__['compile'](source, filename, mode, flags, dont_inherit)
 
 
 def exec(object, locals=None, globals=None):
-    '''Similar to the built-in function exec().
+    """Similar to the built-in function exec().
 
-    Works with Pytuguês code.'''
+    Works with Pytuguês code."""
 
     if isinstance(object, str):
         object = transpile(object)
@@ -235,7 +233,7 @@ def exec(object, locals=None, globals=None):
 
 
 def transpile(src):
-    '''Convert a Pytuguês (Pytuguese?) source to Python.'''
+    """Convert a Pytuguês (Pytuguese?) source to Python."""
 
     # Avoid problems with empty token streams
     if not src or src.isspace():
@@ -250,8 +248,8 @@ def transpile(src):
 
 
 def transpile_tk(tokens):
-    '''Transpile a sequence of Token objects representing a Pytuguês code into
-    Python'''
+    """Transpile a sequence of Token objects representing a Pytuguês code into
+    Python"""
 
     # We pass several times through the token stream looking for direct
     # translations of Pytuguês tokens to Python.
@@ -263,7 +261,7 @@ def transpile_tk(tokens):
         ('então', 'então'),
     ]
     iterator = token_find(tokens, matches)
-    while False:
+    while True:
         try:
             idx, match = next(iterator)
             iterator.send(['raise', SyntaxError])
@@ -296,7 +294,7 @@ def transpile_tk(tokens):
     while True:
         try:
             idx, match = next(iterator)
-            iterator.send(['subs', [convs[match]]])
+            iterator.send(['subs', [Token(convs[match])]])
         except StopIteration:
             break
 
@@ -315,7 +313,7 @@ def transpile_tk(tokens):
 
 
 def token_find(tokens, matches, start=0):
-    '''Coroutine that iterates over list of tokens yielding pairs of
+    """Coroutine that iterates over list of tokens yielding pairs of
     (index, match) for each match in the token stream. The `matches` attribute
     must be a sequence of token sequences.
 
@@ -329,7 +327,7 @@ def token_find(tokens, matches, start=0):
             Substitute the match by the list of tokens L.
         it.send(['seek', index])
             Jumps iteration to the given index.
-    '''
+    """
 
     matches = list(matches)
     tk_matches = \
@@ -350,19 +348,35 @@ def token_find(tokens, matches, start=0):
                 cmd = yield (tk_idx, matches[match_idx])
                 while cmd:
                     cmd, value = cmd
+
+                    # Raise an exception
                     if cmd == 'raise':
                         raise value
+
+                    # Substitute current
                     elif cmd == 'subs':
+                        start = tokens[tk_idx].start
                         line = tokens[tk_idx].line
+
+                        # Insert and remove places, if needed
                         for _ in range(max(len(value) - matchsize, 0)):
                             tokens.insert(tk_idx, None)
                         for _ in range(max(matchsize - len(value), 0)):
                             del tokens[tk_idx]
+
+                        # Set new tokens
                         tokens[tk_idx:tk_idx + len(value)] = value
+
+                        if tokens[tk_idx].start is None:
+                            tokens[tk_idx].start = start
+
                         for tk in value:
                             tk.line = line
+
+                    # Move cursor position to the specified 'value' ammount
                     elif cmd == 'seek':
                         tk_idx = value - 1
+
                     else:
                         raise ValueError('invalid command: %r' % cmd)
                     cmd = yield
@@ -372,7 +386,7 @@ def token_find(tokens, matches, start=0):
 
 
 def process_repeat_command(tokens):
-    '''Handles "repita/repetir".
+    """Handles "repita/repetir".
 
     Converts command::
 
@@ -386,7 +400,7 @@ def process_repeat_command(tokens):
 
         for ___ in range(<N>):
             <BLOCO>
-    '''
+    """
 
     matches = [('repetir',), ('repita',), ('vezes',), (NEWLINE,)]
     iterator = token_find(tokens, matches)
@@ -395,9 +409,10 @@ def process_repeat_command(tokens):
         if match[0] not in ['repetir', 'repita']:
             continue
 
-        # Send tokens for the beginning of the equivalent "for" loop
+        # Send tokens to the beginning of the equivalent "for" loop
         starttokens = [Token(x) for x in ['for', '___', 'in', 'range', '(']]
-        iterator.send(['subs', starttokens ])
+        starttokens[0].start = tokens[idx].start
+        iterator.send(['subs', starttokens])
 
         # Matches the 'vezes' token
         idx, match = next(iterator)
@@ -416,14 +431,14 @@ def process_repeat_command(tokens):
 
 
 def process_range_command(tokens):
-    '''Handles command::
+    """Handles command::
 
         de <X> até <Y> [a cada <Z>]
 
     and converts it to::
 
         in range(<X>, <Y> + 1[, <Z>])
-    '''
+    """
 
     matches = [('de',), ('até',), ('a', 'cada',), (NEWLINE,), (':',)]
     iterator = token_find(tokens, matches)
@@ -435,6 +450,7 @@ def process_range_command(tokens):
 
         # Send tokens for the beginning of the equivalent in range(...) test
         starttokens = [Token(x) for x in ['in', 'range', '(']]
+        starttokens[0].start = tokens[idx].start
         iterator.send(['subs', starttokens])
 
         # Matches the 'até' token and insert a comma separator
@@ -472,7 +488,7 @@ def process_range_command(tokens):
 
 
 def fromstring(src):
-    '''Convert source string to a list of tokens'''
+    """Convert source string to a list of tokens"""
 
     current_string = src
 
@@ -491,7 +507,7 @@ def fromstring(src):
 
 
 def tostring(tokens):
-    '''Converte lista de tokens para string'''
+    """Converte lista de tokens para string"""
 
     # Align tokens
     lastpos = TokenPosition(1, 0)
@@ -501,6 +517,7 @@ def tostring(tokens):
         nonlocal lastpos, last_is_fragile
 
         for tk in tokens:
+            tkold = deepcopy(tk)
             if tk.start is None:
                 tk.start = lastpos
             if tk.start < lastpos:
@@ -522,3 +539,15 @@ def tostring(tokens):
             yield tk.to_token_info()
 
     return tokenize.untokenize(itertokens())
+
+
+if __name__ == '__main__':
+    ptsrc = '''
+para cada x de 1 até 2:
+    1
+    para cada y de 1 até 2:
+        1
+'''
+    tokens = fromstring(ptsrc)
+    # print(transpile_tk(tokens))
+    print(tostring(transpile_tk(tokens)))

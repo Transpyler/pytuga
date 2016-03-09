@@ -4,7 +4,7 @@ from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.5'
+VERSION = '0.7.6'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
 
 try:
@@ -39,9 +39,21 @@ DATA_FILES = [
     ('share/applications', ['data/pytuga.desktop']),
     ('share/doc/pytuga', ['README.rst']),
     ('share/doc/examples', glob('data/examples/*.pytg')),
-    ('share/doc/html', glob('doc/build/html/*.*', recursive=True)),
-    ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang'])
+    ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang']),
 ]
+
+# Add documentation files
+for path, _, files in os.walk('doc/build/html'):
+    docfiles = []
+    DATA_FILES.append(('doc/pytuga' + path[14:], docfiles))
+    for file in files:
+        docfiles.append('%s/%s' % (path, file))
+
+# Fix path separator
+for i, (path, files) in enumerate(DATA_FILES):
+    path = os.path.sep.join(path.split('/'))
+    files = [os.path.sep.join(f.split('/')) for f in files]
+    DATA_FILES[i] = (path, files)
 
 # Run setup() function
 setup(
@@ -96,7 +108,15 @@ setup(
     #
     # Data files
     #
-    include_package_data=True,
+        package_data={
+            'tugalinhas': [
+                '*.svg',
+                'doc/html/*.*',
+                'doc/html/_modules/*.*',
+                'doc/html/_modules/tugalib/*.*',
+                'doc/html/_sources/*.*',
+                'doc/html/_static/*.*',
+            ]},
         data_files=DATA_FILES,
     zip_safe=False,
 )
