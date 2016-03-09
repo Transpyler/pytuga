@@ -31,12 +31,3 @@ from . import util
 util.register_synonyms(globals())
 del util
 del synonyms
-
-# Hack to enable/disable tuga_forbidden depending on the environment
-import sys as _sys
-
-_args = ' '.join(_sys.argv)
-if ('pytuga' in _args) or ('tugalinhas' in _args):
-    from . import tuga_forbidden
-
-    del tuga_forbidden

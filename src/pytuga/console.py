@@ -14,8 +14,7 @@ digite "ajuda()", "licença()" ou "tutorial()" para maiores informações
 
 
 class PyTugaConsole(code.InteractiveConsole):
-
-    '''Very simple console for pytuguês language'''
+    """Very simple console for pytuguês language"""
 
     def __init__(self, locals=None, filename='<console>'):
         tuga_ns = vars(tugalib).items()
@@ -77,8 +76,9 @@ class PyTugaConsole(code.InteractiveConsole):
 
 
 def run_console():
-    '''Run the main console'''
+    """Run the main console"""
 
+    from tugalib import tuga_forbidden
     console = PyTugaConsole()
     try:
         import readline  # @UnusedImport

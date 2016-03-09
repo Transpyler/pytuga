@@ -7,14 +7,14 @@ from pytuga import __version__ as version
 
 
 def start_interactive():
-    '''Start Pytuga REPL'''
+    """Start Pytuga REPL"""
 
     from pytuga.console import run_console
     run_console()
 
 
 def main():
-    '''Executes the main pytuga program in the console.'''
+    """Executes the main pytuga program in the console."""
 
     if len(sys.argv) <= 1:
         return start_interactive()

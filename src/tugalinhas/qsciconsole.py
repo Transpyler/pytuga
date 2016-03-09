@@ -115,6 +115,9 @@ class PythonRunner(AbstractRunner):
         self._last_input = None
         self.input_received.connect(self.setInputValueSlot)
 
+        # Import forbidden symbols
+        from tugalib import tuga_forbidden
+
         @functools.wraps(input)
         def input_function(msg=None):
             self._waiting = True
