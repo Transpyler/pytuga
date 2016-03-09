@@ -185,7 +185,6 @@ termina_com = str.endswith
 é_minúsculo = str.islower
 é_maiúsculo = str.isupper
 é_título = str.istitle
-
 é_alfanumérico = str.isalnum
 é_alfabético = str.isalpha
 é_identificador = str.isidentifier
@@ -194,7 +193,6 @@ termina_com = str.endswith
 é_numérico = str.isnumeric
 é_imprimível = str.isprintable
 é_espaço = str.isspace
-
 
 #
 # Procura

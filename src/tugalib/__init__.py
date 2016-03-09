@@ -26,10 +26,17 @@ from .tuga_math import *
 from .tuga_io import *
 from .tuga_draw import *
 
-# Register synonims
+# Register synonyms
 from . import util
-from . import tuga_forbidden
 util.register_synonyms(globals())
-del synonyms
 del util
-del tuga_forbidden
+del synonyms
+
+# Hack to enable/disable tuga_forbidden depending on the environment
+import sys as _sys
+
+_args = ' '.join(_sys.argv)
+if ('pytuga' in _args) or ('tugalinhas' in _args):
+    from . import tuga_forbidden
+
+    del tuga_forbidden

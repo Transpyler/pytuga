@@ -2,6 +2,8 @@
 Biblioteca de funções
 =====================
 
+..highlight:: pytuga
+
 .. automodule:: tugalib.tuga_io
    :members:
    :member-order: source
