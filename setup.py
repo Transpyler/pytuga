@@ -33,8 +33,8 @@ if sys.platform.startswith('win'):
 # Collect data files
 DATA_FILES = [
     ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
-    (
-    'share/icons/hicolor/scalable/mimetypes', ['data/icons/text-x-pytuga.svg']),
+    ('share/icons/hicolor/scalable/mimetypes',
+     ['data/icons/text-x-pytuga.svg']),
     ('share/mime', ['data/pytg.xml']),
     ('share/applications', ['data/pytuga.desktop']),
     ('share/doc/pytuga', ['README.rst']),
