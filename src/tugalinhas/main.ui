@@ -35,6 +35,9 @@
      <height>29</height>
     </rect>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::ActionsContextMenu</enum>
+   </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>Arquivo</string>
@@ -43,6 +46,7 @@
     <addaction name="actionAbrir"/>
     <addaction name="actionSalvar"/>
     <addaction name="actionSalvar_Como"/>
+    <addaction name="actionSalvar_imagem"/>
     <addaction name="actionSair"/>
    </widget>
    <widget class="QMenu" name="menuTela">
@@ -60,8 +64,21 @@
     </property>
     <addaction name="actionDocumentation"/>
     <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionAtualizar"/>
+   </widget>
+   <widget class="QMenu" name="menuEditor">
+    <property name="title">
+     <string>Editor</string>
+    </property>
+    <addaction name="actionAumentar_fonte"/>
+    <addaction name="actionReduzir_fonte"/>
+    <addaction name="actionTamanho_padr_o"/>
+    <addaction name="separator"/>
+    <addaction name="actionInverter_tema"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEditor"/>
    <addaction name="menuTela"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -93,10 +110,16 @@
    <property name="text">
     <string>Ampliar</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt++</string>
+   </property>
   </action>
   <action name="actionReduzir">
    <property name="text">
     <string>Reduzir</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+-</string>
    </property>
   </action>
   <action name="actionAbrir">
@@ -111,20 +134,68 @@
    <property name="text">
     <string>Salvar como</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="actionLimpar_tela">
    <property name="text">
     <string>Limpar tela</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
   <action name="actionDocumentation">
    <property name="text">
     <string>Documentação</string>
    </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
     <string>Sobre</string>
+   </property>
+  </action>
+  <action name="actionSalvar_imagem">
+   <property name="text">
+    <string>Salvar imagem</string>
+   </property>
+  </action>
+  <action name="actionInverter_tema">
+   <property name="text">
+    <string>Inverter tema</string>
+   </property>
+  </action>
+  <action name="actionAumentar_fonte">
+   <property name="text">
+    <string>Aumentar fonte</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionReduzir_fonte">
+   <property name="text">
+    <string>Reduzir fonte</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionTamanho_padr_o">
+   <property name="text">
+    <string>Tamanho padrão</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionAtualizar">
+   <property name="text">
+    <string>Atualizar</string>
    </property>
   </action>
  </widget>
@@ -290,6 +361,102 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSalvar_imagem</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>saveImageAs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInverter_tema</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>toggleEditorTheme()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAumentar_fonte</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>fontZoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReduzir_fonte</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>fontZoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTamanho_padr_o</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>fontZoomReset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAtualizar</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>updateProgram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -301,5 +468,11 @@
   <slot>clearScene()</slot>
   <slot>openDocumentation()</slot>
   <slot>about()</slot>
+  <slot>saveImageAs()</slot>
+  <slot>toggleEditorTheme()</slot>
+  <slot>fontZoomIn()</slot>
+  <slot>fontZoomOut()</slot>
+  <slot>fontZoomReset()</slot>
+  <slot>updateProgram()</slot>
  </slots>
 </ui>
