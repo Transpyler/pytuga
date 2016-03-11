@@ -1,4 +1,5 @@
 import os
+import sys
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 import pytuga
 from tugalinhas import TurtleWidget
@@ -27,6 +28,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self._layout.addWidget(self._turtlewidget)
         self._layout.setContentsMargins(2, 0, 2, 2)
         self._documentation_view = None
+        self._upgrade_task = None
         self.setMinimumSize(800, 600)
         self.updateTitle()
         self.setWindowIcon(_window_icon())
@@ -159,6 +161,83 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 'Pytuguês é uma linguagem para o ensino de programação em '
                 'português. Aqui aprendemos a programar em português e dentro '
                 'de um ambiente gráfico e lúdico.')
+
+    def updateProgram(self):
+        import subprocess
+        import threading
+        try:
+            from pip import main as pip_main
+            from pip.locations import virtualenv_no_global
+        except ImportError:
+            return QtWidgets.QErrorMessage(self).showMessage(
+                    'Você não possui o comando "pip". Este comando é necessário '
+                    'para realizar a atualização do Pytuguês. No Ubuntu, tente '
+                    'executar o comando "sudo apt-get install python3-pip" antes '
+                    'de tentar fazer a atualização.',
+                    'no-pip-error'
+            )
+
+        retcode = None
+        output = None
+
+        def run_pip():
+            nonlocal retcode, output
+
+            # Run pip install pytuga --user -U or some alternative
+            args = ['python3', '-m', 'pip', 'install', 'pytuga', '-U']
+            if not virtualenv_no_global():
+                args.append('--user')
+            try:
+                output = subprocess.check_output(
+                        args,
+                        universal_newlines=True,
+                        stderr=subprocess.STDOUT,
+                        timeout=5,
+                )
+            except subprocess.CalledProcessError:
+                dialog.reject()
+            except TimeoutError:
+                retcode = 'timeout'
+            else:
+                if 'Requirement already up-to-date: pytuga' in output:
+                    retcode = 'up-to-date'
+
+            dialog.accept()
+
+        # Create dialog and run
+        dialog = QtWidgets.QDialog(self)
+        dialog.setWindowTitle('Atualização de versão')
+        progress = QtWidgets.QProgressBar()
+        progress.setMinimum(0)
+        progress.setMaximum(0)
+        layout = QtWidgets.QVBoxLayout(dialog)
+        layout.addWidget(QtWidgets.QLabel('Buscando atualizações...'))
+        layout.addWidget(progress)
+
+        # Run pip and dialog simultaneously
+        task = threading.Thread(target=run_pip)
+        task.start()
+        is_ok = dialog.exec()
+        task.join(0.01)
+        print('out:', output)
+
+        if not is_ok or retcode == 'timeout':
+            QtWidgets.QMessageBox.critical(
+                    self, 'Erro',
+                    'Houve um problema na atualização. '
+                    'Por favor tente novamente mais tarde.\n\n'
+                    'Pip retornou a mensagem:\n' + (output or '<vazio>'),
+            )
+        elif retcode == 'up-to-date':
+            QtWidgets.QMessageBox.about(
+                    self, 'Nenhuma atualização encontrada',
+                    'Seu programa já estava na última versão.')
+        else:
+            QtWidgets.QMessageBox.about(
+                    self, 'Atualizado com sucesso',
+                    'Você deve reiniciar este programa agora.')
+
+
 
     #
     # Other commands and utility methods
