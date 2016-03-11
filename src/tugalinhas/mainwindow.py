@@ -5,20 +5,24 @@ from tugalinhas import TurtleWidget
 
 
 VERSION = pytuga.__version__
+PYTUGA_FILTER = 'Código fonte em Pytyguês (*.pytg *.py *.py3 *.py2)'
 
 
 class Tugalinhas(QtWidgets.QMainWindow):
-    '''
+    """
     Main window for Tugalinhas
-    '''
+    """
 
     def __init__(self):
         super().__init__()
-        self._filename = 'turtle-test.py'
+        self._filename = 'turtle-test.pytg'
         base = os.path.split(__file__)[0]
         uic.loadUi(os.path.join(base, 'main.ui'), self)
-        self._turtlewidget = TurtleWidget(header_text='Tugalinhas %s\nType `turtlehelp()` for a list of commands' % VERSION)
-        self._turtlescene = self._turtlewidget.scene
+        self._turtlewidget = TurtleWidget(
+                header_text='Tugalinhas %s\n'
+                            'Digite `turtlehelp()` para uma lista de comandos'
+                            % VERSION)
+        self._turtlescene = self._turtlewidget._scene
         self._layout = QtWidgets.QVBoxLayout(self.centralwidget)
         self._layout.addWidget(self._turtlewidget)
         self._layout.setContentsMargins(2, 0, 2, 2)
@@ -32,7 +36,8 @@ class Tugalinhas(QtWidgets.QMainWindow):
     # File operations
     #
     def openFile(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file')[0]
+        fname = QtWidgets.QFileDialog.getOpenFileName(
+                self, 'Abrir arquivo', filter=PYTUGA_FILTER)[0]
         if fname:
             with open(fname) as F:
                 data = F.read()
@@ -48,12 +53,40 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 F.write(self._turtlewidget.text())
 
     def saveFileAs(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file')[0]
+        fname = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Salvar arquivo', filter=PYTUGA_FILTER)[0]
         if fname:
             with open(fname, 'w') as F:
                 F.write(self._turtlewidget.text())
             self._filename = fname
         self.updateTitle()
+
+    def saveImageAs(self):
+        formats = QtGui.QImageWriter.supportedImageFormats()
+        formats = ['.' + bytes(x).decode() for x in formats]
+        fmt_string = ' '.join('*' + ext for ext in formats)
+
+        fname = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Salvar imagem', filter="Imagens (%s)" % fmt_string)[0]
+
+        if fname:
+            if os.path.splitext(fname)[1] not in formats:
+                QtWidgets.QErrorMessage.showMessage(
+                        'Arquivo inválido: %s.\n'
+                        'Extensão não reconhecida. Utilize um formato suportado '
+                        'como por exemplo ".png".' % fname,
+                        'save-image-as-error'
+                )
+            try:
+                self._turtlewidget.saveImage(fname)
+            except ValueError:
+                QtWidgets.QErrorMessage.showMessage(
+                        'Arquivo inválido: %s.\n'
+                        'Não foi possível salvar a tela no arquivo escolhido. '
+                        'Verifique se o caminho está acessível ou se as '
+                        'permissões são corretas.' % fname,
+                        'save-image-as-error'
+                )
 
     def newFile(self):
         self._filename = None
@@ -69,8 +102,20 @@ class Tugalinhas(QtWidgets.QMainWindow):
     def zoomOut(self):
         self._turtlewidget.zoomOut()
 
+    def fontZoomIn(self):
+        self._turtlewidget.fontZoomIn()
+
+    def fontZoomOut(self):
+        self._turtlewidget.fontZoomOut()
+
+    def fontZoomReset(self):
+        self._turtlewidget.fontZoomTo(1)
+
     def clearScene(self):
         self._turtlescene.clear()
+
+    def toggleEditorTheme(self):
+        self._turtlewidget.toggleTheme()
 
     #
     # help menu
@@ -82,7 +127,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(
                     self, 'qt5-webkit não está instalado',
                     'Por favor instale o pacote Qt5 Webkit para visualizar '
-                         'a documentação. Caso não possa instalar o pacote, vá'
+                    'a documentação. Caso não possa instalar o pacote, vá'
                     'para o site: http://pytuga.readthedocs.org/en/latest/'
             )
 

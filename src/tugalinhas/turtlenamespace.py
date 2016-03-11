@@ -12,7 +12,7 @@ from .mathutil import Vec
 from functools import wraps as _wraps
 from .mathutil import Vec as _Vec
 
-COLOR_TRANSLATIOSN = {
+COLOR_TRANSLATIONS = {
     'azul': 'blue',
     'amarelo': 'yellow',
     'vermelho': 'red',
@@ -366,9 +366,10 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         Não altera o estado da caneta após o deslocamento."""
 
-        self.ir_para(posição)
+        self.jumpto(posição)
 
-    @alias('levante')
+    @alias('levante', 'subir_caneta', 'suba_caneta',
+           'levantar_caneta', 'levante_caneta')
     def levantar(self):
         """Levanta a caneta do Tuga.
 
@@ -376,13 +377,14 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         self.penup()
 
-    @alias('abaixe')
+    @alias('abaixe', 'baixe_caneta', 'baixar_caneta',
+           'abaixar_caneta', 'abaixe_caneta')
     def abaixar(self):
         """Abaixa a caneta do Tuga.
 
         Deslocamentos na tela produzirão desenho."""
 
-        self.penup()
+        self.pendown()
 
     def desenhando(self):
         """Retorna verdadeiro se a caneta estiver abaixada e falso, caso
@@ -455,7 +457,7 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         if isinstance(cor, str):
             cor = cor.lower()
-            cor = COLOR_TRANSLATIOSN.get(cor, cor)
+            cor = COLOR_TRANSLATIONS.get(cor, cor)
         self.setcolor(cor)
 
     @alias('defina_cor_do_fundo')
@@ -467,7 +469,7 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         if isinstance(cor, str):
             cor = cor.lower()
-            cor = COLOR_TRANSLATIOSN.get(cor, cor)
+            cor = COLOR_TRANSLATIONS.get(cor, cor)
         self.setfill(cor)
 
     def espessura(self):
@@ -481,6 +483,7 @@ class TurtleNamespace(TurtleNamespaceEnglish):
 
         self.setwidth(px)
 
+    @alias('definir_velocidade', 'defina_velocidade')
     def velocidade(self, valor):
         """Modifica a velocidade de desenho do Tuga.
 

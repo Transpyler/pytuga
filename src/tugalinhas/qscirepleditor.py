@@ -9,11 +9,11 @@ class ReplEditor(QtWidgets.QWidget):
                  hide_console_margins=False,
                  namespace=None, **kwds):
         super().__init__(parent)
-        self.editor = PythonEditor(**kwds)
-        self.editor.runCode = self.runCode
-        self.console = PythonConsole(namespace=namespace,
-                                     header_text=header_text,
-                                     hide_margins=hide_console_margins, **kwds)
+        self._editor = PythonEditor(**kwds)
+        self._editor.runCode = self.runCode
+        self._console = PythonConsole(namespace=namespace,
+                                      header_text=header_text,
+                                      hide_margins=hide_console_margins, **kwds)
         
         # Create buttons and connect buttons
         run_button = QtWidgets.QPushButton('Run')
@@ -37,8 +37,8 @@ class ReplEditor(QtWidgets.QWidget):
         # Create top area with the Editor and the button area element
         top_widget = QtWidgets.QWidget()
         top_layout = QtWidgets.QVBoxLayout(top_widget)
-        top_layout.setContentsMargins(0, 0, 0, 0) 
-        top_layout.addWidget(self.editor)
+        top_layout.setContentsMargins(0, 0, 0, 0)
+        top_layout.addWidget(self._editor)
         top_layout.addWidget(buttons)
         self._top_widget = top_widget
         
@@ -47,7 +47,7 @@ class ReplEditor(QtWidgets.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         splitter = QtWidgets.QSplitter(QtCore.Qt.Orientation(0))
         splitter.addWidget(top_widget)
-        splitter.addWidget(self.console)
+        splitter.addWidget(self._console)
         splitter.setSizes([200, 120])
         splitter.setChildrenCollapsible(False)
         layout.addWidget(splitter)
@@ -61,58 +61,74 @@ class ReplEditor(QtWidgets.QWidget):
         return QtCore.QSize(100, 200)
         
     def runCode(self):
-        text = self.editor.text()
+        text = self._editor.text()
         if text:
-            result = self.console.executeCommand(text)
-            if result and self.console.isHidden():
+            result = self._console.executeCommand(text)
+            if result and self._console.isHidden():
                 self.toggleConsoleVisibility()
     
     def toggleConsoleVisibility(self):
-        if self.console.isHidden():
-            self.console.setHidden(False)
+        if self._console.isHidden():
+            self._console.setHidden(False)
             self._splitter.setSizes(self._splitter_sizes)
         else:
             self._splitter_sizes = self._splitter.sizes()
             self._splitter.setSizes([2**16, 1])
-            self.console.setHidden(True)
+            self._console.setHidden(True)
         
     def toggleEditorVisibility(self):
-        if self.editor.isHidden():
-            self.editor.setHidden(False)
+        if self._editor.isHidden():
+            self._editor.setHidden(False)
             self._splitter.setSizes(self._splitter_sizes)
         else:
             self._splitter_sizes = self._splitter.sizes()
             self._splitter.setSizes([1, 2**16])
-            self.editor.setHidden(True)
+            self._editor.setHidden(True)
         
     def hideUp(self):
-        if self.console.isHidden():
+        if self._console.isHidden():
             self.toggleConsoleVisibility()
-        elif not self.editor.isHidden():
+        elif not self._editor.isHidden():
             self.toggleEditorVisibility()
     
     def hideDown(self):
-        if self.editor.isHidden():
+        if self._editor.isHidden():
             self.toggleEditorVisibility()
-        elif not self.console.isHidden():
+        elif not self._console.isHidden():
             self.toggleConsoleVisibility()
             
     def setText(self, text):
-        self.editor.setText(text)
+        self._editor.setText(text)
         
     def text(self):
-        return self.editor.text()
-        
+        return self._editor.text()
+
+    def toggleTheme(self):
+        self._console.toggleTheme()
+        self._editor.toggleTheme()
+
+    def zoomIn(self):
+        self._console.zoomIn()
+        self._editor.zoomIn()
+
+    def zoomOut(self):
+        self._console.zoomOut()
+        self._editor.zoomOut()
+
+    def zoomTo(self, factor):
+        self._console.zoomTo(factor)
+        self._editor.zoomTo(factor)
+
     def __getattr__(self, attr):
         if 'Console' in attr:
             head, _, tail = attr.partition('Console')
-            return getattr(self.console, head + tail)
+            return getattr(self._console, head + tail)
         else:
             try:
-                return getattr(self.editor, attr)
+                return getattr(self._editor, attr)
             except AttributeError:
                 try:
-                    return getattr(self.console, attr)
+                    return getattr(self._console, attr)
                 except AttributeError:
                     tname = type(self).__name__
                     msg = '%s object has no attribute %s' % (tname, attr)

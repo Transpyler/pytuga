@@ -4,9 +4,11 @@ from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
-VERSION = '0.7.6-8'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
+DIRNAME = os.path.dirname(__file__)
 
+# Warn user about missing PyQt libraries. These cannot go into REQUIRES list
+# since PyQt is not instalable via pip
 try:
     import PyQt5.QtSvg
     import PyQt5.Qsci
@@ -18,8 +20,8 @@ except ImportError:
         '    https://riverbankcomputing.com/software/pyqt/download5\n')
 
 # Rewrite __version__.py in tugalib
-base, _ = os.path.split(__file__)
-version_file = os.path.join(base, 'src', 'tugalib', 'version.py')
+VERSION = open('VERSION').read().strip()
+version_file = os.path.join(DIRNAME, 'src', 'tugalib', 'version.py')
 with open(version_file, 'w') as F:
     F.write('__version__ = %r\n' % VERSION)
 
@@ -56,7 +58,7 @@ for i, (path, files) in enumerate(DATA_FILES):
     DATA_FILES[i] = (path, files)
 
 # Run setup() function
-setup(
+distribution = setup(
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
@@ -120,3 +122,14 @@ setup(
         data_files=DATA_FILES,
     zip_safe=False,
 )
+
+# Adds a symbolic link from executables in $HOME/.local/bin to $HOME/bin, if it
+# exists and if it is installed with the --user option.
+if ('user' in distribution.get_option_dict('install') and
+        os.path.exists(os.path.expanduser('~/bin/')) and
+        not os.path.exists(os.path.expanduser('~/bin/pytuga'))):
+
+    for file in ['tugalinhas', 'pytuga']:
+        local_bin = os.path.expanduser(os.path.join('~', '.local', 'bin', file))
+        home_bin = os.path.expanduser(os.path.join('~', 'bin', file))
+        os.symlink(local_bin, home_bin)

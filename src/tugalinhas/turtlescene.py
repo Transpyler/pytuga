@@ -81,6 +81,17 @@ class TurtleView(QtWidgets.QGraphicsView):
         s = "x=%s, y=%s" % (round(pos[0]), round(pos[1]))
         self._posLabel.setText(s)
 
+    def saveImage(self, fname):
+        rect = self.viewport()
+        rgb = QtGui.QImage.Format_RGB32
+        image = QtGui.QImage(rect.width(), rect.height(), rgb)
+        image.fill(QtGui.QColor(255, 255, 255))
+        painter = QtGui.QPainter(image)
+        self.render(painter)
+        if not image.save(fname):
+            raise ValueError('could not save image %s' % fname)
+        del painter
+
 
 class TurtleScene(QtWidgets.QGraphicsScene):
     """

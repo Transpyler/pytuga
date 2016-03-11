@@ -1,6 +1,6 @@
-'''
+"""
 The main editor with python syntax highlighting
-'''
+"""
 
 import keyword
 from PyQt5 import Qsci, QtGui, QtCore
@@ -24,14 +24,15 @@ Key_D = QtCore.Qt.Key_D
 # Python keywords and common functions for autocompletion
 PYTHON_WORDS = tuple(list(__builtins__) + keyword.kwlist)
 
+
 #
 # Thanks to Eli Bendersky:
 # http://eli.thegreenplace.net/2011/04/01/sample-using-qscintilla-with-pyqt
 #
 class PythonEditor(Qsci.QsciScintilla):
-    '''
+    """
     A Scintilla based text editor with Python syntax highlight.
-    '''
+    """
 
     NAMED_COLORS_INV = dict(
         lexer_default='default',
@@ -108,6 +109,11 @@ class PythonEditor(Qsci.QsciScintilla):
     )
     
     DEFAULT_COLORS = DARK_COLORS
+    THEMES = {
+        'dark': DARK_COLORS,
+        'light': LIGHT_COLORS,
+        'white': WHITE_COLORS,
+    }
     
     BOLD_STYLES = {1, 5, 9, 14}
     
@@ -119,12 +125,13 @@ class PythonEditor(Qsci.QsciScintilla):
         Operator=10, Identifier=11, CommentBlock=12, UnclosedString=13, 
         HighlightedIdentifier=14, Decorator=15)
     
-    def __init__(self, 
-            parent=None, *, 
-            fontsize=11, fontfamily='monospace', 
-            autocompletion_words=(), autocomplete_python=True,
-            **kwds
-        ):
+    def __init__(self,
+                 parent=None, *,
+                 fontsize=11, fontfamily='monospace',
+                 autocompletion_words=(), autocomplete_python=True,
+                 theme='dark',
+                 **kwds
+                 ):
         super().__init__(parent)
         
         # Fonts
@@ -164,12 +171,10 @@ class PythonEditor(Qsci.QsciScintilla):
         self.setAutoCompletionSource(Qsci.QsciScintilla.AcsAPIs)
         
         # Set colors
-        colors = dict(self.DEFAULT_COLORS)
-        for k, v in kwds.items():
-            if k.endswith('_color'):
-                colors[k[:-6]] = v
-        self.setColors(**colors)
-                
+        self._theme = theme
+        color_kwds = {k: v for (k, v) in kwds.items() if k.endswith('_color')}
+        self.setTheme(theme, **color_kwds)
+
         # Check for any rogue parameter
         if kwds:
             raise TypeError('invalid parameter: %r' % kwds.popitem()[0])
@@ -178,11 +183,11 @@ class PythonEditor(Qsci.QsciScintilla):
         return QtCore.QSize(100, 200)
         
     def setAllFonts(self, family='monospace', size=10, fixedpitch=True):
-        '''Set the font of all visible elements in the text editor.
-        
-        This syncronizes the font in the main text area with the margins and 
+        """Set the font of all visible elements in the text editor.
+
+        This syncronizes the font in the main text area with the margins and
         calltips.
-        '''
+        """
         self.fontfamily = family
         self.fontsize = size
         self.fontfixedpitch = True
@@ -201,7 +206,6 @@ class PythonEditor(Qsci.QsciScintilla):
         self.setMarginWidth(1, 0)
         self.setMarginLineNumbers(0, True)
         
-        
         # Change lexer font
         bfamily = bytes(family, encoding='utf8')
         lexer = self.lexer()
@@ -216,11 +220,11 @@ class PythonEditor(Qsci.QsciScintilla):
             self.SendScintilla(Qsci.QsciScintilla.SCI_STYLESETFONT, 1, bfamily)
             
     def setColors(self, **kwds):
-        '''Set colors for all given properties.
-        
-        Properties are of the form `margins_background` to set the 
+        """Set colors for all given properties.
+
+        Properties are of the form `margins_background` to set the
         `marginsBackgroundColor` property.
-        '''
+        """
         tasks = []
         
         # Handle color names:
@@ -267,8 +271,8 @@ class PythonEditor(Qsci.QsciScintilla):
             lexer.setColor(color, style_idx)
     
     def runCode(self):
-        '''Runs the source code in the editor when user press Control + Return
-        '''
+        """Runs the source code in the editor when user press Control + Return
+        """
         
     def keyPressEvent(self, ev):
         key = ev.key()
@@ -277,15 +281,15 @@ class PythonEditor(Qsci.QsciScintilla):
         # Auto indentation
         if modifiers & Control and key in (Return, Enter):
             self.runCode()
-            
-        # Change zoom factor
+
+        # Do not catch zoom factor changes
         elif modifiers & Control and key == Minus:
-            self.zoomOut()
+            pass
         elif modifiers & Control and key == Plus:
-            self.zoomIn()
+            pass
         elif modifiers & Control and key == Equal:
-            self.zoomTo(1)
-            
+            pass
+
         # Delete a line with Ctrl+D
         elif modifiers & Control and key == Key_D:
             if self.hasSelectedText():
@@ -299,3 +303,19 @@ class PythonEditor(Qsci.QsciScintilla):
         # Passthru to Scintilla
         else:
             super().keyPressEvent(ev)
+
+    def toggleTheme(self):
+        if self._theme == 'dark':
+            self.setTheme('light')
+        else:
+            self.setTheme('dark')
+
+    def theme(self):
+        return self._theme
+
+    def setTheme(self, theme, **kwds):
+        colors = dict(self.THEMES[theme])
+        for k, v in kwds.items():
+            colors[k[:-6]] = v
+        self.setColors(**colors)
+        self._theme = theme
