@@ -208,6 +208,26 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         return TurtleNamespace(self, D, **kwds)
 
     #
+    # Turtle visibility
+    #
+    def isTurtleVisible(self):
+        if self._turtle is None:
+            return False
+        return self._turtle.isVisible()
+
+    def isTurtleHidden(self):
+        return not self.isTurtleVisible()
+
+    def hideTurtle(self):
+        if self._turtle is not None:
+            self._turtle.hide()
+
+    def showTurtle(self):
+        if self._turtle is None:
+            raise TypeError('no turtle is defined')
+        self._turtle.show()
+
+    #
     # Communication with the TurtleNamespace object is done exclusively through
     # the two functions bellow
     #
@@ -266,9 +286,6 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         for attr, value in state.items():
             self.setTurtleState(attr, value, draw=False, delay=0)
 
-    #
-    # Set state helpers
-    #
     def __setHeading(self, angle, delay):
         startangle = self._turtle.tip_heading
         self._turtle.tip_heading = angle

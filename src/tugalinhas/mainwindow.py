@@ -113,7 +113,10 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self._scene.clear()
 
     def toggleTurtleVisibility(self):
-        pass
+        if self._scene.isTurtleVisible():
+            self._scene.hideTurtle()
+        else:
+            self._scene.showTurtle()
 
     def toggleScenegraphVisibility(self):
         if self._view.isVisible():
