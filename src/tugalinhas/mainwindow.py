@@ -7,6 +7,8 @@ from tugalinhas import TurtleWidget
 
 VERSION = pytuga.__version__
 PYTUGA_FILTER = 'Código fonte em Pytyguês (*.pytg *.py *.py3 *.py2)'
+PYTUGA_EXAMPLES_PAGE = 'http://pytuga.github.io/exemplos/'
+DIRNAME = os.path.split(__file__)[0]
 
 
 class Tugalinhas(QtWidgets.QMainWindow):
@@ -17,8 +19,9 @@ class Tugalinhas(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self._filename = 'turtle-test.pytg'
-        base = os.path.split(__file__)[0]
-        uic.loadUi(os.path.join(base, 'main.ui'), self)
+
+        # Layout
+        uic.loadUi(os.path.join(DIRNAME, 'main.ui'), self)
         self._turtlewidget = TurtleWidget(
                 header_text='Tugalinhas %s\n'
                             'Digite `turtlehelp()` para uma lista de comandos'
@@ -31,10 +34,12 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self._layout.setContentsMargins(2, 0, 2, 2)
         self._documentation_view = None
         self._upgrade_task = None
+
+        # Initialize sub-widgets and set some window properties
+        self.populateExamplesMenu()
         self.setMinimumSize(800, 600)
         self.updateTitle()
         self.setWindowIcon(_window_icon())
-
 
     #
     # File operations
@@ -145,6 +150,40 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 self._view.show()
         else:
             self._editor.show()
+
+    #
+    # Examples menu
+    #
+    def moreExamples(self):
+        if QtWidgets.QMessageBox.about(
+                self, 'Exemplos',
+                        'Você pode encontrar mais exemplos no website do Pytuguês na página'
+                        '%s. Você deseja ser direcionado para este site?'
+                        % PYTUGA_EXAMPLES_PAGE):
+            # Open examples
+            # TODO: Make it portable or open a small web-browser.
+            import os
+            os.system('google-chrome-stable %s' % PYTUGA_EXAMPLES_PAGE)
+
+    def _showExampleFactory(self, file):
+        def callback():
+            with open(file) as F:
+                data = F.read()
+            self._editor.editor().setText(data)
+
+        return callback
+
+    def populateExamplesMenu(self):
+        path = os.path.join(DIRNAME, 'examples')
+        menu = self.menuExamples
+        separator = menu.actions()[0]
+        for file in sorted(os.listdir(path)):
+            filepath = os.path.join(path, file)
+            name = file[:-5].replace('_', ' ').title()
+            action = QtWidgets.QAction(name, self)
+            menu.insertAction(separator, action)
+            action.triggered.connect(self._showExampleFactory(filepath))
+
 
     #
     # help menu

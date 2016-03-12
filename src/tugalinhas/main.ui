@@ -80,9 +80,17 @@
     <addaction name="actionInverter_tema"/>
     <addaction name="actionToggleEditorVisibility"/>
    </widget>
+   <widget class="QMenu" name="menuExamples">
+    <property name="title">
+     <string>Exemplos</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionMais_exemplos"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEditor"/>
    <addaction name="menuTela"/>
+   <addaction name="menuExamples"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNovo">
@@ -220,6 +228,14 @@
   <action name="actionOcultar_mostar_tuga">
    <property name="text">
     <string>Ocultar/mostar Tuga</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F10</string>
+   </property>
+  </action>
+  <action name="actionMais_exemplos">
+   <property name="text">
+    <string>Mais exemplos...</string>
    </property>
   </action>
  </widget>
@@ -549,5 +565,7 @@
   <slot>toggleEditorVisibility()</slot>
   <slot>toggleScenegraphVisibility()</slot>
   <slot>toggleTurtleVisibility()</slot>
+  <slot>moreExamples()</slot>
+  <slot>openExample(str)</slot>
  </slots>
 </ui>

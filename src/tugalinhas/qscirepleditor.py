@@ -56,7 +56,13 @@ class ReplEditor(QtWidgets.QWidget):
         
         # Size hints
         self.setMinimumSize(QtCore.QSize(100, 200))
-        
+
+    def console(self):
+        return self._console
+
+    def editor(self):
+        return self._editor
+
     def sizeHint(self):
         return QtCore.QSize(100, 200)
         
