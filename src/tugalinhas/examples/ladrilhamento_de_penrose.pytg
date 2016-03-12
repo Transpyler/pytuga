@@ -1,12 +1,8 @@
 # Uma pequena mandala
 N = 10
 M = 10
-repetir
-M
-vezes:
-esquerda(360 / M)
-repetir
-N
-vezes:
-frente(200 / raiz(N))
-esquerda(360 / N)
+repetir M vezes:
+    esquerda(360 / M)
+    repetir N vezes:
+        frente(200 / raiz(N))
+        esquerda(360 / N)
