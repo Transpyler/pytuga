@@ -6,6 +6,15 @@ from pygments.lexer import RegexLexer
 from pygments.lexer import bygroups, default, words
 from pygments.lexers.python import Python3Lexer, PythonTracebackLexer
 
+# Define constants
+from pytuga import keyword
+from tugalib import instrospect as tuga_introspect
+
+PYTUGA_KEYWORDS = keyword.kwlist
+PYTUGA_CONSTANTS = keyword.constants
+PYTUGA_EXCEPTIONS = tuga_introspect.py_exceptions + tuga_introspect.exceptions
+PYTUGA_BUILTINS = tuga_introspect.py_builtins + tuga_introspect.builtins
+
 
 class PytugaLexer(RegexLexer):
 
@@ -15,7 +24,7 @@ class PytugaLexer(RegexLexer):
 
     name = 'Pytuga'
     aliases = ['pytuga', 'pytg', 'pytuguês']
-    filenames = ['pytg']  # Nothing until Python 3 gets widespread
+    filenames = ['pytg']
     mimetypes = ['text/x-pytuga', 'application/x-pytuga']
 
     flags = re.MULTILINE | re.UNICODE
@@ -25,53 +34,13 @@ class PytugaLexer(RegexLexer):
     tokens = Python3Lexer.tokens.copy()  # @UndefinedVariable
 
     tokens['keywords'] = [
-        (words((
-            'assert', 'break', 'continue', 'del', 'elif', 'else', 'except',
-            'finally', 'for', 'global', 'if', 'lambda', 'pass', 'raise',
-            'nonlocal', 'return', 'try', 'while', 'yield', 'yield from', 'as',
-            'with'), suffix=r'\b'),
-         Keyword),
-        (words((
-            'True', 'False', 'None'), suffix=r'\b'),
-         Keyword.Constant),
+        (words(PYTUGA_KEYWORDS, suffix=r'\b'), Keyword),
+        (words(PYTUGA_CONSTANTS, suffix=r'\b'), Keyword.Constant),
     ]
     tokens['builtins'] = [
-        (words((
-            '__import__', 'abs', 'all', 'any', 'bin', 'bool', 'bytearray', 'bytes',
-            'chr', 'classmethod', 'cmp', 'compile', 'complex', 'delattr', 'dict',
-            'dir', 'divmod', 'enumerate', 'eval', 'filter', 'float', 'format',
-            'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'hex', 'id',
-            'input', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list',
-            'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct',
-            'open', 'ord', 'pow', 'print', 'property', 'range', 'repr', 'reversed',
-            'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str',
-            'sum', 'super', 'tuple', 'type', 'vars', 'zip'), prefix=r'(?<!\.)',
-            suffix=r'\b'),
-         Name.Builtin),
-        (r'(?<!\.)(self|Ellipsis|NotImplemented)\b',
-         Name.Builtin.Pseudo),  # @UndefinedVariable
-        (words((
-            'ArithmeticError', 'AssertionError', 'AttributeError',
-            'BaseException', 'BufferError', 'BytesWarning', 'DeprecationWarning',
-            'EOFError', 'EnvironmentError', 'Exception', 'FloatingPointError',
-            'FutureWarning', 'GeneratorExit', 'IOError', 'ImportError',
-            'ImportWarning', 'IndentationError', 'IndexError', 'KeyError',
-            'KeyboardInterrupt', 'LookupError', 'MemoryError', 'NameError',
-            'NotImplementedError', 'OSError', 'OverflowError',
-            'PendingDeprecationWarning', 'ReferenceError', 'ResourceWarning',
-            'RuntimeError', 'RuntimeWarning', 'StopIteration',
-            'SyntaxError', 'SyntaxWarning', 'SystemError', 'SystemExit', 'TabError',
-            'TypeError', 'UnboundLocalError', 'UnicodeDecodeError',
-            'UnicodeEncodeError', 'UnicodeError', 'UnicodeTranslateError',
-            'UnicodeWarning', 'UserWarning', 'ValueError', 'VMSError', 'Warning',
-            'WindowsError', 'ZeroDivisionError',
-            # new builtin exceptions from PEP 3151
-            'BlockingIOError', 'ChildProcessError', 'ConnectionError',
-            'BrokenPipeError', 'ConnectionAbortedError', 'ConnectionRefusedError',
-            'ConnectionResetError', 'FileExistsError', 'FileNotFoundError',
-            'InterruptedError', 'IsADirectoryError', 'NotADirectoryError',
-            'PermissionError', 'ProcessLookupError', 'TimeoutError'),
-            prefix=r'(?<!\.)', suffix=r'\b'),
+        (words(PYTUGA_BUILTINS, prefix=r'(?<!\.)', suffix=r'\b'), Name.Builtin),
+        (r'(?<!\.)(self|Ellipsis|NotImplemented)\b', Name.Builtin.Pseudo),
+        (words(PYTUGA_EXCEPTIONS, prefix=r'(?<!\.)', suffix=r'\b'),
          Name.Exception),
     ]
     tokens['numbers'] = [
@@ -130,9 +99,3 @@ class PytugaLexer(RegexLexer):
 class PytugaTracebackLexer(PythonTracebackLexer):
     pass
 
-
-def mokey_patch():
-    '''Mokey patch pygments in order to accept pytuga source'''
-
-if __name__ == '__main__':
-    pass

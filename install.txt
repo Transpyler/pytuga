@@ -9,6 +9,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalib/util.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/tuga_math.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/qscieditor.py
+/home/chips/.local/lib/python3.5/site-packages/tugalinhas/turtle-test.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/turtleobject.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/mathutil.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/qsciconsole.py
@@ -84,6 +85,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/util.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/tuga_math.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/qscieditor.cpython-35.pyc
+/home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/turtle-test.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/turtleobject.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/mathutil.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/qsciconsole.cpython-35.pyc
@@ -171,12 +173,12 @@
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_math.html
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_std.html
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_io.html
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/top_level.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/not-zip-safe
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/pbr.json
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/entry_points.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/SOURCES.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/PKG-INFO
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.0-py3.5.egg-info/dependency_links.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/top_level.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/not-zip-safe
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/pbr.json
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/entry_points.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/SOURCES.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/PKG-INFO
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/dependency_links.txt
 /home/chips/.local/bin/pytuga
 /home/chips/.local/bin/tugalinhas

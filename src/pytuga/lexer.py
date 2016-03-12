@@ -1,75 +1,13 @@
-import keyword
+from copy import deepcopy
 import tokenize
 from tokenize import TokenInfo
 from tokenize import (NAME, OP, NEWLINE, EXACT_TOKEN_TYPES, NUMBER)
-from copy import deepcopy
+from pytuga.keyword import TRANSLATIONS as TOKEN_TRANSLATIONS
 
 __all__ = ['transpile', 'compile', 'exec']
 TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
                             if attr.isupper() and isinstance(tt, int)}
-TOKEN_TRANSLATIONS = dict(
-    # Loops
-    enquanto='while',
-    para='for',
-    quebre='break',
-    quebrar='break',
-    continuar='continue',
-    # continue='continue',
-    # para cada='for'
 
-    # Conditions
-    se='if',
-    senão='else',
-    # ou então se='elif'
-    # ou se='elif'
-
-    # Singleton values
-    Falso='False',
-    falso='False',
-    Verdadeiro='True',
-    verdadeiro='True',
-    nulo='None',
-    Nulo='None',
-
-    # Operators
-    é='is',
-    e='and',
-    ou='or',
-    não='not',
-    em='in',
-    na='in',
-    no='in',
-    como='as',
-
-    # Function definition
-    função='def',
-    definir='def',
-    defina='def',
-    retorne='return',
-    retornar='return',
-    gere='yield',
-    gerar='yield',
-
-    # Error handling
-    tente='try',
-    tentar='try',
-    exceção='except',
-    finalmente='finally',
-    # jogue erro='raise'?
-
-    # Other
-    apague='del',
-    prossiga='pass',
-    classe='class',
-    importe='import',
-    importar='import',
-    #abrir='with'?
-    # global='global',
-)
-PURE_PYTG_KEYWORDS = set(TOKEN_TRANSLATIONS)
-PURE_PYTG_KEYWORDS.update({'repetir', 'repita', 'vezes', 'cada', 'de', 'até'})
-KEYWORDS = set(PURE_PYTG_KEYWORDS)
-KEYWORDS.update(keyword.kwlist)
 
 
 class Token:

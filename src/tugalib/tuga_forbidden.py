@@ -12,6 +12,7 @@ __all__ = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
 # These classes are mixed with regular builtins using the forbiddenfruit
 # package
 #
+
 class Lista(list):
     """Uma lista representa uma sequência de objetos.
 

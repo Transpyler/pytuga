@@ -23,7 +23,9 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 header_text='Tugalinhas %s\n'
                             'Digite `turtlehelp()` para uma lista de comandos'
                             % VERSION)
-        self._turtlescene = self._turtlewidget._scene
+        self._scene = self._turtlewidget.scene()
+        self._view = self._turtlewidget.view()
+        self._editor = self._turtlewidget.editor()
         self._layout = QtWidgets.QVBoxLayout(self.centralwidget)
         self._layout.addWidget(self._turtlewidget)
         self._layout.setContentsMargins(2, 0, 2, 2)
@@ -96,7 +98,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
         self.updateTitle()
 
     #
-    # View menu
+    # Screen menu
     #
     def zoomIn(self):
         self._turtlewidget.zoomIn()
@@ -104,20 +106,42 @@ class Tugalinhas(QtWidgets.QMainWindow):
     def zoomOut(self):
         self._turtlewidget.zoomOut()
 
+    def fontZoomReset(self):
+        self._turtlewidget.fontZoomTo(1)
+
+    def clearScene(self):
+        self._scene.clear()
+
+    def toggleTurtleVisibility(self):
+        pass
+
+    def toggleScenegraphVisibility(self):
+        if self._view.isVisible():
+            self._view.hide()
+            if self._editor.isHidden():
+                self._editor.show()
+        else:
+            self._view.show()
+
+    #
+    # Editor menu
+    #
     def fontZoomIn(self):
         self._turtlewidget.fontZoomIn()
 
     def fontZoomOut(self):
         self._turtlewidget.fontZoomOut()
 
-    def fontZoomReset(self):
-        self._turtlewidget.fontZoomTo(1)
-
-    def clearScene(self):
-        self._turtlescene.clear()
-
     def toggleEditorTheme(self):
         self._turtlewidget.toggleTheme()
+
+    def toggleEditorVisibility(self):
+        if self._editor.isVisible():
+            self._editor.hide()
+            if self._view.isHidden():
+                self._view.show()
+        else:
+            self._editor.show()
 
     #
     # help menu
