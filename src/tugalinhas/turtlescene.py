@@ -131,13 +131,11 @@ class TurtleScene(QtWidgets.QGraphicsScene):
     clear_screen_signal = QtCore.pyqtSignal()
     restart_screen_signal = QtCore.pyqtSignal()
 
-    @QtCore.pyqtSlot()
     def clearScreen(self):
         state = self.fullTurtleState()
         self.clear()
         self.setFullTurtleState(state)
 
-    @QtCore.pyqtSlot()
     def restartScreen(self):
         self.clear()
 
@@ -165,8 +163,8 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         Each task return a True/False value telling if the scheduler should
         wait for the next frame to process the next task."""
 
-        for result in self.iterTasks():
-            if result:
+        for should_wait_flag in self.iterTasks():
+            if should_wait_flag:
                 return
 
     def timerEvent(self, timer):
@@ -175,6 +173,13 @@ class TurtleScene(QtWidgets.QGraphicsScene):
         It process all queued animation _tasks."""
 
         self.consumeTask()
+
+    def flushExecution(self):
+        while self._tasks:
+            for _task_result in self._tasks[0]:
+                pass
+            else:
+                self._tasks.popleft()
 
     #
     # Turtle control

@@ -131,6 +131,9 @@ class Tugalinhas(QtWidgets.QMainWindow):
         else:
             self._view.show()
 
+    def flushExecution(self):
+        self._turtlewidget.flushExecution()
+
     #
     # Editor menu
     #

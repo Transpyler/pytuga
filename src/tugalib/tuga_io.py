@@ -8,6 +8,7 @@ ou arquivos, seja mostrando valores na tela.
 
 from tugalib.util import synonyms
 
+_pause_function = None
 
 @synonyms('mostre')
 def mostrar(*args):
@@ -43,6 +44,16 @@ def ler_texto(mensagem=''):
     if isinstance(mensagem, str) and mensagem:
         mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
     return input(mensagem)
+
+
+@synonyms('pausa', 'pause')
+def pausar():
+    """Interrompe a execução até o usuário apertar a tecla <enter>"""
+
+    if _pause_function is None:
+        ler_texto('Aperte <enter> para continuar')
+    else:
+        _pause_function()
 
 
 @synonyms('leia_número')

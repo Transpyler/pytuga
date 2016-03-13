@@ -76,3 +76,6 @@ class TurtleWidget(QtWidgets.QWidget):
 
     def saveImage(self, fname):
         self._view.saveImage(fname)
+
+    def flushExecution(self):
+        self._scene.flushExecution()

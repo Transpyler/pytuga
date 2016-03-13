@@ -310,8 +310,8 @@ class TurtleNamespaceEnglish(MutableMapping):
             except AttributeError:
                 pass
         print('\n\n'.join(L))
-    
-    
+
+
 #
 # Pytuguês -- default temporário
 #

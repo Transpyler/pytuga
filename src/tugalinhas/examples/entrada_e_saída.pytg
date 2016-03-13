@@ -1,0 +1,15 @@
+#=========================================================#
+# Desenhamos uma espécie de mandala com os parâmetros
+# controlados pelo usuário.
+#=========================================================#
+
+enquanto verdadeiro:
+    N = leia_número("Escolha o número de lados da figura geométrica: ")
+    M = leia_número("Escolha o número de repetições na mandala: ")
+    repetir M vezes:
+        esquerda(360 / M)
+        repetir N vezes:
+            frente(200 / raiz(N))
+            esquerda(360 / N)
+    pausa()
+    limpar()

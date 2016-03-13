@@ -18,13 +18,6 @@ def dormir(intervalo):
     _time.sleep(intervalo)
 
 
-@synonyms('pausa', 'pause')
-def pausar():
-    """Interrompe a execução até o usuário apertar a tecla <enter>"""
-
-    input('')
-
-
 @synonyms('termine')
 def terminar():
     """

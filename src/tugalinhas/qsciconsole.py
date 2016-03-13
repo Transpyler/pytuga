@@ -57,7 +57,24 @@ class QMeta(abc.ABCMeta, type(QtCore.QObject)):
 
 
 class AbstractRunner(QtCore.QObject, metaclass=QMeta):
-    input_received = QtCore.pyqtSignal(str)
+    askInputSignal = QtCore.pyqtSignal(str)
+    receiveInputSignal = QtCore.pyqtSignal(str)
+    pauseExecutionSignal = QtCore.pyqtSignal()
+    resumeExecutionSignal = QtCore.pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+        self._waiting = False
+        self._userinput = None
+        self.resumeExecutionSignal.connect(self._resumeExecution)
+        self.receiveInputSignal.connect(self._receiveInput)
+
+    def _resumeExecution(self):
+        self._waiting = False
+
+    def _receiveInput(self, value):
+        self._resumeExecution()
+        self._userinput = value
 
     @abc.abstractmethod
     def checkComplete(self, src):
@@ -107,32 +124,30 @@ class PythonRunner(AbstractRunner):
 
     # TODO: make this run as a subprocess
 
-    def __init__(self, namespace=None, input_signal=None):
+    def __init__(self, namespace=None):
         super().__init__()
         self._namespace = dict(namespace or {})
-        self._input_signal = input_signal
-        self._waiting = False
-        self._last_input = None
-        self.input_received.connect(self.setInputValueSlot)
 
         # Import forbidden symbols
-        from tugalib import tuga_forbidden
+        from tugalib import tuga_io
 
         @functools.wraps(input)
         def input_function(msg=None):
             self._waiting = True
-            self._last_input = None
-            self._input_signal.emit(str(msg or ''))
+            self._userinput = None
+            self.askInputSignal.emit(str(msg or ''))
             while self._waiting:
                 time.sleep(0.05)
-            return self._last_input
+            return self._userinput
 
+        def pause_function():
+            self._waiting = True
+            self.pauseExecutionSignal.emit()
+            while self._waiting:
+                time.sleep(0.05)
+
+        tuga_io._pause_function = pause_function
         self._namespace['input'] = input_function
-
-    @QtCore.pyqtSlot(str)
-    def setInputValueSlot(self, value):
-        self._last_input = value
-        self._waiting = False
 
     def checkComplete(self, src):
         header, *_ = src.splitlines()
@@ -243,8 +258,7 @@ class PythonConsole(PythonEditor):
     A Scintilla based console.
     """
 
-    _ask_input_signal = QtCore.pyqtSignal(str)
-    _print_to_console_signal = QtCore.pyqtSignal(str, bool)
+    printToConsoleSignal = QtCore.pyqtSignal(str, bool)
 
     def __init__(self,
                  parent=None, *,
@@ -258,12 +272,11 @@ class PythonConsole(PythonEditor):
             self.setMarginWidth(1, 0)
         self._current_command = []
 
-        # Input signals
-        self._runner = runner or PyTugaRunner(dict(namespace or {}), input_signal=self._ask_input_signal)
-        self._ask_input_signal.connect(self.inputDialogSlot)
-
-        # Qt
-        self._print_to_console_signal.connect(self.printToConsoleSlot)
+        # Connect signals to runner
+        self._runner = runner or PyTugaRunner(dict(namespace or {}))
+        self._runner.askInputSignal.connect(self.inputDialog)
+        self._runner.pauseExecutionSignal.connect(self.pauseDialog)
+        self.printToConsoleSignal.connect(self.printToConsole)
 
         # Set header text
         if header_text is None:
@@ -276,23 +289,27 @@ class PythonConsole(PythonEditor):
 
         # Start lexer and history
         self._pylexer = self.lexer()
-        self._history = []
-        self._history_idx = 0
+        self._history = History()
 
         # Configure timer for polling runner object (60 fps)
         self.startTimer(100 / 6)
         self._background_tasks = deque()
 
-    @QtCore.pyqtSlot(str)
-    def inputDialogSlot(self, message):
+    def inputDialog(self, message):
         """Ask user for input. Return a string with the user supplied value."""
 
-        text, ok = QtWidgets.QInputDialog.getText(None, 'Input text', message or 'Input:')
-        self._runner.input_received.emit(text)
+        text, ok = QtWidgets.QInputDialog.getText(
+                self, 'Entrada de dados',
+                message or 'Valor:'
+        )
+        self._runner.receiveInputSignal.emit(text)
 
-    @QtCore.pyqtSlot(str, bool)
-    def printToConsoleSlot(self, text, add_newline):
-        self.printToConsole(text, add_newline)
+    def pauseDialog(self):
+        QtWidgets.QMessageBox.about(
+                self, 'Esperando...',
+                'Pressione "OK" para continuar'
+        )
+        self._runner.resumeExecutionSignal.emit()
 
     def printToConsole(self, text, add_newline=True):
         self.insert(text)
@@ -348,6 +365,12 @@ class PythonConsole(PythonEditor):
             else:
                 return False
 
+    def getCurrentCommand(self):
+        lines = list(self._current_command)
+        lineno, _ = self.getCursorPosition()
+        lines.append(self.text(lineno)[4:])
+        return '\n'.join(lines)
+
     def processCurrentCommand(self):
         """Process the current command."""
 
@@ -358,14 +381,13 @@ class PythonConsole(PythonEditor):
         else:
             def run_command():
                 if cmd.strip():
-                    self._history.append(cmd)
-                    self._history_idx = 0
+                    self._history.add(cmd)
                     result = self.run(cmd.strip() + '\n', 'single')
                 else:
                     result = ''
 
                 # Insert result in text
-                self._print_to_console_signal.emit(result, bool(result))
+                self.printToConsoleSignal.emit(result, bool(result))
 
             self.scheduleBackgroundTask(run_command)
 
@@ -378,10 +400,9 @@ class PythonConsole(PythonEditor):
         def run_command():
             if not cmd.strip():
                 return
-            self._history.append(cmd)
-            self._history_idx = 0
             result = self.run(cmd.strip() + '\n', mode)
-            self._print_to_console_signal.emit('...\n' + result, True)
+            if result:
+                self.printToConsoleSignal.emit('...\n' + result, True)
 
         self.scheduleBackgroundTask(run_command)
 
@@ -520,14 +541,16 @@ class PythonConsole(PythonEditor):
 
         # Chooses commands in history
         elif key in (Up, Down):
-            delta = 1 if key else 1 
-            N = len(self._history)
-            if N:
-                idx = (N - self._history_idx - delta) % N
-                self.replaceCurrentBy(self._history[idx])
-                self._history_idx += delta
+            if not self._history.browsing:
+                cmd = self.getCurrentCommand()
+                self._history.add(cmd, is_complete=False)
+                self._history.browsing = True
+
+            if key == Up:
+                self._history.incr()
             else:
-                self.cancelCurrent()
+                self._history.decr()
+            self.replaceCurrentBy(self._history.get())
 
         # Ctrl + D deletes the current command
         elif modifiers & Control and key == D:
@@ -561,3 +584,72 @@ def _splitindent(line):
     while line[idx] in [' ', '\t']:
         idx += 1
     return line[:idx], line[idx:]
+
+
+class HistoryItem:
+    def __init__(self, command, is_complete=True):
+        self.command = str(command)
+        self.is_complete = is_complete
+
+    def __str__(self):
+        return self.command
+
+    def __repr__(self):
+        return ('' if self.is_complete else '*') + repr(self.command)
+
+    def __hash__(self):
+        return hash(self.command)
+
+    def __eq__(self, other):
+        if isinstance(other, HistoryItem):
+            return self.command == other.command
+        elif isinstance(other, str):
+            return self.command == other.command
+        else:
+            return NotImplemented
+
+
+class History:
+    def __init__(self):
+        self._data = [HistoryItem('')]
+        self.index = 0
+        self.browsing = False
+
+    def add(self, element, is_complete=None, reset_index=True, clean=True):
+        # Prepare history
+        if clean:
+            self.clean()
+        if reset_index:
+            self.index = 0
+
+        # Add element
+        elem = HistoryItem(element)
+        try:
+            del self._data[self._data.index(elem)]
+            is_present = True
+        except ValueError:
+            is_present = False
+
+        if is_complete is not None:
+            elem.is_complete = is_present or is_complete
+        self._data.append(elem)
+
+    def incr(self):
+        self.index += 1
+
+    def decr(self):
+        self.index -= 1
+
+    def clean(self):
+        self._data = [x for x in self._data if x.is_complete]
+        self.browsing = False
+
+    def get(self):
+        N = len(self._data)
+        return self._data[(N - self.index) % N].command
+
+    def __str__(self):
+        return str(self._data)
+
+    def __len__(self):
+        return len(self._data)
