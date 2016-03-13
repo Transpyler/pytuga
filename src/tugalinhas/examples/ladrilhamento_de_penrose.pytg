@@ -1,4 +1,14 @@
-# Uma pequena mandala
+#=========================================================#
+# Controlando os parâmetros M e N, é possível criar
+# diversas figuras interessantes parecidas com mandalas.
+#
+# Escolhemos um caso especial que forma um tipo de
+# ladrilhamento de Penrose. A propriedade matemática
+# interessante desta figura é que os dois losangos podem
+# ser combinados para preencher completamente o plano,
+# mas sem necessariamente executar um padrão regular.
+#=========================================================#
+
 N = 10
 M = 10
 repetir M vezes:

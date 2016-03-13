@@ -282,20 +282,28 @@ def test_separate_command_blocks_regression():
 
 def test_function_with_long_docstring():
     ptsrc = '''
-block:
+função foo():
     """
     x
     """
     x
 '''
     pysrc = '''
-block:
+def foo():
     """
     x
     """
     x
 '''
     assert pytg(ptsrc) == py(pysrc)
+
+
+def test_full_conditional_command():
+    ptsrc = 'se x então faça:\n    pass'
+    pysrc = 'if x:\n   pass'
+    assert pytg(ptsrc) == py(pysrc)
+
+
 
 if __name__ == '__main__':
     import os

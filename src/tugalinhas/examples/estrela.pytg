@@ -1,4 +1,15 @@
-# Desenhamos uma estrela
-repetir 5 vezes:
+#=========================================================#
+# Podemos desenhar figuras que lembram estrelas ou figuras
+# geométricas regulares utilizando um código muito parecido.
+# O parâmetro M controla o número de lados enquanto N diz
+# quantas voltas serão realizadas no total. Figuras
+# regulares são produzidas com N = 1. Outras combinações
+# podem produzir estrelas (ou às vezes um resultado
+# decepcionante).
+#=========================================================#
+
+M = 5
+N = 2
+repetir M vezes:
     frente(200)
-    esquerda(144)
+    esquerda(360 * N / M)

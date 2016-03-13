@@ -286,7 +286,7 @@ def transpile_tk(tokens):
         ('para', 'cada'): 'for',
 
         # Conditions
-        ('então', 'faça'): 'faça',
+        ('então', 'faça', ':'): ':',
         ('então', ':'): ':',
         ('ou', 'então', 'se'): 'elif',
         ('ou', 'se'): 'elif',
@@ -507,10 +507,8 @@ def tostring(tokens):
 
 if __name__ == '__main__':
     ptsrc = '''
-se x então:
+se x então faça:
     dsfsdf
-ou então se:
-    pass
 '''
 
     tokens = fromstring(ptsrc)
