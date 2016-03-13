@@ -9,11 +9,11 @@ TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
                             if attr.isupper() and isinstance(tt, int)}
 
 
-
 class Token:
     """Mutable token object."""
 
-    def __init__(self, data, type=None, start=None, end=None, line=None):
+    def __init__(self, data, type=None, start=None, end=None, line=None,
+                 abstract=False):
 
         # Start from TokenInfo object
         if isinstance(data, TokenInfo):
@@ -24,14 +24,19 @@ class Token:
             assert all(x is None for x in [type, start, end, line])
             data, type, start, end, line = data
 
-        elif isinstance(data, (int, float)):
+        elif isinstance(data, int):
             type = data
             data = None
 
         if start is not None:
             start = TokenPosition(start)
             if end is None:
-                end = start + (0, len(data))
+                if '\n' not in data:
+                    end = start + (0, len(data))
+                else:
+                    lineno = end.lineno + end.count('\n')
+                    col = len(data.rpartition('\n')[-1])
+                    end = TokenPosition(lineno, col)
         if end is not None:
             end = TokenPosition(end)
         if type is None:
@@ -42,6 +47,8 @@ class Token:
             else:
                 if data.isidentifier():
                     type = NAME
+                elif data.isdigit():
+                    type = NUMBER
                 else:
                     raise TypeError('could not recognize token: %r' % data)
 
@@ -50,6 +57,30 @@ class Token:
         self.start = start
         self.end = end
         self.line = line
+        if not abstract:
+            if start is None or end is None:
+                raise ValueError('could not define start/end of concrete token')
+        else:
+            if start is not None or end is not None:
+                raise ValueError('cannot define start/end positions of '
+                                 'abstract token')
+
+    @classmethod
+    def from_strings(cls, start, *strings):
+        """Return a list of strings starting at the given starting point and
+        return the corresponding strings with the correct start/end positions"""
+
+        tk_list = []
+        start = TokenPosition(start)
+        is_fragile = False
+        for string in strings:
+            if is_fragile and string.isidentifier():
+                start += (0, 1)
+            tok = Token(string, start=start)
+            start = tok.end
+            is_fragile = string.isidentifier()
+            tk_list.append(tok)
+        return tk_list
 
     def __eq__(self, other):
         if isinstance(other, Token):
@@ -112,7 +143,43 @@ class Token:
         """Convert to TokenInfo object used by Python's tokenizer."""
 
         return TokenInfo(
-            self.type, self.string, self.start, self.end, self.line)
+                self.type, self.string, self.start, self.end, self.line
+        )
+
+    def displace(self, cols):
+        """Displace token in line by cols columns to the right."""
+
+        self.start += (0, cols)
+        if self.end.lineno == self.start.lineno:
+            self.end += (0, cols)
+
+
+def displace_tokens(tokens, cols):
+    """Displace all tokens in list which are in the same line as the the first
+    token by the given number of columns"""
+
+    if not tokens or cols == 0:
+        return
+    lineno = tokens[0].start.lineno
+
+    for token in tokens:
+        if token.start.lineno == lineno:
+            token.displace(cols)
+        else:
+            break
+
+
+def insert_tokens_at(tokens, idx, new_tokens, end=None):
+    """Insert new_tokens at tokens list at the given idx"""
+
+    if end is not None:
+        linediff, col = new_tokens[-1].end - end
+        if linediff == 0 and end.lineno == tokens[idx].start.lineno:
+            displace_tokens(tokens[idx:], col)
+
+    for tk in new_tokens:
+        tokens.insert(idx, tk)
+        idx += 1
 
 
 class TokenPosition(tuple):
@@ -201,8 +268,10 @@ def transpile_tk(tokens):
     iterator = token_find(tokens, matches)
     while True:
         try:
-            idx, match = next(iterator)
-            iterator.send(['raise', SyntaxError])
+            idx, match, start, end = next(iterator)
+            match = ' '.join(match)
+            raise SyntaxError('Repetição inválida na linha %s: %s' %
+                              (tokens[idx].start.lineno, match))
         except StopIteration:
             break
 
@@ -210,29 +279,34 @@ def transpile_tk(tokens):
     # replaced by equivalent sequences of Python tokens
     convs = {
         # Block ending
-        ('faça', ':') : Token(':'),
-        ('fazer', ':'): Token(':'),
+        ('faça', ':'): ':',
+        ('fazer', ':'): ':',
 
         # Loops
-        ('para', 'cada'): Token('for'),
+        ('para', 'cada'): 'for',
 
         # Conditions
-        ('então', 'faça'): Token('faça'),
-        ('então', ':'): Token(':'),
-        ('ou', 'então', 'se'): Token('elif'),
-        ('ou', 'se'): Token('elif'),
+        ('então', 'faça'): 'faça',
+        ('então', ':'): ':',
+        ('ou', 'então', 'se'): 'elif',
+        ('ou', 'se'): 'elif',
 
         # Definitions
-        ('definir', 'função'): Token('def'),
-        ('defina', 'função'): Token('def'),
-        ('definir', 'classe'): Token('class'),
-        ('defina', 'classe'): Token('class'),
+        ('definir', 'função'): 'def',
+        ('defina', 'função'): 'def',
+        ('definir', 'classe'): 'class',
+        ('defina', 'classe'): 'class',
     }
     iterator = token_find(tokens, convs)
     while True:
         try:
-            idx, match = next(iterator)
-            iterator.send(['subs', [Token(convs[match])]])
+            idx, match, start, end = next(iterator)
+            tokens[idx] = Token(convs[match], start=start)
+            del tokens[idx + 1: idx + len(match)]
+
+            linediff, col = tokens[idx].end - end
+            if linediff == 0:
+                displace_tokens(tokens[idx + 1:], col)
         except StopIteration:
             break
 
@@ -243,33 +317,28 @@ def transpile_tk(tokens):
             new = Token(new, start=tk.start)
             tokens[i] = new
 
+            # Align tokens
+            linediff, coldiff = new.end - tk.end
+            assert linediff == 0
+            if coldiff:
+                displace_tokens(tokens[i + 1:], coldiff)
+
     # Handle special Pytuguês-only commands
-    tokens = process_repeat_command(tokens)
-    tokens = process_range_command(tokens)
+    tokens = process_repetir_command(tokens)
+    tokens = process_de_ate_command(tokens)
 
     return tokens
 
 
 def token_find(tokens, matches, start=0):
-    """Coroutine that iterates over list of tokens yielding pairs of
-    (index, match) for each match in the token stream. The `matches` attribute
-    must be a sequence of token sequences.
-
-    The caller may send commands to the coroutine to take some action for each
-    match found.
-
-    There are a few supported actions:
-        it.send('raise'):
-            Raises a SyntaxError for an unexpected token in the matched position
-        it.send(['subs', L])
-            Substitute the match by the list of tokens L.
-        it.send(['seek', index])
-            Jumps iteration to the given index.
+    """Iterates over list of tokens yielding (index, match, start, end) for
+    each match in the token stream. The `matches` attribute must be a sequence
+    of token sequences.
     """
 
     matches = list(matches)
     tk_matches = \
-        [tuple(Token(tk) for tk in seq) for seq in matches]
+        [tuple(Token(tk, abstract=True) for tk in seq) for seq in matches]
     tk_matches = \
         [tuple((tk.string, tk.type) for tk in seq) for seq in tk_matches]
     tk_idx = start
@@ -283,47 +352,15 @@ def token_find(tokens, matches, start=0):
                 matchsize = len(tkmatch)
 
                 # Yield value and try to receive commands from sender
-                cmd = yield (tk_idx, matches[match_idx])
-                while cmd:
-                    cmd, value = cmd
-
-                    # Raise an exception
-                    if cmd == 'raise':
-                        raise value
-
-                    # Substitute current
-                    elif cmd == 'subs':
-                        start = tokens[tk_idx].start
-                        line = tokens[tk_idx].line
-
-                        # Insert and remove places, if needed
-                        for _ in range(max(len(value) - matchsize, 0)):
-                            tokens.insert(tk_idx, None)
-                        for _ in range(max(matchsize - len(value), 0)):
-                            del tokens[tk_idx]
-
-                        # Set new tokens
-                        tokens[tk_idx:tk_idx + len(value)] = value
-
-                        if tokens[tk_idx].start is None:
-                            tokens[tk_idx].start = start
-
-                        for tk in value:
-                            tk.line = line
-
-                    # Move cursor position to the specified 'value' ammount
-                    elif cmd == 'seek':
-                        tk_idx = value - 1
-
-                    else:
-                        raise ValueError('invalid command: %r' % cmd)
-                    cmd = yield
+                start = tokens[tk_idx].start
+                end = tokens[tk_idx + matchsize - 1].end
+                yield (tk_idx, matches[match_idx], start, end)
                 tk_idx += 1
         tk_idx += 1
     return
 
 
-def process_repeat_command(tokens):
+def process_repetir_command(tokens):
     """Handles "repita/repetir".
 
     Converts command::
@@ -342,33 +379,36 @@ def process_repeat_command(tokens):
 
     matches = [('repetir',), ('repita',), ('vezes',), (NEWLINE,)]
     iterator = token_find(tokens, matches)
-    for idx, match in iterator:
+    for idx, match, start, end in iterator:
         # Waits for a repetir/repita token to start
         if match[0] not in ['repetir', 'repita']:
             continue
 
         # Send tokens to the beginning of the equivalent "for" loop
-        starttokens = [Token(x) for x in ['for', '___', 'in', 'range', '(']]
-        starttokens[0].start = tokens[idx].start
-        iterator.send(['subs', starttokens])
+        starttokens = Token.from_strings(
+                tokens[idx].start, 'for', '___', 'in', 'range', '('
+        )
+        del tokens[idx]
+        insert_tokens_at(tokens, idx, starttokens, end=end)
 
         # Matches the 'vezes' token
-        idx, match = next(iterator)
+        idx, match, start, end = next(iterator)
+
         if match[0] != 'vezes':
-            lineno = tokens[idx].start[0]
             raise SyntaxError(
-                'comando repetir malformado na linha %s.\n'
+                    'comando repetir malformado na linha %s.\n'
                 '    Espera comando do tipo\n\n'
                 '        repetir <N> vezes:\n'
                 '            <BLOCO>\n\n'
-                '    Palavra chave "vezes" está faltando!' % (lineno))
+                    '    Palavra chave "vezes" está faltando!' % (start.lineno))
         else:
-            iterator.send(['subs', [Token(')')]])
+            tokens[idx] = Token(')', start=start)
+            displace_tokens(tokens[idx + 1:], -4)
 
     return tokens
 
 
-def process_range_command(tokens):
+def process_de_ate_command(tokens):
     """Handles command::
 
         de <X> até <Y> [a cada <Z>]
@@ -380,52 +420,66 @@ def process_range_command(tokens):
 
     matches = [('de',), ('até',), ('a', 'cada',), (NEWLINE,), (':',)]
     iterator = token_find(tokens, matches)
-    one_tk = Token('1', NUMBER)
-    for idx, match in iterator:
+    for idx, match, start, end in iterator:
         # Waits for a 'de' token to start processing
         if match[0] != 'de':
             continue
 
         # Send tokens for the beginning of the equivalent in range(...) test
-        starttokens = [Token(x) for x in ['in', 'range', '(']]
-        starttokens[0].start = tokens[idx].start
-        iterator.send(['subs', starttokens])
+        starttokens = Token.from_strings(tokens[idx].start, 'in', 'range', '(')
+        del tokens[idx]
+        insert_tokens_at(tokens, idx, starttokens, end=end)
 
         # Matches the 'até' token and insert a comma separator
-        idx, match = next(iterator)
+        idx, match, start, end = next(iterator)
         if match[0] == 'até':
-            iterator.send(['subs', [Token(',')]])
+            displace_tokens(tokens[idx:], -3)
+            tokens[idx] = Token(',', start=tokens[idx - 1].end)
         else:
-            raise SyntaxError(match)
+            raise SyntaxError(
+                    'comando para cada malformado na linha %s.\n'
+                    '    Espera comando do tipo\n\n'
+                    '        para cada <x> de <a> até <b>:\n'
+                    '            <BLOCO>\n\n'
+                    '    Palavra chave "até" está faltando!' % (start.lineno)
+            )
 
-        idx, match = next(iterator)
+        idx, match, start, end = next(iterator)
 
         # Matches "a cada" or the end of the line
         if match == ('a', 'cada'):
-            middletokens = [Token(x) for x in ['+', one_tk, ',']]
-            iterator.send(['subs', middletokens])
+            middletokens = Token.from_strings(start, '+', '1', ',')
+            del tokens[idx:idx + 2]
+            insert_tokens_at(tokens, idx, middletokens, end=end)
 
             # Proceed to the end of the line
-            idx, match = next(iterator)
+            idx, match, start, end = next(iterator)
             if match[0] not in (NEWLINE, ':'):
-                raise SyntaxError(match)
-            endtokens = [Token(')'), tokens[idx]]
-            iterator.send(['subs', endtokens])
+                raise SyntaxError(
+                        'comando malformado na linha %s.\n'
+                        '    Espera um ":" no fim do bloco' % (start.lineno)
+                )
+            endtok = Token(')', start=start)
+            displace_tokens(tokens[idx:], 1)
+            tokens.insert(idx, endtok)
 
         # Finish command
         elif match[0] in (NEWLINE, ':'):
-            endtokens = [Token(x) for x in ['+', one_tk, ')']]
-            endtokens.append(tokens[idx])
-            iterator.send(['subs', endtokens])
+            displace_tokens(tokens[idx:], 1)
+            endtokens = Token.from_strings(start, '+', '1', ')')
+            insert_tokens_at(tokens, idx, endtokens, end=end)
 
         # Unexpected token
         else:
-            raise SyntaxError(match)
+            raise SyntaxError(
+                    'comando malformado na linha %s.\n'
+                    '    Espera um ":" no fim do bloco' % (start.lineno)
+            )
 
     return tokens
 
 
-def fromstring(src):
+def fromstring(src, convert_tokens=True):
     """Convert source string to a list of tokens"""
 
     current_string = src
@@ -440,52 +494,25 @@ def fromstring(src):
             raise StopIteration
 
     tokens = list(tokenize.generate_tokens(iterlines))
-    tokens = list(map(Token, tokens))
+    if convert_tokens:
+        tokens = list(map(Token, tokens))
     return tokens
 
 
 def tostring(tokens):
     """Converte lista de tokens para string"""
 
-    # Align tokens
-    lastpos = TokenPosition(1, 0)
-    last_is_fragile = False
-
-    def itertokens():
-        nonlocal lastpos, last_is_fragile
-
-        for tk in tokens:
-            tkold = deepcopy(tk)
-            if tk.start is None:
-                tk.start = lastpos
-            if tk.start < lastpos:
-                tk.start, tk.end = lastpos, None
-            if last_is_fragile and tk.string.isidentifier() and tk.start == lastpos:
-                tk.start += (0, 1)
-                tk.end = None
-            if tk.end is None:
-                tk.end = tk.start + (0, len(tk.string))
-
-            assert tk.end >= tk.start, str(tk)
-            assert tk.start >= lastpos, str(tk)
-            skip = tk.string.count('\n')
-            if skip:
-                lastpos = TokenPosition(tk.end.lineno + skip, 0)
-            else:
-                lastpos = tk.end
-            last_is_fragile = tk.string.isidentifier()
-            yield tk.to_token_info()
-
-    return tokenize.untokenize(itertokens())
+    return tokenize.untokenize([tk.to_token_info() for tk in tokens])
 
 
 if __name__ == '__main__':
     ptsrc = '''
-para cada x de 1 até 2:
-    1
-    para cada y de 1 até 2:
-        1
+se x então:
+    dsfsdf
+ou então se:
+    pass
 '''
+
     tokens = fromstring(ptsrc)
     # print(transpile_tk(tokens))
     print(tostring(transpile_tk(tokens)))

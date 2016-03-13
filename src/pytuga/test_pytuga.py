@@ -280,6 +280,36 @@ def test_separate_command_blocks_regression():
     assert pytg(ptsrc) == py(pysrc)
 
 
+def test_function_with_long_docstring():
+    ptsrc = '''
+block:
+    """
+    x
+    """
+    x
+'''
+    pysrc = '''
+block:
+    """
+    x
+    """
+    x
+'''
+    assert pytg(ptsrc) == py(pysrc)
+
 if __name__ == '__main__':
     import os
     os.system('py.test test_pytuga.py -q')
+
+    pytg = """
+block:
+    '''
+    docstring
+    '''
+    x
+"""
+    from pprint import pprint
+    from pytuga.lexer import transpile_tk
+    # print(transpile(pytg))
+    # pprint(fromstring(pytg))
+    # pprint(transpile_tk(fromstring(pytg)))
