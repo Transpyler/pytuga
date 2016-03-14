@@ -1,5 +1,4 @@
 import os
-import sys
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 import pytuga
 from tugalinhas import TurtleWidget
@@ -7,7 +6,8 @@ from tugalinhas import TurtleWidget
 
 VERSION = pytuga.__version__
 PYTUGA_FILTER = 'Código fonte em Pytyguês (*.pytg *.py *.py3 *.py2)'
-PYTUGA_EXAMPLES_PAGE = 'http://pytuga.github.io/exemplos/'
+PYTUGA_EXAMPLES_PAGE = 'http://fabiommendes.github.io/pytuga/exemplos/'
+PYTUGA_DOCUMENTATION_PAGE = 'http://pytuga.readthedocs.org/pt/latest/'
 DIRNAME = os.path.split(__file__)[0]
 
 
@@ -199,7 +199,8 @@ class Tugalinhas(QtWidgets.QMainWindow):
                     self, 'qt5-webkit não está instalado',
                     'Por favor instale o pacote Qt5 Webkit para visualizar '
                     'a documentação. Caso não possa instalar o pacote, vá'
-                    'para o site: http://pytuga.readthedocs.org/en/latest/'
+                    'para o site: %s' %
+                    PYTUGA_DOCUMENTATION_PAGE
             )
 
         if self._documentation_view is not None:

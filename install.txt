@@ -1,6 +1,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalib/tuga_strings.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/version.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/tuga_std.py
+/home/chips/.local/lib/python3.5/site-packages/tugalib/instrospect.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/tuga_draw.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__init__.py
 /home/chips/.local/lib/python3.5/site-packages/tugalib/tuga_forbidden.py
@@ -21,6 +22,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/util.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/turtlenamespace.py
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/mainwindow.py
+/home/chips/.local/lib/python3.5/site-packages/pytuga/keyword.py
 /home/chips/.local/lib/python3.5/site-packages/pytuga/test_pytuga.py
 /home/chips/.local/lib/python3.5/site-packages/pytuga/__init__.py
 /home/chips/.local/lib/python3.5/site-packages/pytuga/pygments.py
@@ -30,6 +32,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/turtleart.svg
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/main.ui
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/icon.svg
+/home/chips/.local/lib/python3.5/site-packages/tugalinhas/turtle-test.pytg
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/doc/html/index.html
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/doc/html/referencia.html
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/doc/html/intro.html
@@ -77,6 +80,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/tuga_strings.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/version.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/tuga_std.cpython-35.pyc
+/home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/instrospect.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/tuga_draw.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/__init__.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalib/__pycache__/tuga_forbidden.cpython-35.pyc
@@ -97,6 +101,7 @@
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/util.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/turtlenamespace.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/tugalinhas/__pycache__/mainwindow.cpython-35.pyc
+/home/chips/.local/lib/python3.5/site-packages/pytuga/__pycache__/keyword.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/pytuga/__pycache__/test_pytuga.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/pytuga/__pycache__/__init__.cpython-35.pyc
 /home/chips/.local/lib/python3.5/site-packages/pytuga/__pycache__/pygments.cpython-35.pyc
@@ -108,10 +113,7 @@
 /home/chips/.local/share/mime/pytg.xml
 /home/chips/.local/share/applications/pytuga.desktop
 /home/chips/.local/share/doc/pytuga/README.rst
-/home/chips/.local/share/doc/examples/figura.pytg
-/home/chips/.local/share/doc/examples/teste.pytg
-/home/chips/.local/share/doc/examples/koch.pytg
-/home/chips/.local/share/doc/examples/simple.pytg
+/home/chips/.local/share/doc/examples
 /home/chips/.local/share/gtksourceview-3.0/language-specs/pytuga.lang
 /home/chips/.local/doc/pytuga/.buildinfo
 /home/chips/.local/doc/pytuga/index.html
@@ -173,12 +175,12 @@
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_math.html
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_std.html
 /home/chips/.local/doc/pytuga/_modules/tugalib/tuga_io.html
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/top_level.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/not-zip-safe
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/pbr.json
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/entry_points.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/SOURCES.txt
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/PKG-INFO
-/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1-py3.5.egg-info/dependency_links.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/top_level.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/not-zip-safe
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/pbr.json
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/entry_points.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/SOURCES.txt
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/PKG-INFO
+/home/chips/.local/lib/python3.5/site-packages/pytuga-0.8.1.post1-py3.5.egg-info/dependency_links.txt
 /home/chips/.local/bin/pytuga
 /home/chips/.local/bin/tugalinhas

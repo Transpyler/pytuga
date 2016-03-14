@@ -59,6 +59,8 @@
     <addaction name="actionLimpar_tela"/>
     <addaction name="actionOcultar_mostrar_tela"/>
     <addaction name="actionOcultar_mostar_tuga"/>
+    <addaction name="separator"/>
+    <addaction name="actionFlushExecution"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -236,6 +238,14 @@
   <action name="actionMais_exemplos">
    <property name="text">
     <string>Mais exemplos...</string>
+   </property>
+  </action>
+  <action name="actionFlushExecution">
+   <property name="text">
+    <string>Adiantar execução</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
    </property>
   </action>
  </widget>
@@ -545,6 +555,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFlushExecution</sender>
+   <signal>triggered()</signal>
+   <receiver>Tugalinhas</receiver>
+   <slot>flushExecution()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -567,5 +593,6 @@
   <slot>toggleTurtleVisibility()</slot>
   <slot>moreExamples()</slot>
   <slot>openExample(str)</slot>
+  <slot>flushExecution()</slot>
  </slots>
 </ui>
