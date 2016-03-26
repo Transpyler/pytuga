@@ -8,6 +8,7 @@ import abc
 import threading
 import functools
 import time
+import builtins
 from collections import deque
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
@@ -58,9 +59,13 @@ class QMeta(abc.ABCMeta, type(QtCore.QObject)):
 
 class AbstractRunner(QtCore.QObject, metaclass=QMeta):
     askInputSignal = QtCore.pyqtSignal(str)
-    receiveInputSignal = QtCore.pyqtSignal(str)
+    askAlertSignal = QtCore.pyqtSignal(str)
+    askFileSignal = QtCore.pyqtSignal(bool)
     pauseExecutionSignal = QtCore.pyqtSignal()
+
+    # Sent for resuming execution from any ask* signal
     resumeExecutionSignal = QtCore.pyqtSignal()
+    receiveInputSignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -73,8 +78,8 @@ class AbstractRunner(QtCore.QObject, metaclass=QMeta):
         self._waiting = False
 
     def _receiveInput(self, value):
-        self._resumeExecution()
         self._userinput = value
+        self._resumeExecution()
 
     @abc.abstractmethod
     def checkComplete(self, src):
@@ -127,10 +132,9 @@ class PythonRunner(AbstractRunner):
     def __init__(self, namespace=None):
         super().__init__()
         self._namespace = dict(namespace or {})
+        self._update_special_functions()
 
-        # Import forbidden symbols
-        from tugalib import tuga_io
-
+    def _update_special_functions(self):
         @functools.wraps(input)
         def input_function(msg=None):
             self._waiting = True
@@ -140,14 +144,36 @@ class PythonRunner(AbstractRunner):
                 time.sleep(0.05)
             return self._userinput
 
-        def pause_function():
+        def alert(*args, sep=' ', end='\n'):
+            """Opens an alert dialog displaying the input message."""
+
+            data = sep.join(map(str, args)) + end
+            self._waiting = True
+            self.askAlertSignal.emit(data)
+            while self._waiting:
+                time.sleep(0.05)
+
+        def pause():
+            """Opens a dialog that pauses execution until the user cancels
+            it."""
             self._waiting = True
             self.pauseExecutionSignal.emit()
             while self._waiting:
                 time.sleep(0.05)
 
-        tuga_io._pause_function = pause_function
+        def filechooser(do_open):
+            self._waiting = True
+            self._userinput = None
+            self.askFileSignal.emit(do_open)
+            while self._waiting:
+                time.sleep(0.05)
+            return self._userinput
+
+        builtins.input = input_function
         self._namespace['input'] = input_function
+        self._namespace['_alert'] = alert
+        self._namespace['_pause'] = pause
+        self._namespace['_filechooser'] = filechooser
 
     def checkComplete(self, src):
         header, *_ = src.splitlines()
@@ -211,18 +237,24 @@ class PyTranspilableRunner(PythonRunner):
 class PyTugaRunner(PyTranspilableRunner):
     def __init__(self, namespace=None, **kwds):
         import pytuga
-        import tugalib
-        import tugalib.tuga_io
+        import pytuga.lib.tuga_io
+        self._pytuga = pytuga
+
+        super().__init__(namespace={}, **kwds)
+
+        # Update some functions in the tuga_io module to use the desired
+        # qt-aware implementation. This is kind of ugly, but we will go with it
+        # for now ;-)
+        pytuga.lib.tuga_io._input = self._namespace['input']
+        pytuga.lib.tuga_io._alert = self._namespace['_alert']
+        pytuga.lib.tuga_io._pause = self._namespace['_pause']
+        pytuga.lib.tuga_io._filechooser = self._namespace['_filechooser']
 
         # Configure the default namespace and initialize runner
-        self._pytuga = pytuga
-        _namespace = {k: v for (k, v) in vars(tugalib).items()
-                      if not k.startswith('_')}
+        _namespace = pytuga.tugalib_namespace(forbidden=True)
         _namespace.update(dict(namespace or {}))
-        super().__init__(namespace=_namespace, **kwds)
+        self._namespace.update(_namespace)
 
-        # Update some functions to use the correct input() implementation
-        tugalib.tuga_io.input = self._namespace['input']
 
     def transpile(self, src):
         return self._pytuga.transpile(src)
@@ -275,6 +307,8 @@ class PythonConsole(PythonEditor):
         # Connect signals to runner
         self._runner = runner or PyTugaRunner(dict(namespace or {}))
         self._runner.askInputSignal.connect(self.inputDialog)
+        self._runner.askAlertSignal.connect(self.alertDialog)
+        self._runner.askFileSignal.connect(self.fileDialog)
         self._runner.pauseExecutionSignal.connect(self.pauseDialog)
         self.printToConsoleSignal.connect(self.printToConsole)
 
@@ -310,6 +344,19 @@ class PythonConsole(PythonEditor):
                 'Pressione "OK" para continuar'
         )
         self._runner.resumeExecutionSignal.emit()
+
+    def alertDialog(self, msg):
+        QtWidgets.QMessageBox.about(self, 'Esperando...', msg)
+        self._runner.resumeExecutionSignal.emit()
+
+    def fileDialog(self, do_open):
+        if do_open:
+            fname = \
+            QtWidgets.QFileDialog.getOpenFileName(self, 'Abrir arquivo')[0]
+        else:
+            fname = \
+            QtWidgets.QFileDialog.getSaveFileName(self, 'Salvar arquivo')[0]
+        self._runner.receiveInputSignal.emit(fname)
 
     def printToConsole(self, text, add_newline=True):
         self.insert(text)

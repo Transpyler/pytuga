@@ -4,7 +4,7 @@ from tugalinhas import Tugalinhas
 
 
 def main():
-    '''Main function entry point for the Tugalinhas executable'''
+    """Main function entry point for the Tugalinhas executable"""
     
     app = QtWidgets.QApplication(sys.argv)
     window = Tugalinhas()

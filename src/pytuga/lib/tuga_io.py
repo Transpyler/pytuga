@@ -8,7 +8,6 @@ ou arquivos, seja mostrando valores na tela.
 
 from pytuga.lib.util import synonyms
 
-_pause_function = None
 
 @synonyms('mostre')
 def mostrar(*args):
@@ -26,6 +25,14 @@ def mostrar(*args):
     """
 
     print(*args)
+
+
+@synonyms('alerte', 'alertar')
+def alerta(*args):
+    """Similar à função `mostrar`, mas mostra a mensagem resultante em uma
+    caixa de diálogo."""
+
+    _alert(*args)
 
 
 @synonyms('mostre_formatado', 'mostref', 'mostrarf')
@@ -50,18 +57,15 @@ def ler_texto(mensagem=''):
     """
 
     if isinstance(mensagem, str) and mensagem:
-        mensagem = mensagem + ' ' if not mensagem.endswith(' ') else mensagem
-    return input(mensagem)
+        mensagem = (mensagem + ' ') if not mensagem.endswith(' ') else mensagem
+    return _input(mensagem)
 
 
 @synonyms('pausa', 'pause')
 def pausar():
     """Interrompe a execução até o usuário apertar a tecla <enter>"""
 
-    if _pause_function is None:
-        ler_texto('Aperte <enter> para continuar')
-    else:
-        _pause_function()
+    _pause()
 
 
 @synonyms('leia_número')
@@ -83,7 +87,7 @@ def ler_número(mensagem=''):
 
 
 @synonyms('leia_arquivo', 'leia_ficheiro', 'ler_ficheiro')
-def ler_arquivo(arquivo):
+def ler_arquivo(arquivo=None):
     """
     Lê conteúdo de um arquivo texto e retorna uma string de texto.
 
@@ -93,11 +97,13 @@ def ler_arquivo(arquivo):
     >>> dados = ler_arquivo("foo.txt")
     """
 
+    if arquivo is None:
+        arquivo = _filechooser(True)
     return open(arquivo).read()
 
 
-@synonyms('salve_arquivo', 'salvar_ficheiro', 'salve_ficheiro')
-def salvar_arquivo(arquivo, texto):
+@synonyms('salve_em_arquivo', 'salvar_em_ficheiro', 'salve_em_ficheiro')
+def salvar_em_arquivo(texto, arquivo=None):
     """
     Salva o conteúdo de texto no arquivo indicado, apagando qualquer
     conteúdo anterior.
@@ -108,11 +114,32 @@ def salvar_arquivo(arquivo, texto):
     Examples
     --------
 
-    >>> salvar_arquivo("foo.txt", dados)
+    >>> salvar_em_arquivo(dados, "foo.txt")
     """
+
+    if arquivo is None:
+        arquivo = _filechooser(False)
 
     with open(arquivo) as F:
         F.write(str(texto))
+
+
+# These functions can be overridden by the Qt GUI and have a proper behavior in
+# a graphical environment
+def _pause():
+    ler_texto('Aperte <enter> para continuar')
+
+
+def _alert(*args):
+    mostrar(*args)
+
+
+def _input(*args):
+    return input(*args)
+
+
+def _filechooser(do_open):
+    return ler_texto('Nome do arquivo: ')
 
 
 if __name__ == '__main__':
