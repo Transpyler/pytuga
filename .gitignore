@@ -3,8 +3,8 @@ build/
 dist/
 src/pytuga.egg-info/
 .idea/
-examples/teste.pytg
+pyinstaller/
+.settings/
 .gitignore
 .project
 .pydevproject
-pyinstaller

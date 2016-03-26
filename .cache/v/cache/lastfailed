@@ -1,1 +1,3 @@
-{}
+{
+  "src/pytuga/test/test_language.py::test_pytuga_to_python_transpile[sources1]": true
+}
