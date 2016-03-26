@@ -1,6 +1,17 @@
 import warnings
 import functools
 
+__all__ = [
+    # Remove accents
+    'unidecode',
+
+    # Handle synonyms
+    'synonyms', 'collect_synonyms', 'register_synonyms',
+
+    # Other decorators
+    'accented_keywords'
+]
+
 
 #
 # Unidecode function is copied here in order to avoid a simple dependency

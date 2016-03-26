@@ -1,45 +1,88 @@
 import pytest
-from pytuga.lexer import transpile, fromstring
+from pytuga.core import transpile
+from pytuga.lexer import fromstring
+
+
+def pytg(src):
+    return [repr(x) for x in fromstring(transpile(src))]
+
+
+def py(src):
+    return [repr(x) for x in fromstring(src)]
+
+#
+# Dictionary of translations. Each test case is separated by a line of ='s and
+# where the 1st part has a Pytugues code and the second part has the
+# corresponding python source
+#
+data = r'''
+
+================================================================================
+
+--------------------------------------------------------------------------------
+
+================================================================================
+verdadeiro, falso, nulo, Verdadeiro, Falso, Nulo
+--------------------------------------------------------------------------------
+True, False, None, True, False, None
+================================================================================
+a ou b, a e b, a é b
+--------------------------------------------------------------------------------
+a or b, a and b, a is b
+================================================================================
+repetir 4 vezes: prosseguir
+--------------------------------------------------------------------------------
+for ___ in range(4): pass
+================================================================================
+repetir 4 vezes:
+    prosseguir
+--------------------------------------------------------------------------------
+for ___ in range(4):
+    pass
+================================================================================
+    repetir 4 vezes:
+        prosseguir
+--------------------------------------------------------------------------------
+    for ___ in range(4):
+        pass
+================================================================================
+'''.split('=' * 80)
+
+data = [x.split('-' * 80) for x in data if x.strip()]
+
+
+@pytest.fixture(params=data)
+def sources(request):
+    return request.param
+
+
+def test_pytuga_to_python_transpile(sources):
+    pytuga, python = sources
+    assert pytg(pytuga) == py(python)
 
 
 #
-# Passthru translations
+# Passthru translations. Each test case is separated by a blank line.
 #
-@pytest.fixture(
-    params=['x + y', 'x / y', 'x | y']
-)
+data = r'''
+mostre(42)
+
+x + y, x * y
+'''.split('\n\n')
+
+
+@pytest.fixture(params=data)
 def passtru(request):
     return request.param
 
 
 def test_passthru(passtru):
-    assert transpile(passtru) == passtru
+    assert py(passtru) == pytg(passtru)
 
 
 #
-# Test tokenizers
+# Old tests
 #
-def pytg(src):
-    return [repr(x) for x in fromstring(transpile(src))]
-
-def py(src):
-    return [repr(x) for x in fromstring(src)]
-
-
-def test_repetir():
-    ptsrc = 'repetir 4 vezes: mostre(42)'
-    pysrc = 'for ___ in range(4): mostre(42)'
-    assert pytg(ptsrc) == py(pysrc)
-
-    ptsrc = 'repetir 4 vezes:\n    mostre(42)'
-    pysrc = 'for ___ in range(4):\n    mostre(42)'
-    assert pytg(ptsrc) == py(pysrc)
-
-    ptsrc = '\n\n\nrepetir 5 vezes:\n    mostre(42)'
-    pysrc = '\n\n\nfor ___ in range(5):\n    mostre(42)'
-    assert pytg(ptsrc) == py(pysrc)
-
-
 def test_para_cada():
     ptsrc = 'para cada x em [1, 2, 3]: mostre(x)'
     pysrc = 'for x in [1, 2, 3]: mostre(x)'
@@ -304,20 +347,5 @@ def test_full_conditional_command():
     assert pytg(ptsrc) == py(pysrc)
 
 
-
 if __name__ == '__main__':
-    import os
-    os.system('py.test test_pytuga.py -q')
-
-    pytg = """
-block:
-    '''
-    docstring
-    '''
-    x
-"""
-    from pprint import pprint
-    from pytuga.lexer import transpile_tk
-    # print(transpile(pytg))
-    # pprint(fromstring(pytg))
-    # pprint(transpile_tk(fromstring(pytg)))
+    pytest.main('test_language.py')

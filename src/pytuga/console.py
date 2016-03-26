@@ -1,8 +1,7 @@
 import code
 import sys
 import traceback
-import tugalib
-from pytuga import lexer
+from pytuga import core
 from pytuga import __version__
 
 
@@ -16,15 +15,15 @@ digite "ajuda()", "licença()" ou "tutorial()" para maiores informações
 class PyTugaConsole(code.InteractiveConsole):
     """Very simple console for pytuguês language"""
 
-    def __init__(self, locals=None, filename='<console>'):
-        tuga_ns = vars(tugalib).items()
+    def __init__(self, locals=None, filename='<console>', forbidden=True):
+        tuga_ns = core.tugalib_namespace(forbidden=forbidden)
         locals = locals if locals is not None else {}
-        locals.update({k: v for (k, v) in tuga_ns if not k.startswith('_')})
+        locals.update(tuga_ns)
         super().__init__(locals, filename)
 
     def runsource(self, source, filename="<input>", symbol="single"):
         try:
-            source = lexer.transpile(source)
+            source = core.transpile(source)
             if source.endswith('\n'):
                 source = source[:-1]
             code = self.compile(source, filename, symbol)
@@ -44,7 +43,7 @@ class PyTugaConsole(code.InteractiveConsole):
 
     def runcode(self, code):
         if isinstance(code, str):
-            code = lexer.transpile(code)
+            code = core.transpile(code)
         super(PyTugaConsole, self).runcode(code)
 
     def showsyntaxerror(self, filename=None):
@@ -76,15 +75,15 @@ class PyTugaConsole(code.InteractiveConsole):
 
 
 def run_console():
-    """Run the main console"""
+    """Run the main console."""
 
-    from tugalib import tuga_forbidden
     console = PyTugaConsole()
     try:
-        import readline  # @UnusedImport
+        import readline
     except ImportError:
         pass
     console.interact(pytuga_banner)
+
 
 if __name__ == '__main__':
     run_console()

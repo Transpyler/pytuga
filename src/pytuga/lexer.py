@@ -4,7 +4,7 @@ from tokenize import TokenInfo
 from tokenize import (NAME, OP, NEWLINE, EXACT_TOKEN_TYPES, NUMBER)
 from pytuga.keyword import TRANSLATIONS as TOKEN_TRANSLATIONS
 
-__all__ = ['transpile', 'compile', 'exec']
+__all__ = ['transpile_tk', 'fromstring', 'tostring']
 TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
                             if attr.isupper() and isinstance(tt, int)}
 
@@ -191,6 +191,9 @@ class TokenPosition(tuple):
             x, y = x
         return tuple.__new__(cls, [x, y])
 
+    def __init__(self, x, y=None):
+        super().__init__()
+
     def __add__(self, other):
         x, y = self
         a, b = other
@@ -216,40 +219,6 @@ class TokenPosition(tuple):
     @property
     def col(self):
         return self[1]
-
-
-def compile(source, filename, mode, flags=0, dont_inherit=False):
-    """Similar to the built-in function compile().
-
-    Works with Pytuguês code."""
-
-    source = transpile(source)
-    return __builtins__['compile'](source, filename, mode, flags, dont_inherit)
-
-
-def exec(object, locals=None, globals=None):
-    """Similar to the built-in function exec().
-
-    Works with Pytuguês code."""
-
-    if isinstance(object, str):
-        object = transpile(object)
-    return __builtins__['exec'](object, locals, globals)
-
-
-def transpile(src):
-    """Convert a Pytuguês (Pytuguese?) source to Python."""
-
-    # Avoid problems with empty token streams
-    if not src or src.isspace():
-        return src
-
-    # Convert and process...
-    else:
-        tokens = fromstring(src)
-        transpiled_tokens = transpile_tk(tokens)
-        result = tostring(transpiled_tokens)
-        return result
 
 
 def transpile_tk(tokens):
@@ -280,6 +249,7 @@ def transpile_tk(tokens):
     convs = {
         # Block ending
         ('faça', ':'): ':',
+        ('faca', ':'): ':',
         ('fazer', ':'): ':',
 
         # Loops
@@ -288,12 +258,17 @@ def transpile_tk(tokens):
         # Conditions
         ('então', 'faça', ':'): ':',
         ('então', ':'): ':',
+        ('entao', 'faca', ':'): ':',
+        ('entao', ':'): ':',
         ('ou', 'então', 'se'): 'elif',
+        ('ou', 'entao', 'se'): 'elif',
         ('ou', 'se'): 'elif',
 
         # Definitions
         ('definir', 'função'): 'def',
+        ('definir', 'funcao'): 'def',
         ('defina', 'função'): 'def',
+        ('defina', 'funcao'): 'def',
         ('definir', 'classe'): 'class',
         ('defina', 'classe'): 'class',
     }

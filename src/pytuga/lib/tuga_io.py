@@ -6,7 +6,7 @@ Funções que realizam a interação com o usuário, seja lendo valores digitado
 ou arquivos, seja mostrando valores na tela.
 """
 
-from tugalib.util import synonyms
+from pytuga.lib.util import synonyms
 
 _pause_function = None
 
@@ -26,6 +26,14 @@ def mostrar(*args):
     """
 
     print(*args)
+
+
+@synonyms('mostre_formatado', 'mostref', 'mostrarf')
+def mostrar_formatado(texto, *args):
+    """Mostra uma string de texto aplicando os argumentos de formatação
+    fornecidos"""
+
+    mostrar(texto % args)
 
 
 @synonyms('leia_texto')

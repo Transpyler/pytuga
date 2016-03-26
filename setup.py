@@ -4,6 +4,7 @@ from glob import glob
 from setuptools import setup, find_packages
 
 NAME = 'pytuga'
+AUTHOR = 'Fábio Macêdo Mendes'
 REQUIRES = []  # 'PyQt5' is not supported in PyPI
 DIRNAME = os.path.dirname(__file__)
 
@@ -21,9 +22,10 @@ except ImportError:
 
 # Rewrite __version__.py in tugalib
 VERSION = open('VERSION').read().strip()
-version_file = os.path.join(DIRNAME, 'src', 'tugalib', 'version.py')
+version_file = os.path.join(DIRNAME, 'src', 'pytuga', 'version.py')
 with open(version_file, 'w') as F:
-    F.write('__version__ = %r\n' % VERSION)
+    F.write('__version__ = %r\n'
+            '__author__ = %r' % (VERSION, AUTHOR))
 
 # Fix possible bug in Windows which does not generate the gui script
 console_scripts = ['pytuga = pytuga.__main__:main']
@@ -62,7 +64,7 @@ distribution = setup(
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
-    author='Fábio Macêdo Mendes',
+        author=AUTHOR,
     author_email='fabiomacedomendes@gmail.com',
     url='https://github.com/fabiommendes/pytuga',
     long_description=('''

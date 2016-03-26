@@ -4,13 +4,14 @@ Dirty c-level hacks inspired by the forbiddenfruit module.
 
 import os
 import ctypes
-from .util import unidecode, accented_keywords, synonyms, collect_synonyms
+from .util import accented_keywords, synonyms, collect_synonyms
 
 
 __all__ = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
+
 #
-# These classes are mixed with regular builtins using the forbiddenfruit
-# package
+# These classes are mixed with regular builtins using the same technics as in
+# the forbiddenfruit package
 #
 
 class Lista(list):
@@ -251,7 +252,7 @@ class Texto(str):
 
 #
 # In the nomenclature of the forbiddenfruit module, inserting a new method to
-# a builtin type is called "cursing". We shall do it a lot in order to provide
+# a builtin type is called "cursing". We shall do it in order to provide
 # translations.
 #
 CURSES = {
@@ -362,18 +363,20 @@ def _change_none_repr():
 
 
 # Apply curses
-if os.environ.get('DEBUG', 'false') == 'true':
+if os.environ.get('DEBUG', 'false').lower() == 'true':
     print('''
 ======================
 Aviso aos beta-testers
 ======================
 
-Esta versão está testando um hack no interpretador do Python que permite
+Esta versão utiliza um hack no interpretador do Python que permite
 modificar a representação dos tipos base como True, False e None. Se o
 interpretador terminar com segfault ou apresentar algum tipo de comportamento
-errático reinicie com a variável de ambiente FORBIDDEN_PYTUGA igual à "false" e
+errático reinicie com a variável de ambiente PYTUGA_FORBIDDEN igual à "false" e
 envie um relatório de erros com a sua plataforma e sistema operacional.
 ''')
-_apply_all_curses()
-_change_bool_repr()
-_change_none_repr()
+
+if os.environ.get('PYTUGA_FORBIDDEN', 'true') == 'true':
+    _apply_all_curses()
+    _change_bool_repr()
+    _change_none_repr()

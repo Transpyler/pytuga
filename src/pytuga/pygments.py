@@ -8,7 +8,7 @@ from pygments.lexers.python import Python3Lexer, PythonTracebackLexer
 
 # Define constants
 from pytuga import keyword
-from tugalib import instrospect as tuga_introspect
+from tugalib import introspect as tuga_introspect
 
 PYTUGA_KEYWORDS = keyword.kwlist
 PYTUGA_CONSTANTS = keyword.constants

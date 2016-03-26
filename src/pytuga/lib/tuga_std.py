@@ -5,7 +5,7 @@ Outras funções
 Outras funções que não se encaixam em nenhuma categoria específica.
 """
 import time as _time
-from tugalib.util import synonyms, accented_keywords
+from pytuga.lib.util import synonyms, accented_keywords
 
 
 #
