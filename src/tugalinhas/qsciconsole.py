@@ -1,14 +1,8 @@
 """
 The main editor with python syntax highlighting
 """
-import io
 import sys
-import traceback
-import abc
 import threading
-import functools
-import time
-import builtins
 from collections import deque
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
@@ -50,241 +44,6 @@ UnlockedNavKeys = {Up, Down, Right, Left, PageUp, PageDown, Home}
 UnlockedShiftKeys = set()
 
 
-#
-# Classes
-#
-class QMeta(abc.ABCMeta, type(QtCore.QObject)):
-    pass
-
-
-class AbstractRunner(QtCore.QObject, metaclass=QMeta):
-    askInputSignal = QtCore.pyqtSignal(str)
-    askAlertSignal = QtCore.pyqtSignal(str)
-    askFileSignal = QtCore.pyqtSignal(bool)
-    pauseExecutionSignal = QtCore.pyqtSignal()
-
-    # Sent for resuming execution from any ask* signal
-    resumeExecutionSignal = QtCore.pyqtSignal()
-    receiveInputSignal = QtCore.pyqtSignal(str)
-
-    def __init__(self):
-        super().__init__()
-        self._waiting = False
-        self._userinput = None
-        self.resumeExecutionSignal.connect(self._resumeExecution)
-        self.receiveInputSignal.connect(self._receiveInput)
-
-    def _resumeExecution(self):
-        self._waiting = False
-
-    def _receiveInput(self, value):
-        self._userinput = value
-        self._resumeExecution()
-
-    @abc.abstractmethod
-    def checkComplete(self, src):
-        """Return True if source code can represent a complete command."""
-
-        return True
-
-    @abc.abstractmethod
-    def checkValidSyntax(self, src):
-        """Return True if source code has a valid syntax."""
-
-        return False
-
-    @abc.abstractmethod
-    def runSingle(self, src):
-        """Runs command in 'single' mode: returns a string with the representation
-        of the command output."""
-
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def runExec(self, src):
-        """Runs command in "exec" mode: returns a string with all prints during
-        the command's execution."""
-
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def kill(self):
-        """Kills runner processs"""
-
-        raise NotImplementedError
-
-    def poll(self):
-        """Poll runner and return a boolean telling if runner is running"""
-
-        return False
-
-    def cancel(self):
-        """Cancel execution of a runner process"""
-
-        raise NotImplementedError
-
-
-class PythonRunner(AbstractRunner):
-    """Runs code in a Python 3 interpreter"""
-
-    # TODO: make this run as a subprocess
-
-    def __init__(self, namespace=None):
-        super().__init__()
-        self._namespace = dict(namespace or {})
-        self._update_special_functions()
-
-    def _update_special_functions(self):
-        @functools.wraps(input)
-        def input_function(msg=None):
-            self._waiting = True
-            self._userinput = None
-            self.askInputSignal.emit(str(msg or ''))
-            while self._waiting:
-                time.sleep(0.05)
-            return self._userinput
-
-        def alert(*args, sep=' ', end='\n'):
-            """Opens an alert dialog displaying the input message."""
-
-            data = sep.join(map(str, args)) + end
-            self._waiting = True
-            self.askAlertSignal.emit(data)
-            while self._waiting:
-                time.sleep(0.05)
-
-        def pause():
-            """Opens a dialog that pauses execution until the user cancels
-            it."""
-            self._waiting = True
-            self.pauseExecutionSignal.emit()
-            while self._waiting:
-                time.sleep(0.05)
-
-        def filechooser(do_open):
-            self._waiting = True
-            self._userinput = None
-            self.askFileSignal.emit(do_open)
-            while self._waiting:
-                time.sleep(0.05)
-            return self._userinput
-
-        builtins.input = input_function
-        self._namespace['input'] = input_function
-        self._namespace['_alert'] = alert
-        self._namespace['_pause'] = pause
-        self._namespace['_filechooser'] = filechooser
-
-    def checkComplete(self, src):
-        header, *_ = src.splitlines()
-        return header.strip().endswith(':')
-
-    def checkValidSyntax(self, src):
-        try:
-            compile(src, '<input>', 'eval')
-            return True
-        except SyntaxError:
-            return False
-
-    def kill(self):
-        raise NotImplementedError
-
-    def updateNamespace(self, D):
-        self._namespace.update(D)
-
-    def runSingle(self, src):
-        return self._run_worker(src, 'single', self._namespace)
-
-    def runExec(self, src):
-        return self._run_worker(src, 'exec', self._namespace)
-
-    @staticmethod
-    def _run_worker(cmd, mode, ns):
-        stdout, stderr = sys.stdout, sys.stderr
-        out = sys.stdout = io.StringIO()
-        err = sys.sterr = io.StringIO()
-        try:
-            code = compile(cmd, '<input>', mode)
-            exec(code, ns)
-        except:
-            traceback.print_exc(file=out)
-        finally:
-            sys.stdout, sys.stderr = stdout, stderr
-            data = out.getvalue() + err.getvalue()
-            return data
-
-    @staticmethod
-    def _set_subprocess_globals(namespace):
-        print(namespace)
-        D = globals()
-        D.update(namespace)
-
-
-class PyTranspilableRunner(PythonRunner):
-    @abc.abstractmethod
-    def transpile(self, src):
-        """Transpile source to Python 3"""
-
-        raise NotImplementedError
-
-    def runSingle(self, src):
-        return super().runSingle(self.transpile(src))
-
-    def runExec(self, src):
-        return super().runExec(self.transpile(src))
-
-
-class PyTugaRunner(PyTranspilableRunner):
-    def __init__(self, namespace=None, **kwds):
-        import pytuga
-        import pytuga.lib.tuga_io
-        self._pytuga = pytuga
-
-        super().__init__(namespace={}, **kwds)
-
-        # Update some functions in the tuga_io module to use the desired
-        # qt-aware implementation. This is kind of ugly, but we will go with it
-        # for now ;-)
-        pytuga.lib.tuga_io._input = self._namespace['input']
-        pytuga.lib.tuga_io._alert = self._namespace['_alert']
-        pytuga.lib.tuga_io._pause = self._namespace['_pause']
-        pytuga.lib.tuga_io._filechooser = self._namespace['_filechooser']
-
-        # Configure the default namespace and initialize runner
-        _namespace = pytuga.tugalib_namespace(forbidden=True)
-        _namespace.update(dict(namespace or {}))
-        self._namespace.update(_namespace)
-
-
-    def transpile(self, src):
-        return self._pytuga.transpile(src)
-
-
-class CRunner(AbstractRunner):
-    def __init__(self):
-        self._cdll = None
-
-    def getSymbols(self, src):
-        """Return a mapping from {name: type} for all symbols defined in the
-        source"""
-
-    def forceExtern(self, src):
-        """Convert all declarations in C source to extern declarations."""
-
-        return src
-
-    def compile(self, src):
-        """Compiles and saves the ctypes cdll object internally"""
-
-    def runSingle(self, src):
-        raise NotImplementedError('CRunner cannot run in single mode')
-
-    def runExec(self, src):
-        extern_src = self.forceExtern(src)
-        self.compile(extern_src)
-        raise NotImplementedError
-
-
 class PythonConsole(PythonEditor):
     """
     A Scintilla based console.
@@ -295,7 +54,6 @@ class PythonConsole(PythonEditor):
     def __init__(self,
                  parent=None, *,
                  runner=None,
-                 namespace=None,
                  header_text=None,
                  hide_margins=True, **kwds):
         super().__init__(parent, **kwds)
@@ -305,7 +63,7 @@ class PythonConsole(PythonEditor):
         self._current_command = []
 
         # Connect signals to runner
-        self._runner = runner or PyTugaRunner(dict(namespace or {}))
+        self._runner = runner
         self._runner.askInputSignal.connect(self.inputDialog)
         self._runner.askAlertSignal.connect(self.alertDialog)
         self._runner.askFileSignal.connect(self.fileDialog)
