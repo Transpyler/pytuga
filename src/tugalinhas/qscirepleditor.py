@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from .qsciconsole import PythonConsole
 from .qscieditor import PythonEditor
+from .runners.pytuga import PyTugaRunner
 
 
 class ReplEditor(QtWidgets.QWidget):
@@ -11,7 +12,7 @@ class ReplEditor(QtWidgets.QWidget):
         super().__init__(parent)
         self._editor = PythonEditor(**kwds)
         self._editor.runCode = self.runCode
-        self._console = PythonConsole(namespace=namespace,
+        self._console = PythonConsole(runner=PyTugaRunner(namespace),
                                       header_text=header_text,
                                       hide_margins=hide_console_margins, **kwds)
         
