@@ -142,7 +142,9 @@ permitem que o usuário do programa dê a entrada em valores que serão utilizad
 posteriormente. As *funções de saída* são aquelas que fornecem informação de
 volta para o usuário. A mais importante delas é a função ``mostre(valor)``, que
 mostra o conteúdo do argumento na tela. Podemos fazer a saída na forma de um
-arquivo, utilizando a função ``salve_arquivo(nome_do_arquivo, valor)``.
+arquivo, utilizando a função ``salve_arquivo(nome_do_arquivo, valor)``. Teste
+também a função ``alerte(valor)``: ela é semelhante à função "mostre", mas em
+modo gráfico ela mostra a mensagem em uma caixa de diálogo.
 
 Teste
 .....

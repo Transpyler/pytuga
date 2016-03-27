@@ -1,8 +1,7 @@
 import os
 import sys
 import argparse
-from pytuga.console import PyTugaConsole
-from pytuga.lexer import transpile
+from pytuga import transpile, PyTugaConsole
 from pytuga import __version__ as version
 
 

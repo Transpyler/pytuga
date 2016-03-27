@@ -12,12 +12,12 @@ Conteúdo:
 .. toctree::
    :maxdepth: 2
 
-   intro.rst
-   install.rst
-   tutorial.rst
-         referencia.rst
-   python.rst
-   design.rst
+         Visão geral <readme>
+         Instalação <install>
+         Tutorial <tutorial>
+         Biblioteca de funções <referencia>
+         Migrando para Python <python>
+         Para programadores e colaboradores <dev>
 
 
 Tabelas e índices

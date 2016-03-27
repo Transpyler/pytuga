@@ -1,5 +1,5 @@
 """
-The main editor with python syntax highlighting
+Scintilla based console with python syntax highlighting
 """
 import sys
 import threading
@@ -31,7 +31,6 @@ V = QtCore.Qt.Key_V
 X = QtCore.Qt.Key_X
 A = QtCore.Qt.Key_A
 E = QtCore.Qt.Key_E
-D = QtCore.Qt.Key_D
 H = QtCore.Qt.Key_H
 Z = QtCore.Qt.Key_Z
 Plus = QtCore.Qt.Key_Plus
@@ -91,15 +90,13 @@ class PythonConsole(PythonEditor):
         """Ask user for input. Return a string with the user supplied value."""
 
         text, ok = QtWidgets.QInputDialog.getText(
-                self, 'Entrada de dados',
-                message or 'Valor:'
+                self, 'Entrada de dados', message or 'Valor:'
         )
         self._runner.receiveInputSignal.emit(text)
 
     def pauseDialog(self):
         QtWidgets.QMessageBox.about(
-                self, 'Esperando...',
-                'Pressione "OK" para continuar'
+                self, 'Esperando...', 'Pressione "OK" para continuar'
         )
         self._runner.resumeExecutionSignal.emit()
 
@@ -110,10 +107,10 @@ class PythonConsole(PythonEditor):
     def fileDialog(self, do_open):
         if do_open:
             fname = \
-            QtWidgets.QFileDialog.getOpenFileName(self, 'Abrir arquivo')[0]
+                QtWidgets.QFileDialog.getOpenFileName(self, 'Abrir arquivo')[0]
         else:
             fname = \
-            QtWidgets.QFileDialog.getSaveFileName(self, 'Salvar arquivo')[0]
+                QtWidgets.QFileDialog.getSaveFileName(self, 'Salvar arquivo')[0]
         self._runner.receiveInputSignal.emit(fname)
 
     def printToConsole(self, text, add_newline=True):

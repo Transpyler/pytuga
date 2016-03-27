@@ -336,6 +336,19 @@ falso = Falso = False
 nulo = Nulo = None
 
 #
+# Type alias
+#
+Lista = list
+Tupla = tuple
+Dicionário = dict
+Conjunto = set
+ConjuntoImutável = frozenset
+Texto = Cadeia = str
+Inteiro = int
+Fracionário = float
+Complexo = complex
+
+#
 # Pending functions
 #
 # format = format

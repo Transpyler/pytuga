@@ -28,8 +28,8 @@ tela.
 
 Este pacote instala o "Tugalinhas", que consiste em um ambiente de programação
 visual, no estilo da linguagem LOGO e o ``pytuga``, que é o interpretador de
-Pytuguês. Para começar sua interação com o Pytuguês, execute no prompt``$ tugalinhas``
-e digite o comando::
+Pytuguês. Para começar sua interação com o Pytuguês, execute no prompt
+``$ tugalinhas`` e digite o comando::
 
    >>> mostre("olá, mundo!")
 

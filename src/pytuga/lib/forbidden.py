@@ -6,14 +6,13 @@ import os
 import ctypes
 from .util import accented_keywords, synonyms, collect_synonyms
 
+__all__ = []
 
-__all__ = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
 
 #
 # These classes are mixed with regular builtins using the same technics as in
 # the forbiddenfruit package
 #
-
 class Lista(list):
     """Uma lista representa uma sequência de objetos.
 

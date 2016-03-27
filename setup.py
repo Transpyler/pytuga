@@ -35,16 +35,20 @@ if sys.platform.startswith('win'):
     console_scripts.append('tugalinhas = tugalinhas.__main__:main')
 
 # Collect data files
-DATA_FILES = [
-    ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
-    ('share/icons/hicolor/scalable/mimetypes',
-     ['data/icons/text-x-pytuga.svg']),
-    ('share/mime', ['data/pytg.xml']),
-    ('share/applications', ['data/pytuga.desktop']),
-    ('share/doc/pytuga', ['README.rst']),
-    ('share/doc/examples', glob('data/examples/*.pytg')),
-    ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang']),
-]
+if sys.platform.startswith('win'):
+    # TODO: figure out where these files should be in Windows
+    DATA_FILES = []
+else:
+    DATA_FILES = [
+        ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
+        ('share/icons/hicolor/scalable/mimetypes',
+         ['data/icons/text-x-pytuga.svg']),
+        ('share/mime', ['data/pytg.xml']),
+        ('share/applications', ['data/pytuga.desktop']),
+        ('share/doc/pytuga', ['README.rst']),
+        ('share/doc/examples', glob('data/examples/*.pytg')),
+        ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang']),
+    ]
 
 # Add documentation files
 for path, _, files in os.walk('doc/build/html'):
@@ -53,7 +57,7 @@ for path, _, files in os.walk('doc/build/html'):
     for file in files:
         docfiles.append('%s/%s' % (path, file))
 
-# Fix path separator
+# Fix path separator (necessary?)
 for i, (path, files) in enumerate(DATA_FILES):
     path = os.path.sep.join(path.split('/'))
     files = [os.path.sep.join(f.split('/')) for f in files]
@@ -120,18 +124,24 @@ distribution = setup(
                 'doc/html/_modules/tugalib/*.*',
                 'doc/html/_sources/*.*',
                 'doc/html/_static/*.*',
-            ]},
+            ]
+        },
         data_files=DATA_FILES,
     zip_safe=False,
 )
 
 # Adds a symbolic link from executables in $HOME/.local/bin to $HOME/bin, if it
 # exists and if it is installed with the --user option.
+binfolder = os.path.join(os.path.expanduser('~'), 'bin')
+pytuga = os.path.join(binfolder, 'pytuga')
 if ('user' in distribution.get_option_dict('install') and
-        os.path.exists(os.path.expanduser('~/bin/')) and
-        not os.path.exists(os.path.expanduser('~/bin/pytuga'))):
+        os.path.exists(binfolder) and not os.path.exists(pytuga)):
 
-    for file in ['tugalinhas', 'pytuga']:
-        local_bin = os.path.expanduser(os.path.join('~', '.local', 'bin', file))
-        home_bin = os.path.expanduser(os.path.join('~', 'bin', file))
-        os.symlink(local_bin, home_bin)
+    try:
+        for file in ['tugalinhas', 'pytuga']:
+            local_bin = os.path.expanduser(
+                os.path.join('~', '.local', 'bin', file))
+            home_bin = os.path.expanduser(os.path.join('~', 'bin', file))
+            os.symlink(local_bin, home_bin)
+    except FileNotFoundError:
+        pass

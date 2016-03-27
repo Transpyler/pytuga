@@ -8,3 +8,4 @@ pyinstaller/
 .gitignore
 .project
 .pydevproject
+installed-files.txt

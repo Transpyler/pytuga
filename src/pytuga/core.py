@@ -65,7 +65,6 @@ def revert_builtins():
     """Remove pytuga functions from builtins"""
 
     tuganames = list(tugalib_namespace(forbidden=False))
-    tuganames.extend(forbidden_types)
 
     for name in tuganames:
         if hasattr(_builtins, name):
@@ -127,7 +126,6 @@ def _filtering_out(names):
     return names
 
 
-forbidden_types = ['Lista', 'Tupla', 'Conjunto', 'Dicionário', 'Texto']
 all_names = [name for name in dir(tugalib) if not name.startswith('_')]
 namespace = {name: getattr(tugalib, name) for name in all_names}
 _names = namespace.copy()
@@ -158,7 +156,6 @@ py_types = [
 types = _filtering_out(
         [name for (name, value) in _names.items() if isinstance(value, type)]
 )
-types.extend(forbidden_types)
 
 # Functions
 py_functions = py_types = [
