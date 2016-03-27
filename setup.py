@@ -130,6 +130,7 @@ distribution = setup(
                 'doc/html/_modules/tugalib/*.*',
                 'doc/html/_sources/*.*',
                 'doc/html/_static/*.*',
+                'examples/*.pytg'
             ]
         },
         data_files=DATA_FILES,

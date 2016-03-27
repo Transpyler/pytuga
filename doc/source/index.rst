@@ -7,7 +7,7 @@
 Bem vindos à documentação do Pytuguês
 #####################################
 
-Conteúdo:
+.. include:: ../../README.rst
 
 .. toctree::
    :maxdepth: 2
@@ -17,8 +17,6 @@ Conteúdo:
          Biblioteca de funções <referencia>
          Migrando para Python <python>
          Para programadores e colaboradores <dev>
-
-.. include:: ../README.rst
 
 Tabelas e índices
 =================
