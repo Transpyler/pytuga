@@ -24,9 +24,14 @@ except ImportError:
 # Rewrite __version__.py in tugalib
 VERSION = open('VERSION', encoding='utf8').read().strip()
 version_file = os.path.join(DIRNAME, 'src', 'pytuga', 'version.py')
-with open(version_file, 'w', encoding='utf8') as F:
-    F.write('__version__ = %r\n'
-            '__author__ = %r' % (VERSION, AUTHOR))
+try:
+    with open(version_file, 'w', encoding='utf8') as F:
+        F.write('__version__ = %r\n'
+                '__author__ = %r' % (VERSION, AUTHOR))
+except UnicodeDecodeError:
+    # Read the docs builder has a problem with encoding. Maybe old Python3
+    # versions?
+    pass
 
 # Fix possible bug in Windows which does not generate the gui script
 console_scripts = ['pytuga = pytuga.__main__:main']
