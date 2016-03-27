@@ -15,7 +15,6 @@
 import sys
 import os
 import shlex
-import pytuga
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -64,8 +63,8 @@ author = u'Fábio Macêdo Mendes'
 # built documents.
 #
 # The short X.Y version.
-version = pytuga.__version__
-#version = 'test'
+proj_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+version = open(os.path.join(proj_root, 'VERSION')).read().strip()
 
 # The full version, including alpha/beta/rc tags.
 release = version
