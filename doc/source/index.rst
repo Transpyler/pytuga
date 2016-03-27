@@ -12,13 +12,13 @@ Conteúdo:
 .. toctree::
    :maxdepth: 2
 
-         Visão geral <readme>
          Instalação <install>
          Tutorial <tutorial>
          Biblioteca de funções <referencia>
          Migrando para Python <python>
          Para programadores e colaboradores <dev>
 
+.. include:: ../README.rst
 
 Tabelas e índices
 =================

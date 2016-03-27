@@ -22,9 +22,9 @@ except ImportError:
         '    https://riverbankcomputing.com/software/pyqt/download5\n')
 
 # Rewrite __version__.py in tugalib
-VERSION = open('VERSION').read().strip()
+VERSION = open('VERSION', encoding='utf8').read().strip()
 version_file = os.path.join(DIRNAME, 'src', 'pytuga', 'version.py')
-with open(version_file, 'w') as F:
+with open(version_file, 'w', encoding='utf8') as F:
     F.write('__version__ = %r\n'
             '__author__ = %r' % (VERSION, AUTHOR))
 
