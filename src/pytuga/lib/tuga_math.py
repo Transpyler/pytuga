@@ -8,7 +8,7 @@ usuário.
 
 import math as _math
 import random as _random
-from pytuga.lib.util import synonyms
+from pytuga.util import synonyms
 pi = _math.pi
 neperiano = _math.exp(1)
 

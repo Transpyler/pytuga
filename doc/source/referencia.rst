@@ -2,24 +2,20 @@
 Biblioteca de funções
 =====================
 
-..highlight:: pytuga
+.. highlight:: pytuga
 
-.. automodule:: tugalib.tuga_io
+.. automodule:: pytuga.lib.tuga_io
    :members:
    :member-order: source
    
-.. automodule:: tugalib.tuga_std
+.. automodule:: pytuga.lib.tuga_std
    :members:
    :member-order: source
    
-.. automodule:: tugalib.tuga_draw
+.. automodule:: pytuga.lib.tuga_math
    :members:
    :member-order: source
    
-.. automodule:: tugalib.tuga_math
-   :members:
-   :member-order: source
-   
-.. automodule:: tugalib.tuga_strings
+.. automodule:: pytuga.lib.tuga_strings
    :members:
    :member-order: source

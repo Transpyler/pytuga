@@ -5,7 +5,7 @@ Textos (strings)
 Funções para processamento de texto.
 '''
 
-from pytuga.lib.util import synonyms
+from pytuga.util import synonyms
 # TODO: terminar as traduções de funções e escolher ordem dos argumentos
 
 

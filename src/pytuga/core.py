@@ -3,6 +3,8 @@ import builtins as _builtins
 from types import ModuleType as _Module
 from pytuga import lib as tugalib
 from pytuga import lexer
+from pytuga import util as tuga_util
+
 
 __all__ = [
     # Tugalib namespace
@@ -28,11 +30,10 @@ def tugalib_namespace(forbidden=False):
 
     If forbidden is True, import the tugalib.tuga_forbidden module."""
 
-    from pytuga.lib import util
     blacklist = {'tuga_draw', 'tuga_forbidden', 'tuga_io', 'tuga_math',
                  'tuga_std', 'tuga_strings', 'turtlelib', 'util',
                  }
-    blacklist.update(util.__all__)
+    blacklist.update(dir(tuga_util))
 
     ns = {name: getattr(tugalib, name) for name in dir(tugalib)}
 

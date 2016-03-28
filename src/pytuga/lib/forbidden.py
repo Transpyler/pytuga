@@ -4,7 +4,7 @@ Dirty c-level hacks inspired by the forbiddenfruit module.
 
 import os
 import ctypes
-from .util import accented_keywords, synonyms, collect_synonyms
+from pytuga.util import accented_keywords, synonyms, collect_synonyms
 
 __all__ = []
 

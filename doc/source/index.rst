@@ -12,11 +12,11 @@ Bem vindos à documentação do Pytuguês
 .. toctree::
    :maxdepth: 2
 
-         Instalação <install>
-         Tutorial <tutorial>
-         Biblioteca de funções <referencia>
-         Migrando para Python <python>
-         Para programadores e colaboradores <dev>
+   Instalação <install>
+   Tutorial <tutorial>
+   Biblioteca de funções <referencia>
+   Migrando para Python <python>
+   Para programadores e colaboradores <dev>
 
 Tabelas e índices
 =================

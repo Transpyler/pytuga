@@ -3,15 +3,15 @@ Pytuguês
 ========
 
 Pytuguês é uma versão da linguagem de programação Python que tenta se aproximar
-o máximo possível de um "pseudo-código" em português. A motivação principal em
+o máximo possível de um *pseudo-código* em português. A motivação principal em
 aprender Pytuguês é evitar as barreiras com a língua inglesa quando iniciamos
-a aprender programação. Uma vantagem do Pytuguês com relação à outras soluções
+a aprender programação. Uma vantagem do Pytuguês com relação a outras soluções
 semelhantes é que a transição para uma linguagem de programação de uso comum é
 bastante suave, já que é possível misturar código Python e Pytuguês no mesmo 
 programa.
 
 A sintaxe da linguagem de programação Python muitas vezes é comparada a um
-pseudo-código ou algorítimo executável. Ainda que existam alguns recursos
+*pseudo-código* ou algorítimo executável. Ainda que existam alguns recursos
 sintáticos avançados que certamente violam esta simplicidade, o Python
 provavelmente é uma das linguagens de programação de uso geral com a sintaxe
 mais próxima da linguagem natural. Programas em Python frequentemente se

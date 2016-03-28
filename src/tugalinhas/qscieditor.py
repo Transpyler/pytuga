@@ -3,8 +3,10 @@ The main editor with python syntax highlighting
 """
 
 import keyword
+import builtins
 from PyQt5 import Qsci, QtGui, QtCore
 from PyQt5.QtGui import QColor, QFont
+
 
 Return = QtCore.Qt.Key_Return
 Enter = QtCore.Qt.Key_Enter
@@ -22,8 +24,10 @@ Key_Z = QtCore.Qt.Key_Z
 Key_D = QtCore.Qt.Key_D
 
 # Python keywords and common functions for autocompletion
-PYTHON_WORDS = tuple(list(__builtins__) + keyword.kwlist)
-
+PYTHON_WORDS = tuple(
+        [x for x in dir(builtins) if not x.startswith('_')] +
+        list(keyword.kwlist)  # is a set (?) in python 3.4
+)
 
 #
 # Thanks to Eli Bendersky:
@@ -188,6 +192,7 @@ class PythonEditor(Qsci.QsciScintilla):
         This syncronizes the font in the main text area with the margins and
         calltips.
         """
+
         self.fontfamily = family
         self.fontsize = size
         self.fontfixedpitch = True

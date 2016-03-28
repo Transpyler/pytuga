@@ -1,4 +1,5 @@
 import os
+import sys
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 import pytuga
 from tugalinhas import TurtleWidget
@@ -332,3 +333,12 @@ def _window_icon():
     dirpath = os.path.dirname(__file__)
     icon_path = os.path.join(dirpath, 'icon.svg')
     return QtGui.QIcon(icon_path)
+
+
+def startapp():
+    """Display main window"""
+
+    app = QtWidgets.QApplication(sys.argv)
+    window = Tugalinhas()
+    window.show()
+    sys.exit(app.exec_())

@@ -6,7 +6,6 @@ from setuptools import setup, find_packages
 
 NAME = 'pytuga'
 AUTHOR = 'Fábio Macêdo Mendes'
-REQUIRES = []  # 'PyQt5' is not supported in PyPI
 DIRNAME = os.path.dirname(__file__)
 
 # Warn user about missing PyQt libraries. These cannot go into REQUIRES list
@@ -108,7 +107,7 @@ distribution = setup(
     #
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=REQUIRES,
+        install_requires=[],  # 'PyQt5' is not supported in PyPI,
 
     #
     # Scripts
