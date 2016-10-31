@@ -9,3 +9,4 @@ pyinstaller/
 .project
 .pydevproject
 installed-files.txt
+.cache/
