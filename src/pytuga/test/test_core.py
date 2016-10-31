@@ -18,7 +18,8 @@ def test_builtins():
 
 def test_transpile():
     py = transpile('enquanto verdadeiro ou falso: prosseguir')
-    assert py == 'while True or False: pass'
+    # Each transpile call puts a '\n' in the end of line
+    assert py == 'while True or False: pass\n'
 
 
 def test_exec():
