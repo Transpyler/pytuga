@@ -459,6 +459,9 @@ def fromstring(src, convert_tokens=True):
 
     current_string = src
 
+    if(current_string[-1] != '\n'):
+        current_string += '\n'
+
     def iterlines():
         nonlocal current_string
 
@@ -471,6 +474,7 @@ def fromstring(src, convert_tokens=True):
     tokens = list(tokenize.generate_tokens(iterlines))
     if convert_tokens:
         tokens = list(map(Token, tokens))
+
     return tokens
 
 
