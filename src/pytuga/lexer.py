@@ -459,7 +459,7 @@ def fromstring(src, convert_tokens=True):
 
     current_string = src
 
-    if(current_string[-1] != '\n'):
+    if not current_string.endswith('\n'):
         current_string += '\n'
 
     def iterlines():

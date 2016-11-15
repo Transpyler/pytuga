@@ -113,7 +113,7 @@ def transpile(src):
     else:
         src_formatted = src
 
-        if(src_formatted[-1] != '\n'):
+        if not src_formatted.endswith('\n'):
             src_formatted += '\n'
 
         tokens = lexer.fromstring(src_formatted)
