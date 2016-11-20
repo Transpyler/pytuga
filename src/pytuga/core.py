@@ -111,7 +111,12 @@ def transpile(src):
 
     # Convert and process...
     else:
-        tokens = lexer.fromstring(src)
+        src_formatted = src
+
+        if not src_formatted.endswith('\n'):
+            src_formatted += '\n'
+
+        tokens = lexer.fromstring(src_formatted)
         transpiled_tokens = lexer.transpile_tk(tokens)
         result = lexer.tostring(transpiled_tokens)
         return result
