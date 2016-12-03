@@ -26,7 +26,7 @@ except ImportError:
 
 # Rewrite __version__.py in tugalib
 VERSION = open('VERSION', encoding='utf8').read().strip()
-version_file = os.path.join(DIRNAME, 'src', 'pytuga', 'version.py')
+version_file = os.path.join(DIRNAME, 'src', 'pytuga', '__version__.py')
 try:
     with open(version_file, 'w', encoding='utf8') as F:
         F.write('__version__ = %r\n'

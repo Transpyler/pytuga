@@ -1,5 +1,6 @@
 import builtins as _builtins
 import codeop
+import contextlib
 import importlib
 from types import ModuleType as _Module
 
@@ -102,6 +103,12 @@ def update_builtins(forbidden=False, **kwargs):
 
     for (name, value) in ns.items():
         setattr(_builtins, name, value)
+
+    @contextlib.contextmanager
+    def ctx_manager():
+        yield None
+        revert_builtins()
+    return ctx_manager()
 
 
 def revert_builtins():
@@ -241,7 +248,12 @@ def transpile(src):
 
     # Convert and process...
     else:
-        tokens = lexer.fromstring(src)
+        src_formatted = src
+
+        if not src_formatted.endswith('\n'):
+            src_formatted += '\n'
+
+        tokens = lexer.fromstring(src_formatted)
         transpiled_tokens = lexer.transpile_tk(tokens)
         result = lexer.tostring(transpiled_tokens)
         return keep_spaces(result, src)

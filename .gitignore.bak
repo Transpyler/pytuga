@@ -1,0 +1,11 @@
+__pycache__
+build/
+dist/
+src/pytuga.egg-info/
+.idea/
+pyinstaller/
+.settings/
+.gitignore
+.project
+.pydevproject
+installed-files.txt

@@ -4,6 +4,7 @@ import sys
 
 from jupyter_client import KernelManager
 from jupyter_console.app import ZMQTerminalIPythonApp
+from jupyter_console.ptshell import ZMQTerminalInteractiveShell
 
 
 class PytugaKernelManager(KernelManager):
@@ -21,12 +22,31 @@ class PytugaKernelManager(KernelManager):
         return os.path.join(os.path.dirname(__file__), 'kernel.py')
 
 
+# Jupyter does not make it very easy to subclass. We simply monkey-patch the
+# ZMQTerminalInteractiveShell class. It is a singleton, hence we don't expect
+# problems.
+#
+# These hacks customize the messages shown during shell initialization.
+def show_banner(self):
+    print(self.kernel_info.get('banner', ''))
+
+
+ZMQTerminalInteractiveShell.show_banner = show_banner
+
+
+class ZMQTerminalPytugaApp(ZMQTerminalIPythonApp):
+    """
+    A Pytuga specific terminal
+    """
+    name = 'pytuga-console'
+
+
 def start_console_shell():
     """
     Starts a cli-based shell.
     """
 
-    ZMQTerminalIPythonApp.launch_instance(
+    ZMQTerminalPytugaApp.launch_instance(
         kernel_manager=PytugaKernelManager,
         kernel_name='pytuga',
     )
@@ -37,7 +57,7 @@ def start_qt_shell():
     Starts a shell based on QtConsole.
     """
 
-    ZMQTerminalIPythonApp.launch_instance(
+    ZMQTerminalPytugaApp.launch_instance(
         kernel_manager=PytugaKernelManager,
     )
 

@@ -28,16 +28,22 @@ class PrettyCallable:
     Callable that is represented with a pretty message.
     """
 
-    def __init__(self, func, name=None, doc=None, str=None):
+    def __init__(self, func, name=None, doc=None, str=None,
+                 autoexec=False, autoexec_message=None):
         self.__func = func
+        self.__autoexec = autoexec
+        self.__autoexec_message = autoexec_message
+        self.__repr = str or 'please call %s()' % self.__name__
         self.__name__ = name or func.__name__
         self.__doc__ = doc or func.__doc__
-        self.__repr = str or 'please call %s()' % self.__name__
 
     def __call__(self, *args, **kwargs):
         return self.__func(*args, **kwargs)
 
     def __repr__(self):
+        if self.__autoexec:
+            self.__func()
+            return self.__autoexec_message or ''
         return self.__repr
 
     def __getattr__(self, attr):
@@ -73,7 +79,8 @@ class PytugaShell(ZMQInteractiveShell):
         super().init_user_ns()
         ns = self.user_ns
 
-        @pretty_callable('digite "sair()" para terminar a execução')
+        @pretty_callable('digite "sair()" para terminar a execução',
+                         autoexec=True, autoexec_message='tchau! ;-)')
         def sair():
             """
             Finaliza a execução do terminal de Pytuguês.

@@ -6,11 +6,23 @@ from pytuga import __version__
 
 
 pytuga_banner = \
-    '''Benvindo ao Pytuguês, um Python com sotaque lusitano.
-Pytuga %s
+    r'''Pytuga %s
 Python %s
-digite "ajuda()", "licença()" ou "tutorial()" para maiores informações
-''' % ( __version__, sys.version.splitlines()[0])
+                 __
+                /\ \__
+ _____    __  __\ \ ,_\  __  __     __       __
+/\ '__`\ /\ \/\ \\ \ \/ /\ \/\ \  /'_ `\   /'__`\
+\ \ \L\ \\ \ \_\ \\ \ \_\ \ \_\ \/\ \L\ \ /\ \L\.\_
+ \ \ ,__/ \/`____ \\ \__\\ \____/\ \____ \\ \__/.\_\
+  \ \ \/   `/___/> \\/__/ \/___/  \/___L\ \\/__/\/_/
+   \ \_\      /\___/                /\____/
+    \/_/      \/__/                 \_/__/
+
+
+Benvindo ao Pytuguês, um Python com sotaque lusitano.
+
+digite "ajuda()", "licença()" ou "tutorial()" para maiores informações.''' \
+    % (__version__, sys.version.splitlines()[0])
 
 
 class PyTugaConsole(code.InteractiveConsole):

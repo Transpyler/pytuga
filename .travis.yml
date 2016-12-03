@@ -1,0 +1,11 @@
+language: python
+
+# versions support
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+
+install: "pip install -r requirements.txt"
+
+script: "py.test src/pytuga/test/"
