@@ -30,35 +30,43 @@ Zen do Pytuguês
     If the implementation is easy to explain, it may be a good idea.
     Namespaces are one honking great idea -- let's do more of those
 
-O Pytuguês, como linguagem voltada para iniciantes, algumas vezes pode divergir
-do Zen do Python. É lógico que acreditamos que "Beautiful is better than ugly" e
-"Simple is better than complex", mas talvez devamos acrescentar no topo algumas
-das prioridades mais importantes::
+Pytuguês é um dialeto de Python, com sotaque lusitano. Python é uma linguagem
+excelente para o ensino de programação e o foco do Pytuguês é exatamente este.
+No entanto, Python também é uma linguagem de uso profissional e isto acaba
+levando a algumas decisões que enfatizam as "boas práticas", mas que podem
+aumentar um pouco a curva de dificuldade de um programador iniciante.
 
-    Programar deve ser divertido.
-    Programar deve ser simples (até mesmo para uma criança!).
-    A linguagem deve cumprir com as expectativas do usuário.
-    A linguagem deve destacar e não esconder os erros de um programa.
+É lógico que acreditamos que *"Beautiful is better than ugly"*, *"Simple is better
+than complex"*, etc. Dado o foco do Pytuguês, devemos acrescentar algumas
+prioridades no topo::
 
-Sendo assim, algumas decisões sobre a linguagem talvez violem o Zen do Python
-original para priorizar estes novos elementos.
+    Você não precisa aprender uma linguagem nova para começar a programar.
+    Programar é divertido.
+    Até uma criança consegue fazer.
+    O usuário não gosta de surpresas.
+    O usuário não gosta de erros, mas a linguagem deve destacar e não esconder
+    os erros de um programa.
+
+Sendo assim, as vezes desviamos de uma linguagem puramente "pythonica" para para
+priorizar estes novos elementos.
 
 
 Questões específicas do Pytuguês
 ================================
 
 Acentuação:
-    Diferentemente do Inglês, Português é uma linguagem que possui acentos.
-    Deste modo, tanto partes da sintaxe como funções básicas do Pytuguês devem
-    ser acentuados. No entanto, acentos são fáceis de se esquecer e algumas
-    pessoas realmente não gostam da idéia de acentos em código fonte. Pensando
+    Diferentemente do Inglês, Português possui muitas palavras com acentos.
+    Deste modo, tanto elementos básicos da sintaxe tais quais palavras chave e
+    comandos, quanto os elementos definidos pelo usuário como funções e variáveis devem ser
+    acentuados normalmente. Acentos são fáceis de se esquecer e algumas
+    pessoas realmente não gostam da idéia de acentuar código fonte. Pensando
     nisto, disponibilizamos "apelidos" não acentuados para cada comando e cada
     função na biblioteca básica.
 Verbosidade:
     Não esperamos que se criem códigos para "produção" em Pytuguês, nem
     imaginamos Pytuguês como uma linguagem extremamente produtiva. Deste modo,
-    achamos que é mais importante que a intenção de um programa seja clara ao
-    leitor que este mesmo programa seja fácil de digitar. Por isto, sempre
+    achamos que é mais importante deixar que a intenção de um programa seja
+    clara do que tornar os programs compactos e fáceis de digitar. Por isto, sempre
     optamos por nomes longos e explícitos ao invés de nomes curtos e ambíguos.
     Inclusive acreditamos que o fato de Python exigir menos digitação funciona
     como um incentivo de migração do Pytuguês para o Python.
@@ -67,15 +75,14 @@ Tempos verbais:
     pelo "to", como em "to eat" vs. "eat"). O Português conjuga o imperativo
     como em "comer" vs "coma" e ambas as formas parecem maneiras válidas de
     expressar uma ação em um programa. O modo imperativo talvez se baseia na
-    idéia que um programa é uma sequência de comandos que devem ser
-    transmitidos para o computador executar, como em ``mostre('olá, mundo!')``.
-    Já o modo infinitivo concebe um programa como a implementação de um
-    algorítimo abstrato, onde nenhuma entidade concreta é encarregada de
-    executar as ações: ``mostrar('olá, mundo!')``. O Pytuguês suporta as duas
+    idéia que um programa é uma sequência de comandos transmitidos para o
+    computador executar, como em ``mostre('olá, mundo!')``.
+    Já o modo infinitivo concebe um programa como uma idéia abstrata e impessoal,
+    como em ``mostrar('olá, mundo!')``. O Pytuguês suporta as duas
     formas de cada comando, tanto no nível da sintaxe, quanto no nível da
     biblioteca de funções.
 Argumentos de funções:
-    Iniciantes muitas vezes tem dificuldades em utilizar funções com o número
+    Iniciantes muitas vezes tem dificuldades em utilizar funções com número
     variável de argumentos. A documentação do Pytuguês evita mencionar
     argumentos variáveis (mesmo quando eles são suportados) e a maior
     parte das funções do Pytuguês espera um número fixo de argumentos. De um
@@ -110,9 +117,10 @@ Range explícito
 ---------------
 
 Programadores iniciantes possuem uma certa dificuldade com a função range().
-É uma função que pode ser chamada de três maneiras diferentes. Se pensarmos em
-termos de intervalos numéricos, ela inclui o ponto de início, mas exclui o ponto
-final. Para evitar estas complicações, introduzimos o laço::
+É uma função que possui três assinaturas diferentes e é fácil confundir a
+indexação baseada em zero. Se pensarmos em termos de intervalos numéricos,
+ela inclui o ponto de início, mas exclui o ponto final. Para evitar estas
+complicações, Pytuguês também suporta o laço::
 
     para cada <VAR> de <A> até <B> [a cada <C>] faça:
         <BLOCO DE COMANDOS>
@@ -128,9 +136,10 @@ função "range()". Por examplo, contamos de 1 até 10 fazendo::
 Sintaxe redundante
 ------------------
 
-Alguns comandos do Pytuguês introduzem sintaxe redundante, apenas com o intuito
+Alguns comandos do Pytuguês introduzem sintaxe redundante, com a única função
 de tornar a intenção do programador mais explícita. Estas palavras redundantes
-são sempre opcionais e o programador pode escolher utilizá-las ou não::
+são opcionais e o programador pode escolher utilizá-las ou não, de acordo com
+o estilo pessoal::
 
     # Laços
     para [cada] x em L [faça]:
@@ -168,6 +177,7 @@ Problemas abertos
   legibilidade do código e possui uma certa congruência com o uso do mesmo
   símbolo em linguagem natural. O fato é que iniciantes frequentemente esquecem
   os dois pontos e se frustram quando o código não funciona. Devemos ignorar a
-  ausência dos mesmos ou simplesmente mostrar uma mensagem de erro mais clara?
+  ausência dos mesmos ou simplesmente mostrar uma mensagem de erro mais clara,
+  explicando que o usuário deve inserir o ":" em uma linha específica?
   Esta ausência deve ser tolerada apenas em sintaxe Pytuguês ou também em
   sintaxe Python?

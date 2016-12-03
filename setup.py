@@ -3,6 +3,9 @@ import os
 import sys
 from glob import glob
 from setuptools import setup, find_packages
+from setuptools.command.install import install as _install
+from setuptools.command.develop import develop as _develop
+
 
 NAME = 'pytuga'
 AUTHOR = 'Fábio Macêdo Mendes'
@@ -15,6 +18,7 @@ try:
     import PyQt5.Qsci
 except ImportError:
     import warnings
+
     warnings.warn(
         'Please install PyQt5, PyQt5.QtSvg and PyQt5.Qsci!\n'
         'Check your distribution packages or go to the website bellow:\n'
@@ -62,18 +66,31 @@ for path, _, files in os.walk('doc/build/html'):
     for file in files:
         docfiles.append('%s/%s' % (path, file))
 
-# Fix path separator (necessary?)
-for i, (path, files) in enumerate(DATA_FILES):
-    path = os.path.sep.join(path.split('/'))
-    files = [os.path.sep.join(f.split('/')) for f in files]
-    DATA_FILES[i] = (path, files)
+# Fix path separators in windows (necessary?)
+if os.path.sep != '/':
+    for i, (path, files) in enumerate(DATA_FILES):
+        path = os.path.sep.join(path.split('/'))
+        files = [os.path.sep.join(f.split('/')) for f in files]
+        DATA_FILES[i] = (path, files)
+
+
+# Wraps command classes to register ipytuga kernel
+def wrapped_cmd(cmd):
+    class Command(cmd):
+        def run(self):
+            cmd.run(self)
+            from pytuga.ipytuga.setup import setup_assets
+            setup_assets(True)
+
+    return Command
+
 
 # Run setup() function
 distribution = setup(
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
-        author=AUTHOR,
+    author=AUTHOR,
     author_email='fabiomacedomendes@gmail.com',
     url='https://github.com/fabiommendes/pytuga',
     long_description=('''
@@ -102,37 +119,45 @@ distribution = setup(
         'Topic :: Software Development :: Libraries',
     ],
 
-    #
-    # Packages and depencies
-    #
+    # Packages and dependencies
     package_dir={'': 'src'},
     packages=find_packages('src'),
-        install_requires=[],  # 'PyQt5' is not supported in PyPI,
+    install_requires=[
+        'unidecode',
+        'metakernel-python',
+        'ipykernel',
+        'jupyter-client',
+    ],  # 'PyQt5' is not supported in PyPI,
 
-    #
+    # Wrapped commands (for ipytuga)
+    cmdclass={
+        'install': wrapped_cmd(_install),
+        'develop': wrapped_cmd(_develop),
+    },
+
     # Scripts
-    #
     entry_points={
         # Stand alone tugalinhas?
         'console_scripts': console_scripts,
         'gui_scripts': gui_scripts,
     },
 
-    #
     # Data files
-    #
-        package_data={
-            'tugalinhas': [
-                '*.*',
-                'doc/html/*.*',
-                'doc/html/_modules/*.*',
-                'doc/html/_modules/tugalib/*.*',
-                'doc/html/_sources/*.*',
-                'doc/html/_static/*.*',
-                'examples/*.pytg'
-            ]
-        },
-        data_files=DATA_FILES,
+    package_data={
+        'tugalinhas': [
+            '*.*',
+            'doc/html/*.*',
+            'doc/html/_modules/*.*',
+            'doc/html/_modules/tugalib/*.*',
+            'doc/html/_sources/*.*',
+            'doc/html/_static/*.*',
+            'examples/*.pytg'
+        ],
+        'pytuga': [
+            'ipytuga/assets/*.*',
+        ],
+    },
+    data_files=DATA_FILES,
     zip_safe=False,
 )
 

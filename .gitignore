@@ -1,11 +1,14 @@
-__pycache__
+# Cached builds
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg
+*.egg-info/
+
+# Build directories
+doc/_build/
 build/
 dist/
-src/pytuga.egg-info/
-.idea/
-pyinstaller/
-.settings/
-.gitignore
-.project
-.pydevproject
-installed-files.txt

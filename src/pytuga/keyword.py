@@ -20,7 +20,7 @@ TRANSLATIONS = dict(
         nulo='None', Nulo='None',
 
         # Operators
-        é='is',
+        é='is', eh='is',
         e='and',
         ou='or',
         não='not', nao='not',
@@ -45,7 +45,13 @@ TRANSLATIONS = dict(
         importe='import', importar='import',
         usando='with',  # ???
         # global='global',
+
+        # Pytugues to pytugues
+        até='ate',
+        ateh='ate',
 )
+
+
 PURE_PYTG_KEYWORDS = set(TRANSLATIONS)
 PURE_PYTG_KEYWORDS.update({'repetir', 'repita', 'vezes', 'cada', 'de',
                            'até', 'ate', 'fazer', 'faça', 'faca'})

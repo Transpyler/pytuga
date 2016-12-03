@@ -1,0 +1,24 @@
+{
+  "argv": ["python3", "-m", "pytuga.ipytuga.kernel", "-f", "{connection_file}"],
+  "display_name": "Pytuguês",
+  "language": "pytuga",
+  "codemirror_mode": "python",
+  "language_info": {
+    "name": "Pytuguês",
+    "codemirror_mode": {
+      "name": "python"
+    },
+    "mimetype": "text/x-pytuga",
+    "pygments_lexer": "ipython3"
+  },
+  "help_links": [
+    {
+      "text": "Documentação do Pytuguês",
+      "link": "http://pytuga.readthedocs.io/pt/latest/"
+    },
+    {
+      "text": "Github",
+      "link": "http://github.com/fabiommendes/pytuga/"
+    }
+  ]
+}

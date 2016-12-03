@@ -12,7 +12,7 @@ try:
     import turtle as _TURTLE_MODULE
 except ImportError:
     _TURTLE_MODULE = None
-from tugalib.util import synonyms
+from pytuga.utils import synonyms
 
 
 def _turtle():

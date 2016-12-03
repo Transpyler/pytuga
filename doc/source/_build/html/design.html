@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Definições e design do Pytuguês &mdash; pytuga 0.7.6-5 documentação</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pytuga 0.7.6-5 documentação" href="index.html"/>
+        <link rel="prev" title="Migrando para Python" href="python.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pytuga
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.6-5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Migrando para Python</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Definições e design do Pytuguês</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#zen-do-pytugues">Zen do Pytuguês</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#questoes-especificas-do-pytugues">Questões específicas do Pytuguês</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estensoes-sintaticas-para-o-python">Estensões sintáticas para o Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#repetir">Repetir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#range-explicito">Range explícito</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sintaxe-redundante">Sintaxe redundante</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#problemas-abertos">Problemas abertos</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">pytuga</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Definições e design do Pytuguês</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/design.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="definicoes-e-design-do-pytugues">
+<h1>Definições e design do Pytuguês<a class="headerlink" href="#definicoes-e-design-do-pytugues" title="Link permanente para este título">¶</a></h1>
+<div class="section" id="zen-do-pytugues">
+<h2>Zen do Pytuguês<a class="headerlink" href="#zen-do-pytugues" title="Link permanente para este título">¶</a></h2>
+<dl class="docutils">
+<dt>::</dt>
+<dd><p class="first">import this</p>
+<p>The Zen of Python, by Tim Peters</p>
+<p class="last">Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren&#8217;t special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one&#8211; and preferably only one &#8211;obvious way to do it.
+Although that way may not be obvious at first unless you&#8217;re Dutch.
+Now is better than never.
+Although never is often better than <em>right</em> now.
+If the implementation is hard to explain, it&#8217;s a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea &#8211; let&#8217;s do more of those</p>
+</dd>
+</dl>
+<p>O Pytuguês, como linguagem voltada para iniciantes, algumas vezes pode divergir
+do Zen do Python. É lógico que acreditamos que &#8220;Beautiful is better than ugly&#8221; e
+&#8220;Simple is better than complex&#8221;, mas talvez devamos acrescentar no topo algumas
+das prioridades mais importantes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Programar deve ser divertido.
+Programar deve ser simples (até mesmo para uma criança!).
+A linguagem deve cumprir com as expectativas do usuário.
+A linguagem deve destacar e não esconder os erros de um programa.
+</pre></div>
+</div>
+<p>Sendo assim, algumas decisões sobre a linguagem talvez violem o Zen do Python
+original para priorizar estes novos elementos.</p>
+</div>
+<div class="section" id="questoes-especificas-do-pytugues">
+<h2>Questões específicas do Pytuguês<a class="headerlink" href="#questoes-especificas-do-pytugues" title="Link permanente para este título">¶</a></h2>
+<dl class="docutils">
+<dt>Acentuação:</dt>
+<dd>Diferentemente do Inglês, Português é uma linguagem que possui acentos.
+Deste modo, tanto partes da sintaxe como funções básicas do Pytuguês devem
+ser acentuados. No entanto, acentos são fáceis de se esquecer e algumas
+pessoas realmente não gostam da idéia de acentos em código fonte. Pensando
+nisto, disponibilizamos &#8220;apelidos&#8221; não acentuados para cada comando e cada
+função na biblioteca básica.</dd>
+<dt>Verbosidade:</dt>
+<dd>Não esperamos que se criem códigos para &#8220;produção&#8221; em Pytuguês, nem
+imaginamos Pytuguês como uma linguagem extremamente produtiva. Deste modo,
+achamos que é mais importante que a intenção de um programa seja clara ao
+leitor que este mesmo programa seja fácil de digitar. Por isto, sempre
+optamos por nomes longos e explícitos ao invés de nomes curtos e ambíguos.
+Inclusive acreditamos que o fato de Python exigir menos digitação funciona
+como um incentivo de migração do Pytuguês para o Python.</dd>
+<dt>Tempos verbais:</dt>
+<dd>O inglês muitas vezes não diferencia o infinitivo do imperativo (a não ser
+pelo &#8220;to&#8221;, como em &#8220;to eat&#8221; vs. &#8220;eat&#8221;). O Português conjuga o imperativo
+como em &#8220;comer&#8221; vs &#8220;coma&#8221; e ambas as formas parecem maneiras válidas de
+expressar uma ação em um programa. O modo imperativo talvez se baseia na
+idéia que um programa é uma sequência de comandos que devem ser
+transmitidos para o computador executar, como em <code class="docutils literal"><span class="pre">mostre('olá,</span> <span class="pre">mundo!')</span></code>.
+Já o modo infinitivo concebe um programa como a implementação de um
+algorítimo abstrato, onde nenhuma entidade concreta é encarregada de
+executar as ações: <code class="docutils literal"><span class="pre">mostrar('olá,</span> <span class="pre">mundo!')</span></code>. O Pytuguês suporta as duas
+formas de cada comando, tanto no nível da sintaxe, quanto no nível da
+biblioteca de funções.</dd>
+<dt>Argumentos de funções:</dt>
+<dd>Iniciantes muitas vezes tem dificuldades em utilizar funções com o número
+variável de argumentos. A documentação do Pytuguês evita mencionar
+argumentos variáveis (mesmo quando eles são suportados) e a maior
+parte das funções do Pytuguês espera um número fixo de argumentos. De um
+modo geral, preferimos criar duplicatas de funções em suas versões com cada
+número de argumentos.</dd>
+</dl>
+</div>
+<div class="section" id="estensoes-sintaticas-para-o-python">
+<h2>Estensões sintáticas para o Python<a class="headerlink" href="#estensoes-sintaticas-para-o-python" title="Link permanente para este título">¶</a></h2>
+<p>Além da tradução (e algumas vezes adição de palavras chaves reduntantes, apenas
+para enfatizar o contexto), o Pytuguês possui algumas estensões sintáticas
+com relação ao Python.</p>
+<div class="section" id="repetir">
+<h3>Repetir<a class="headerlink" href="#repetir" title="Link permanente para este título">¶</a></h3>
+<p>A estrutura de repetição mais simples é dada pelo comando &#8220;repetir&#8221; (ou repita),
+que simplesmente repete o conteúdo de um bloco pelo número especificado de vezes</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>repetir &lt;N&gt; vezes:
+    &lt;BLOCO DE COMANDOS&gt;
+</pre></div>
+</div>
+<p>O laço &#8220;repetir&#8221; é a introdução às estruturas de repetição, e muitas vezes é
+o suficiente para problemas simples como desenhar figuras na tela.</p>
+</div>
+<div class="section" id="range-explicito">
+<h3>Range explícito<a class="headerlink" href="#range-explicito" title="Link permanente para este título">¶</a></h3>
+<p>Programadores iniciantes possuem uma certa dificuldade com a função range().
+É uma função que pode ser chamada de três maneiras diferentes. Se pensarmos em
+termos de intervalos numéricos, ela inclui o ponto de início, mas exclui o ponto
+final. Para evitar estas complicações, introduzimos o laço:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>para cada &lt;VAR&gt; de &lt;A&gt; até &lt;B&gt; [a cada &lt;C&gt;] faça:
+    &lt;BLOCO DE COMANDOS&gt;
+</pre></div>
+</div>
+<p>Na nova forma, tanto o início do intervalo numérico quanto o seu fim estão
+marcados explicitamente. Isto deixa o código mais óbvio para aqueles que
+nunca entraram em contato com a linguagem e desconhecem as particularidades da
+função &#8220;range()&#8221;. Por examplo, contamos de 1 até 10 fazendo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>para cada x de 1 até 10 faça:
+    mostre(x)
+</pre></div>
+</div>
+</div>
+<div class="section" id="sintaxe-redundante">
+<h3>Sintaxe redundante<a class="headerlink" href="#sintaxe-redundante" title="Link permanente para este título">¶</a></h3>
+<p>Alguns comandos do Pytuguês introduzem sintaxe redundante, apenas com o intuito
+de tornar a intenção do programador mais explícita. Estas palavras redundantes
+são sempre opcionais e o programador pode escolher utilizá-las ou não:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span># Laços
+para [cada] x em L [faça]:
+    &lt;BLOCO&gt;
+
+para [cada] x de 1 até 10 [a] cada 2 [faça]:
+    &lt;BLOCO&gt;
+
+enquanto x &gt; 10 [faça]:
+    &lt;BLOCO&gt;
+
+# Condicionais
+se x &gt; 10 [então] [faça]:
+    &lt;BLOCO&gt;
+ou [então] se x &gt; 10 [então] [faça]:
+    &lt;BLOCO&gt;
+senão [faça]:
+    &lt;BLOCO&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="problemas-abertos">
+<h2>Problemas abertos<a class="headerlink" href="#problemas-abertos" title="Link permanente para este título">¶</a></h2>
+<ul class="simple">
+<li>Operador &#8220;is&#8221; é traduzido como &#8220;é&#8221;. A versão não-acentuada colide com o
+operador lógico &#8220;e&#8221;. Encontrar outros sinónimos para identidade?
+<code class="docutils literal"><span class="pre">x</span> <span class="pre">[é]</span> <span class="pre">idêntico</span> <span class="pre">[a]</span> <span class="pre">y</span></code>?</li>
+<li>Keywords com espaços: Pytuguês possui alguns comandos que funcionam como
+&#8220;keywords&#8221; com espaços (Ex.: para x de 1 até 10 <em>a cada</em> 2: ...). O
+identificador &#8220;a&#8221; deve ser tratado como keyword ou é tratado assim somente
+quando aparecer em &#8220;a cada&#8221;. Se &#8220;a&#8221; for promovido a uma keyword, podemos ter
+várias colisões de nomes.</li>
+<li>Dois pontos são necessários para delimitar o início de um bloco? O uso de &#8221;:&#8221;
+para delimitar o início de um bloco é redundante em Python (já que a
+indentação sozinha já é capaz de resolver esta questão), mas aumenta a
+legibilidade do código e possui uma certa congruência com o uso do mesmo
+símbolo em linguagem natural. O fato é que iniciantes frequentemente esquecem
+os dois pontos e se frustram quando o código não funciona. Devemos ignorar a
+ausência dos mesmos ou simplesmente mostrar uma mensagem de erro mais clara?
+Esta ausência deve ser tolerada apenas em sintaxe Pytuguês ou também em
+sintaxe Python?</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="python.html" class="btn btn-neutral" title="Migrando para Python" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Fábio Macêdo Mendes.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.7.6-5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

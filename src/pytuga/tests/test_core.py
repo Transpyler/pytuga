@@ -37,7 +37,3 @@ def test_compile():
     D = {}
     exec(code, D, forbidden=False)
     assert D['x'] == 1
-
-
-if __name__ == '__main__':
-    pytest.main('test_core.py')

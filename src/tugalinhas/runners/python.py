@@ -11,6 +11,8 @@ from .base import Runner
 class PythonRunner(Runner):
     """Runs code in a Python 3 interpreter"""
 
+    _exec = exec
+
     def __init__(self, namespace=None):
         super().__init__()
         self._namespace = dict(namespace or {})
@@ -63,7 +65,7 @@ class PythonRunner(Runner):
 
     def checkValidSyntax(self, src):
         try:
-            compile(src, '<input>', 'eval')
+            compile(self.transform(src), '<input>', 'eval')
             return True
         except SyntaxError:
             return False
@@ -77,20 +79,22 @@ class PythonRunner(Runner):
     def updateNamespace(self, D):
         self._namespace.update(D)
 
+    def transform(self, src):
+        return src
+
     def runSingle(self, src):
         return self._run_worker(src, 'single', self._namespace)
 
     def runExec(self, src):
         return self._run_worker(src, 'exec', self._namespace)
 
-    @staticmethod
-    def _run_worker(cmd, mode, ns):
+    def _run_worker(self, cmd, mode, ns):
         stdout, stderr = sys.stdout, sys.stderr
         out = sys.stdout = io.StringIO()
         err = sys.sterr = io.StringIO()
         try:
-            code = compile(cmd, '<input>', mode)
-            exec(code, ns)
+            code = compile(self.transform(cmd), '<input>', mode)
+            self._exec(code, ns)
         except:
             traceback.print_exc(file=out)
         finally:
@@ -98,7 +102,6 @@ class PythonRunner(Runner):
             data = out.getvalue() + err.getvalue()
             return data
 
-    @staticmethod
-    def _set_subprocess_globals(namespace):
+    def _set_subprocess_globals(self, namespace):
         D = globals()
         D.update(namespace)

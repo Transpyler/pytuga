@@ -5,7 +5,7 @@ Outras funções
 Outras funções que não se encaixam em nenhuma categoria específica.
 """
 import time as _time
-from pytuga.util import synonyms, accented_keywords
+from pytuga.utils import synonyms, normalize_accented_keywords
 
 
 #
@@ -278,7 +278,7 @@ def ordenado(seq, chave=None):
     return sorted(seq, key=chave)
 
 
-@accented_keywords
+@normalize_accented_keywords
 def texto(obj, codificacao=None):
     """
     Cria um novo texto a partir do objeto fornecido.

@@ -6,14 +6,17 @@ from pytuga import __version__
 
 
 pytuga_banner = \
-    '''pytuga %s, o interpretador de Pytuguês.
-[Python 3.4, GCC] em linux
+    '''Benvindo ao Pytuguês, um Python com sotaque lusitano.
+Pytuga %s
+Python %s
 digite "ajuda()", "licença()" ou "tutorial()" para maiores informações
-''' % __version__
+''' % ( __version__, sys.version.splitlines()[0])
 
 
 class PyTugaConsole(code.InteractiveConsole):
-    """Very simple console for pytuguês language"""
+    """
+    Very simple console for Pytuguês language.
+    """
 
     def __init__(self, locals=None, filename='<console>', forbidden=True):
         tuga_ns = core.tugalib_namespace(forbidden=forbidden)
@@ -75,7 +78,9 @@ class PyTugaConsole(code.InteractiveConsole):
 
 
 def run_console():
-    """Run the main console."""
+    """
+    Run the main console.
+    """
 
     console = PyTugaConsole()
     try:

@@ -55,6 +55,15 @@ def alias(*args):
     return decorator
 
 
+class TurtleImplementationMixin:
+    """
+    Implements functions in TurtleNamespace using Python's builtin turtle
+    module.
+    """
+
+
+
+
 class TurtleNamespaceEnglish(MutableMapping):
     """
     Defines the namespace of turtle functions. 

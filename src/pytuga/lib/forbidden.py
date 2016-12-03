@@ -4,7 +4,7 @@ Dirty c-level hacks inspired by the forbiddenfruit module.
 
 import os
 import ctypes
-from pytuga.util import accented_keywords, synonyms, collect_synonyms
+from pytuga.utils import normalize_accented_keywords, synonyms, collect_synonyms
 
 __all__ = []
 
@@ -61,7 +61,7 @@ class Lista(list):
 
         return self.index(valor, i, j)
 
-    @accented_keywords
+    @normalize_accented_keywords
     @synonyms('insira')
     def inserir(self, índice, valor):
         """Insere o elemento dado na posição dada pelo índice."""
@@ -86,7 +86,7 @@ class Lista(list):
 
         self.sort(**kwds)
 
-    @accented_keywords
+    @normalize_accented_keywords
     @synonyms('ordene_por')
     def ordenar_por(self, função, invertido=False):
         """Ordena a lista a partir segundo o resultado da aplicação da função
@@ -100,7 +100,7 @@ class Lista(list):
 
         return self.pop(*args)
 
-    @accented_keywords
+    @normalize_accented_keywords
     @synonyms('retire_de')
     def retirar_de(self, índice):
         """Remove o elemento no índice dado e o retorna."""

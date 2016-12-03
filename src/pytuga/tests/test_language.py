@@ -112,9 +112,6 @@ def test_passthru(passtru):
 #
 # Old tests
 #
-
-
-
 def test_para_cada_in_range():
     ptsrc = 'para x de 1 até 10: mostre(x)'
     pysrc = 'for x in range(1, 10 + 1): mostre(x)'

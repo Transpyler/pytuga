@@ -29,6 +29,7 @@ PYTHON_WORDS = tuple(
         list(keyword.kwlist)  # is a set (?) in python 3.4
 )
 
+
 #
 # Thanks to Eli Bendersky:
 # http://eli.thegreenplace.net/2011/04/01/sample-using-qscintilla-with-pyqt
@@ -145,6 +146,7 @@ class PythonEditor(Qsci.QsciScintilla):
 
         # Configure lexer and api for autocompletion
         lexer = Qsci.QsciLexerPython(self)
+        lexer = Qsci.QsciLexerPython()
         lexer.setDefaultFont(self.font())
         words = list(autocompletion_words) 
         if autocomplete_python:

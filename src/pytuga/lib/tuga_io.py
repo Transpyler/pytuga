@@ -6,7 +6,7 @@ Funções que realizam a interação com o usuário, seja lendo valores digitado
 ou arquivos, seja mostrando valores na tela.
 """
 
-from pytuga.util import synonyms
+from pytuga.utils import synonyms
 
 
 @synonyms('mostre')

@@ -25,7 +25,7 @@ from .tuga_math import *
 from .tuga_io import *
 
 # Register synonyms
-from pytuga import util
-util.register_synonyms(globals())
-del util
+from pytuga import utils
+utils.register_synonyms(globals())
+del utils
 del synonyms

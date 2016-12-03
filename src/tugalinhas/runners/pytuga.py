@@ -2,12 +2,15 @@ from .python import PythonRunner
 
 
 class PyTugaRunner(PythonRunner):
-    """Executes code in Pytuga environment."""
+    """
+    Executes code in Pytuga environment.
+    """
 
     def __init__(self, namespace=None, **kwds):
         import pytuga
         import pytuga.lib.tuga_io
         self._pytuga = pytuga
+        self._exec = pytuga.exec
 
         super().__init__(namespace={}, **kwds)
 
@@ -24,8 +27,5 @@ class PyTugaRunner(PythonRunner):
         _namespace.update(dict(namespace or {}))
         self._namespace.update(_namespace)
 
-    def runSingle(self, src):
-        return super().runSingle(self._pytuga.transpile(src))
-
-    def runExec(self, src):
-        return super().runExec(self._pytuga.transpile(src))
+    def transform(self, src):
+        return self._pytuga.transpile(src)

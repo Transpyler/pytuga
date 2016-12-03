@@ -10,7 +10,9 @@ TOKEN_TYPE_NAME = {tt: attr for (attr, tt) in vars(tokenize).items()
 
 
 class Token:
-    """Mutable token object."""
+    """
+    Mutable token object.
+    """
 
     def __init__(self, data, type=None, start=None, end=None, line=None,
                  abstract=False):
@@ -67,8 +69,10 @@ class Token:
 
     @classmethod
     def from_strings(cls, start, *strings):
-        """Return a list of strings starting at the given starting point and
-        return the corresponding strings with the correct start/end positions"""
+        """
+        Return a list of strings starting at the given starting point and
+        return the corresponding strings with the correct start/end positions
+        """
 
         tk_list = []
         start = TokenPosition(start)
@@ -140,14 +144,18 @@ class Token:
         yield from (self[i] for i in range(5))
 
     def to_token_info(self):
-        """Convert to TokenInfo object used by Python's tokenizer."""
+        """
+        Convert to TokenInfo object used by Python's tokenizer.
+        """
 
         return TokenInfo(
                 self.type, self.string, self.start, self.end, self.line
         )
 
     def displace(self, cols):
-        """Displace token in line by cols columns to the right."""
+        """
+        Displace token in line by cols columns to the right.
+        """
 
         self.start += (0, cols)
         if self.end.lineno == self.start.lineno:
@@ -155,8 +163,10 @@ class Token:
 
 
 def displace_tokens(tokens, cols):
-    """Displace all tokens in list which are in the same line as the the first
-    token by the given number of columns"""
+    """
+    Displace all tokens in list which are in the same line as the the first
+    token by the given number of columns
+    """
 
     if not tokens or cols == 0:
         return
@@ -170,7 +180,9 @@ def displace_tokens(tokens, cols):
 
 
 def insert_tokens_at(tokens, idx, new_tokens, end=None):
-    """Insert new_tokens at tokens list at the given idx"""
+    """
+    Insert new_tokens at tokens list at the given idx
+    """
 
     if end is not None:
         linediff, col = new_tokens[-1].end - end
@@ -183,8 +195,10 @@ def insert_tokens_at(tokens, idx, new_tokens, end=None):
 
 
 class TokenPosition(tuple):
-    """Represent the start or end position of a token and accept some basic
-    arithmetic operations"""
+    """
+    Represent the start or end position of a token and accept some basic
+    arithmetic operations
+    """
 
     def __new__(cls, x, y=None):
         if y is None:
@@ -222,8 +236,10 @@ class TokenPosition(tuple):
 
 
 def transpile_tk(tokens):
-    """Transpile a sequence of Token objects representing a Pytuguês code into
-    Python"""
+    """
+    Transpile a sequence of Token objects representing a Pytuguês code into
+    Python
+    """
 
     # We pass several times through the token stream looking for direct
     # translations of Pytuguês tokens to Python.
@@ -286,8 +302,9 @@ def transpile_tk(tokens):
             break
 
     # Now we apply simple single token translations
+    translations = dict(TOKEN_TRANSLATIONS)
     for i, tk in enumerate(tokens):
-        new = TOKEN_TRANSLATIONS.get(tk.string, tk)
+        new = translations.get(tk.string, tk)
         if new is not tk:
             new = Token(new, start=tk.start)
             tokens[i] = new
@@ -306,7 +323,8 @@ def transpile_tk(tokens):
 
 
 def token_find(tokens, matches, start=0):
-    """Iterates over list of tokens yielding (index, match, start, end) for
+    """
+    Iterate over list of tokens yielding (index, match, start, end) for
     each match in the token stream. The `matches` attribute must be a sequence
     of token sequences.
     """
@@ -336,17 +354,18 @@ def token_find(tokens, matches, start=0):
 
 
 def process_repetir_command(tokens):
-    """Handles "repita/repetir".
-
+    """
     Converts command::
 
         repetir <N> vezes:
             <BLOCO>
 
+    or::
+
         repita <N> vezes:
             <BLOCO>
 
-    into::
+    to::
 
         for ___ in range(<N>):
             <BLOCO>
@@ -384,16 +403,18 @@ def process_repetir_command(tokens):
 
 
 def process_de_ate_command(tokens):
-    """Handles command::
+    """
+    Converts command::
 
         de <X> até <Y> [a cada <Z>]
 
-    and converts it to::
+    to::
 
         in range(<X>, <Y> + 1[, <Z>])
+
     """
 
-    matches = [('de',), ('até',), ('a', 'cada',), (NEWLINE,), (':',)]
+    matches = [('de',), ('ate',), ('a', 'cada',), (NEWLINE,), (':',)]
     iterator = token_find(tokens, matches)
     for idx, match, start, end in iterator:
         # Waits for a 'de' token to start processing
@@ -407,7 +428,7 @@ def process_de_ate_command(tokens):
 
         # Matches the 'até' token and insert a comma separator
         idx, match, start, end = next(iterator)
-        if match[0] == 'até':
+        if match[0] in ['até', 'ate']:
             displace_tokens(tokens[idx:], -3)
             tokens[idx] = Token(',', start=tokens[idx - 1].end)
         else:
@@ -455,7 +476,9 @@ def process_de_ate_command(tokens):
 
 
 def fromstring(src, convert_tokens=True):
-    """Convert source string to a list of tokens"""
+    """
+    Convert source string to a list of tokens.
+    """
 
     current_string = src
 
@@ -475,17 +498,8 @@ def fromstring(src, convert_tokens=True):
 
 
 def tostring(tokens):
-    """Converte lista de tokens para string"""
+    """
+    Convert list of tokens to string.
+    """
 
     return tokenize.untokenize([tk.to_token_info() for tk in tokens])
-
-
-if __name__ == '__main__':
-    ptsrc = '''
-se x então faça:
-    dsfsdf
-'''
-
-    tokens = fromstring(ptsrc)
-    # print(transpile_tk(tokens))
-    print(tostring(transpile_tk(tokens)))
