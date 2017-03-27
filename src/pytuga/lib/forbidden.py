@@ -2,9 +2,10 @@
 Dirty c-level hacks inspired by the forbiddenfruit module.
 """
 
-import os
 import ctypes
-from pytuga.utils import normalize_accented_keywords, synonyms, collect_synonyms
+import os
+
+from transpyler.utils import normalize_accented_keywords, synonyms, collect_synonyms
 
 __all__ = []
 
@@ -14,7 +15,8 @@ __all__ = []
 # the forbiddenfruit package
 #
 class Lista(list):
-    """Uma lista representa uma sequência de objetos.
+    """
+    Uma lista representa uma sequência de objetos.
 
     Pode ser incializada com a sintaxe::
 

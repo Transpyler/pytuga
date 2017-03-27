@@ -1,9 +1,9 @@
 import os
 import sys
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
-import pytuga
-from tugalinhas import TurtleWidget
 
+import pytuga
+from pytuga_gui import TurtleWidget
 
 VERSION = pytuga.__version__
 PYTUGA_FILTER = 'Código fonte em Pytyguês (*.pytg *.py *.py3 *.py2)'
@@ -12,10 +12,22 @@ PYTUGA_DOCUMENTATION_PAGE = 'http://pytuga.readthedocs.org/pt/latest/'
 DIRNAME = os.path.split(__file__)[0]
 
 
-class Tugalinhas(QtWidgets.QMainWindow):
+class PytugaMainWindow(QtWidgets.QMainWindow):
     """
-    Main window for Tugalinhas
+    Main window for Pytuga GUI.
     """
+
+    @classmethod
+    def launchInstance(cls, show=True, **kwargs):
+        """
+        Launches a new instance of application.
+        """
+
+        app = QtWidgets.QApplication(sys.argv)
+        window = cls(**kwargs)
+        if show:
+            window.show()
+        sys.exit(app.exec_())
 
     def __init__(self):
         super().__init__()
@@ -24,9 +36,9 @@ class Tugalinhas(QtWidgets.QMainWindow):
         # Layout
         uic.loadUi(os.path.join(DIRNAME, 'main.ui'), self)
         self._turtlewidget = TurtleWidget(
-                header_text='Tugalinhas %s\n'
-                            'Digite `turtlehelp()` para uma lista de comandos'
-                            % VERSION)
+            header_text='Tugalinhas %s\n'
+                        'Digite `turtlehelp()` para uma lista de comandos'
+                        % VERSION)
         self._scene = self._turtlewidget.scene()
         self._view = self._turtlewidget.view()
         self._editor = self._turtlewidget.editor()
@@ -47,7 +59,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
     #
     def openFile(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Abrir arquivo', filter=PYTUGA_FILTER)[0]
+            self, 'Abrir arquivo', filter=PYTUGA_FILTER)[0]
         if fname:
             with open(fname) as F:
                 data = F.read()
@@ -64,7 +76,7 @@ class Tugalinhas(QtWidgets.QMainWindow):
 
     def saveFileAs(self):
         fname = QtWidgets.QFileDialog.getSaveFileName(
-                self, 'Salvar arquivo', filter=PYTUGA_FILTER)[0]
+            self, 'Salvar arquivo', filter=PYTUGA_FILTER)[0]
         if fname:
             with open(fname, 'w') as F:
                 F.write(self._turtlewidget.text())
@@ -76,27 +88,29 @@ class Tugalinhas(QtWidgets.QMainWindow):
         formats = ['.' + bytes(x).decode() for x in formats]
         fmt_string = ' '.join('*' + ext for ext in formats)
 
-        fname = QtWidgets.QFileDialog.getSaveFileName(
-                self, 'Salvar imagem', filter="Imagens (%s)" % fmt_string)[0]
+        fname, *_ = QtWidgets.QFileDialog.getSaveFileName(
+            self,
+            'Salvar imagem',
+            filter="Imagens (%s)" % fmt_string
+        )
 
         if fname:
             if os.path.splitext(fname)[1] not in formats:
-                QtWidgets.QErrorMessage.showMessage(
-                        'Arquivo inválido: %s.\n'
-                        'Extensão não reconhecida. Utilize um formato suportado '
-                        'como por exemplo ".png".' % fname,
-                        'save-image-as-error'
+                msg = (
+                    'Arquivo inválido: %s.\n'
+                    'Extensão não reconhecida. Utilize um formato suportado '
+                    'como por exemplo ".png".' % fname
                 )
+                QtWidgets.QErrorMessage.showMessage(msg, 'save-image-as-error')
             try:
                 self._turtlewidget.saveImage(fname)
             except ValueError:
-                QtWidgets.QErrorMessage.showMessage(
-                        'Arquivo inválido: %s.\n'
-                        'Não foi possível salvar a tela no arquivo escolhido. '
-                        'Verifique se o caminho está acessível ou se as '
-                        'permissões são corretas.' % fname,
-                        'save-image-as-error'
-                )
+                msg = (
+                    'Arquivo inválido: %s.\n'
+                    'Não foi possível salvar a tela no arquivo escolhido. '
+                    'Verifique se o caminho está acessível ou se as permissões '
+                    'são corretas.' % fname)
+                QtWidgets.QErrorMessage.showMessage(msg, 'save-image-as-error')
 
     def newFile(self):
         self._filename = None
@@ -159,12 +173,11 @@ class Tugalinhas(QtWidgets.QMainWindow):
     # Examples menu
     #
     def moreExamples(self):
-        if QtWidgets.QMessageBox.about(
-                self, 'Exemplos',
-                        'Você pode encontrar mais exemplos no website do Pytuguês na página'
-                        '%s. Você deseja ser direcionado para este site?'
-                        % PYTUGA_EXAMPLES_PAGE):
-            # Open examples
+        msg = 'Você pode encontrar mais exemplos no website do Pytuguês na ' \
+              'página %s. Você deseja ser direcionado para este site?' \
+              % PYTUGA_EXAMPLES_PAGE
+
+        if QtWidgets.QMessageBox.about(self, 'Exemplos', msg):
             # TODO: Make it portable or open a small web-browser.
             import os
             os.system('google-chrome-stable %s' % PYTUGA_EXAMPLES_PAGE)
@@ -188,7 +201,6 @@ class Tugalinhas(QtWidgets.QMainWindow):
             menu.insertAction(separator, action)
             action.triggered.connect(self._showExampleFactory(filepath))
 
-
     #
     # help menu
     #
@@ -196,12 +208,13 @@ class Tugalinhas(QtWidgets.QMainWindow):
         try:
             from PyQt5 import QtWebKitWidgets
         except ImportError:
-            QtWidgets.QMessageBox.critical(
-                    self, 'qt5-webkit não está instalado',
-                    'Por favor instale o pacote Qt5 Webkit para visualizar '
-                    'a documentação. Caso não possa instalar o pacote, vá'
-                    'para o site: %s' %
-                    PYTUGA_DOCUMENTATION_PAGE
+            return QtWidgets.QMessageBox.critical(
+                self,
+                'qt5-webkit não está instalado',
+                'Por favor instale o pacote Qt5 Webkit para visualizar '
+                'a documentação. Caso não possa instalar o pacote, vá'
+                'para o site: %s' %
+                PYTUGA_DOCUMENTATION_PAGE
             )
 
         if self._documentation_view is not None:
@@ -227,11 +240,12 @@ class Tugalinhas(QtWidgets.QMainWindow):
 
     def about(self):
         QtWidgets.QMessageBox.about(
-                self,
-                'Pytuguês',
-                'Pytuguês é uma linguagem para o ensino de programação em '
-                'português. Aqui aprendemos a programar em português e dentro '
-                'de um ambiente gráfico e lúdico.')
+            self,
+            'Pytuguês',
+            'Pytuguês é uma linguagem para o ensino de programação em '
+            'português. Aqui aprendemos a programar em português e dentro '
+            'de um ambiente gráfico e lúdico.'
+        )
 
     def updateProgram(self):
         import subprocess
@@ -241,11 +255,11 @@ class Tugalinhas(QtWidgets.QMainWindow):
             from pip.locations import virtualenv_no_global
         except ImportError:
             return QtWidgets.QErrorMessage(self).showMessage(
-                    'Você não possui o comando "pip". Este comando é necessário '
-                    'para realizar a atualização do Pytuguês. No Ubuntu, tente '
-                    'executar o comando "sudo apt-get install python3-pip" antes '
-                    'de tentar fazer a atualização.',
-                    'no-pip-error'
+                'Você não possui o comando "pip". Este comando é necessário '
+                'para realizar a atualização do Pytuguês. No Ubuntu, tente '
+                'executar o comando "sudo apt-get install python3-pip" antes '
+                'de tentar fazer a atualização.',
+                'no-pip-error'
             )
 
         retcode = None
@@ -260,10 +274,10 @@ class Tugalinhas(QtWidgets.QMainWindow):
                 args.append('--user')
             try:
                 output = subprocess.check_output(
-                        args,
-                        universal_newlines=True,
-                        stderr=subprocess.STDOUT,
-                        timeout=5,
+                    args,
+                    universal_newlines=True,
+                    stderr=subprocess.STDOUT,
+                    timeout=5,
                 )
             except subprocess.CalledProcessError:
                 dialog.reject()
@@ -294,21 +308,19 @@ class Tugalinhas(QtWidgets.QMainWindow):
 
         if not is_ok or retcode == 'timeout':
             QtWidgets.QMessageBox.critical(
-                    self, 'Erro',
-                    'Houve um problema na atualização. '
-                    'Por favor tente novamente mais tarde.\n\n'
-                    'Pip retornou a mensagem:\n' + (output or '<vazio>'),
+                self, 'Erro',
+                'Houve um problema na atualização. '
+                'Por favor tente novamente mais tarde.\n\n'
+                'Pip retornou a mensagem:\n' + (output or '<vazio>'),
             )
         elif retcode == 'up-to-date':
             QtWidgets.QMessageBox.about(
-                    self, 'Nenhuma atualização encontrada',
-                    'Seu programa já estava na última versão.')
+                self, 'Nenhuma atualização encontrada',
+                'Seu programa já estava na última versão.')
         else:
             QtWidgets.QMessageBox.about(
-                    self, 'Atualizado com sucesso',
-                    'Você deve reiniciar este programa agora.')
-
-
+                self, 'Atualizado com sucesso',
+                'Você deve reiniciar este programa agora.')
 
     #
     # Other commands and utility methods
@@ -319,11 +331,13 @@ class Tugalinhas(QtWidgets.QMainWindow):
         else:
             self.setWindowTitle('Tugalinhas (not saved)')
 
-if not hasattr(Tugalinhas, 'setUnifiedTitleAndToolBarOnMac'):
+
+if not hasattr(PytugaMainWindow, 'setUnifiedTitleAndToolBarOnMac'):
     def setUnifiedTitleAndToolBarOnMac(*arg, **kwds):
         pass
 
-    Tugalinhas.setUnifiedTitleAndToolBarOnMac = setUnifiedTitleAndToolBarOnMac
+
+    PytugaMainWindow.setUnifiedTitleAndToolBarOnMac = setUnifiedTitleAndToolBarOnMac
 
 
 #
@@ -335,10 +349,13 @@ def _window_icon():
     return QtGui.QIcon(icon_path)
 
 
-def startapp():
-    """Display main window"""
+def start_application(**kwargs):
+    """
+    Display main window
+    """
 
-    app = QtWidgets.QApplication(sys.argv)
-    window = Tugalinhas()
-    window.show()
-    sys.exit(app.exec_())
+    PytugaMainWindow.launchInstance(**kwargs)
+
+
+if __name__ == '__main__':
+    start_application()

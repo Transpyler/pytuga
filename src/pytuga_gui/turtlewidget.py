@@ -1,8 +1,22 @@
 from PyQt5 import QtWidgets
-from . import ReplEditor, TurtleScene, TurtleView
+
+from lazyutils import delegate_to
+
+from . import TurtleScene, TurtleView
+from .repl_editor import ReplEditor
 
 
 class TurtleWidget(QtWidgets.QWidget):
+    text = delegate_to('_editor')
+    setText = delegate_to('_editor')
+    zoomIn = delegate_to('_view')
+    zoomOut = delegate_to('_view')
+    increaseFont = delegate_to('_editor')
+    decreaseFont = delegate_to('_editor')
+    toggleTheme = delegate_to('_editor')
+    saveImage = delegate_to('_view')
+    flushExecution = delegate_to('_scene')
+
     def __init__(self, 
                  parent=None, 
                  text='', header_text=None,
@@ -13,12 +27,10 @@ class TurtleWidget(QtWidgets.QWidget):
         self._scene = TurtleScene()
         self._view = TurtleView(self._scene)
         self._namespace = dict(self._scene.getNamespace())
-        autocompletion_words = self._namespace.keys()
-        
+
         # Configure editor
         self._editor = ReplEditor(namespace=self._namespace,
-                                  header_text=header_text,
-                                  autocompletion_words=autocompletion_words)
+                                  header_text=header_text)
         self._editor.setText(text)
         self._editor.setNamespace(self._namespace)
         self._editor.sizePolicy().setHorizontalPolicy(7)
@@ -43,18 +55,6 @@ class TurtleWidget(QtWidgets.QWidget):
 
     def editor(self):
         return self._editor
-                        
-    def setText(self, text):
-        self._editor.setText(text)
-        
-    def text(self):
-        return self._editor.text()
-    
-    def zoomIn(self):
-        self._view.zoomIn()
-    
-    def zoomOut(self):
-        self._view.zoomOut()
 
     def fontZoomIn(self):
         self._editor.zoomIn()
@@ -65,17 +65,3 @@ class TurtleWidget(QtWidgets.QWidget):
     def fontZoomTo(self, factor):
         self._editor.zoomTo(factor)
 
-    def increaseFont(self):
-        self._editor.increaseFont()
-
-    def decreaseFont(self):
-        self._editor.decreaseFont()
-
-    def toggleTheme(self):
-        self._editor.toggleTheme()
-
-    def saveImage(self, fname):
-        self._view.saveImage(fname)
-
-    def flushExecution(self):
-        self._scene.flushExecution()

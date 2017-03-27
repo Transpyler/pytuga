@@ -44,7 +44,7 @@ class _TurtleWindow(QtWidgets.QWidget):
             return cls._instance
 
     def __init__(self, queue=None, rqueue=None):
-        from tugalinhas.turtlescene import TurtleScene, TurtleView
+        from pytuga_gui.turtlescene import TurtleScene, TurtleView
 
         super().__init__()
         self._scene = TurtleScene()
@@ -113,7 +113,7 @@ def _get_cmd(name, ns):
 def qturtle_namespace():
     """Return qturtle namespace as a dictionary"""
 
-    from tugalinhas.turtlenamespace import TurtleNamespaceEnglish as t_ns
+    from pytuga_gui.turtlenamespace import TurtleNamespaceEnglish as t_ns
     ns = {}
 
     for _cmd in [
@@ -142,7 +142,7 @@ def qturtle_namespace():
 def pytuga_namespace():
     """Return all drawing related functions from pytuga namespace as a dictionary."""
 
-    from tugalinhas.turtlenamespace import TurtleNamespace as t_ns
+    from pytuga_gui.turtlenamespace import TurtleNamespace as t_ns
     ns = {}
     ns_english = qturtle_namespace()
 

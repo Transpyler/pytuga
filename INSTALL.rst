@@ -40,7 +40,7 @@ Windows
 -------
 
 Existem duas opções de instalação no Windows. A primeira funciona somente para
-o Windows 64bits e consiste em baixar o arquivo auto-executável do tugalinhas__.
+o Windows 64bits e consiste em baixar o arquivo auto-executável do pytuga__.
 Baixe este arquivo em qualquer lugar do seu computador e execute-o com um clique
 duplo.
 
@@ -85,7 +85,7 @@ mudar para o diretório onde o Python estiver instalado. Digite::
 Agora repita os comandos anteriores. Se você decidiu instalar o Python em
 outro caminho, modifique o comando acima para indicar o caminho correto.
 
-Para executar o Tugalinhas, aperte Win+R e digite "tugalinhas" no prompt. Caso
+Para executar em modo gráfico, aperte Win+R e digite "pytuga" no prompt. Caso
 isto não funcione (especialmente nas versões mais novas do Windows), procure
 o executável do tugalinhas na pasta ``c:\Python34\Scripts\`` ou execute o
-comando ``python -m tugalinhas`` do terminal.
+comando ``python -m pytuga`` do terminal.

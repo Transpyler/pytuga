@@ -29,10 +29,11 @@ loop de ler, avaliar e imprimir). Neste modo, o interpretador executa
 imediatamente os comandos digitados pelo usuário e já mostra o resultado na
 tela.
 
-Este pacote instala o "Tugalinhas", que consiste em um ambiente de programação
-visual, no estilo da linguagem LOGO e o ``pytuga``, que é o interpretador de
-Pytuguês. Para começar sua interação com o Pytuguês, execute no prompt
-``$ tugalinhas`` e digite o comando::
+Este pacote instala o "pytuga", que consiste em um ambiente de programação
+visual, no estilo da linguagem LOGO. Para começar sua interação com o Pytuguês,
+execute no prompt
+``$ pytuga``. Uma vez aberta a janela do terminal de Pytuguês, digite o
+comando::
 
    >>> mostre("olá, mundo!")
 

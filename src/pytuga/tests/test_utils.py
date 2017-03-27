@@ -1,4 +1,4 @@
-from pytuga.utils import *
+from transpyler.utils import *
 
 
 def test_keep_spaces():

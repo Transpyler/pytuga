@@ -26,7 +26,7 @@ except ImportError:
 
 # Rewrite __version__.py in tugalib
 VERSION = open('VERSION', encoding='utf8').read().strip()
-version_file = os.path.join(DIRNAME, 'src', 'pytuga', '__version__.py')
+version_file = os.path.join(DIRNAME, 'src', 'pytuga', '__meta__.py')
 try:
     with open(version_file, 'w', encoding='utf8') as F:
         F.write('__version__ = %r\n'
@@ -126,7 +126,8 @@ distribution = setup(
         'unidecode',
         'metakernel-python',
         'ipykernel',
-        'jupyter-client',
+        'jupyter-client>4.1',
+        'qtconsole',
     ],  # 'PyQt5' is not supported in PyPI,
 
     # Wrapped commands (for ipytuga)

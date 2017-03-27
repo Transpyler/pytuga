@@ -5,7 +5,8 @@ Outras funções
 Outras funções que não se encaixam em nenhuma categoria específica.
 """
 import time as _time
-from pytuga.utils import synonyms, normalize_accented_keywords
+
+from transpyler.utils import synonyms, normalize_accented_keywords
 
 
 #

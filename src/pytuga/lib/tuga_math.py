@@ -8,7 +8,9 @@ usuário.
 
 import math as _math
 import random as _random
-from pytuga.utils import synonyms
+
+from transpyler.utils import synonyms
+
 pi = _math.pi
 neperiano = _math.exp(1)
 

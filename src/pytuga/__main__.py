@@ -6,7 +6,7 @@ from pytuga import transpile
 from pytuga import __version__ as version
 
 
-def start_interactive_console():
+def start_simple_console():
     """
     Start console-based Pytuga REPL
     """
@@ -22,6 +22,23 @@ def start_ipytuga(**kwargs):
 
     from pytuga.ipytuga.shell import start_shell
     start_shell(**kwargs)
+
+
+def start_qtconsole(**kwargs):
+    """
+    Starts a QtConsole based shell application.
+    """
+
+    from pytuga_gui.ipytuga_qtconsole import start_qtconsole
+    start_qtconsole(**kwargs)
+
+
+def start_full_gui(**kwargs):
+    """
+    Starts full GUI application.
+    """
+
+    from pytuga_gui.main_window import main
 
 
 def to_python(src):
@@ -41,7 +58,7 @@ def main(argv=None):
         return start_ipytuga()
 
     # Process arguments
-    parser = argparse.ArgumentParser(description='Executa código Pytuguês')
+    parser = argparse.ArgumentParser(description='Interpretador de Pytuguês')
     parser.add_argument(
         'arquivo', help='nome do arquivo a ser executado')
     parser.add_argument(
@@ -54,8 +71,18 @@ def main(argv=None):
         help='salva conversão para Python no caminho especificado')
     parser.add_argument(
         '--versão', '-v',
-        help='mostra a versão do interpretador de pytuguês',
+        help='mostra a versão do interpretador de Pytuguês',
         action='version', version='Pytuga %s' % version)
+    parser.add_argument(
+        '--console', '-c',
+        action='store_const', const=True,
+        help='inicia console simples, sem editor de texto.'
+    )
+    parser.add_argument(
+        '--terminal', '-t',
+        action='store_const', const=True,
+        help='inicia shell Pytuguês em modo não-gráfico.'
+    )
     # parser.add_argument('--warning', '-w', action='store_const',
     #                   help='ativa avisos de compatibilidade com o python')
     args = parser.parse_args(argv)

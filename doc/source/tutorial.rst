@@ -12,11 +12,8 @@ computador para realizar tarefas como quadrados, triângulos, estrelas ou
 outras figuras geométricas.
 
 Podemos iniciar o ambiente de programação em modo texto invocando o comando
-**pytuga** no terminal. Uma alternativa gráfica mais amigável é o **Tugalinhas** que
-também é instalado junto com este pacote.
-
-Uma vez aberto o **Tugalinhas** ou o **pytuga**, nos deparamos com o shell de
-Pytuguês (que inicia com ``>>>``) onde podemos digitar comandos diretamente.
+**pytuga** no terminal. Uma vez aberta a aplicação, nos deparamos com o shell
+de Pytuguês (que inicia com ``>>>``) onde podemos digitar comandos diretamente.
 Para mostrar uma mensagem na tela, por exemplo, digite::
 
     >>> mostre("olá, mundo!")
@@ -41,7 +38,7 @@ portugueses, angolanos, etc.
 Esta seção vai percorrer os principais recursos do Pytuguês para que você possa
 começar a programar em poucos minutos. Normalmente a primeira interação com o
 Pytuguês se dá por meio da programação gráfica, onde controlamos a trajetória de
-um pequeno "robô" que desenha figuras geométricas na tela. Inicie o Tugalinhas
+um pequeno "robô" que desenha figuras geométricas na tela. Inicie o PytugaMainWindow
 ou o pytuga. Os comandos básicos para interagir com o cursor na tela são::
 
     >>> frente(100)   # avança 100 pixels

@@ -54,7 +54,7 @@ TRANSLATIONS = dict(
 
 PURE_PYTG_KEYWORDS = set(TRANSLATIONS)
 PURE_PYTG_KEYWORDS.update({'repetir', 'repita', 'vezes', 'cada', 'de',
-                           'até', 'ate', 'fazer', 'faça', 'faca'})
+                           'ate', 'fazer', 'faça', 'faca'})
 kwlist = set(PURE_PYTG_KEYWORDS)
 kwlist.update(keyword.kwlist)
 constants = (

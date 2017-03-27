@@ -146,7 +146,6 @@ class PythonEditor(Qsci.QsciScintilla):
 
         # Configure lexer and api for autocompletion
         lexer = Qsci.QsciLexerPython(self)
-        lexer = Qsci.QsciLexerPython()
         lexer.setDefaultFont(self.font())
         words = list(autocompletion_words) 
         if autocomplete_python:

@@ -6,7 +6,7 @@ Funções que realizam a interação com o usuário, seja lendo valores digitado
 ou arquivos, seja mostrando valores na tela.
 """
 
-from pytuga.utils import synonyms
+from transpyler.utils import synonyms
 
 
 @synonyms('mostre')
@@ -143,5 +143,5 @@ def _filechooser(do_open):
 
 
 if __name__ == '__main__':
-    import doctest
+    pass
     # doctest.testmod()

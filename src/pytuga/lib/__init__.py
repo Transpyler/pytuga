@@ -19,13 +19,14 @@ Aqui mostramos todas as funções disponíveis agrupadas nas categorias abaixo.
 
 '''
 
+from .tuga_io import *
+from .tuga_math import *
 from .tuga_std import *
 from .tuga_strings import *
-from .tuga_math import *
-from .tuga_io import *
 
 # Register synonyms
-from pytuga import utils
+from transpyler import utils
+
 utils.register_synonyms(globals())
 del utils
 del synonyms

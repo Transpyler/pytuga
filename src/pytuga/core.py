@@ -6,8 +6,8 @@ from types import ModuleType as _Module
 
 from pytuga import lexer
 from pytuga import lib as tugalib
-from pytuga import utils as tuga_util
-from pytuga.utils import keep_spaces
+from transpyler import utils as tuga_util
+from transpyler.utils import keep_spaces
 
 __all__ = [
     # Tugalib namespace
