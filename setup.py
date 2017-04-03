@@ -2,8 +2,8 @@ import os
 import sys
 from glob import glob
 
-from setuptools import find_packages
-from setuptools.command.develop import develop as _develop
+from setuptools import find_packages, setup
+from setuptools.command.develop import deveglop as _develop
 from setuptools.command.install import install as _install
 
 NAME = 'pytuga'
@@ -112,7 +112,7 @@ def wrapped_cmd(cmd):
 
 
 # Run setup() function
-distribution = setup(
+setup(
     name=NAME,
     version=VERSION,
     description='Interpretador de Pytuguês: um Python com sotaque lusitano.',
