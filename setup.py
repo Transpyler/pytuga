@@ -1,15 +1,48 @@
-# -*- coding: utf8 -*-
 import os
 import sys
 from glob import glob
-from setuptools import setup, find_packages
-from setuptools.command.install import install as _install
-from setuptools.command.develop import develop as _develop
 
+from setuptools import setup, find_packages
+from setuptools.command.develop import develop as _develop
+from setuptools.command.install import install as _install
 
 NAME = 'pytuga'
 AUTHOR = 'Fábio Macêdo Mendes'
 DIRNAME = os.path.dirname(__file__)
+
+# cx_Freeze: dependencies are automatically detected, but it might need
+# fine tuning.
+setup_kwargs = {}
+try:
+    from cx_Freeze import setup, Executable
+except:
+    pass
+else:
+    build_options = {
+        'include_files': [],
+        'packages': ['os', 'pytuga', 'pygments'],
+        'excludes': [
+            'tkinter', 'redis', 'lxml', 'qturtle.qsci.widgets',
+            'nltk', 'textblob',
+            'matplotlib', 'scipy', 'numpy', 'sklearn',
+            'notebook',
+            'java',
+            'sphinx', 'PIL', 'PyQt4'
+        ],
+        'optimize': 1,
+    }
+    base = 'Win32GUI' if sys.platform == 'win32' else None
+
+    setup_kwargs['executables'] = [
+        Executable(
+            'src/pytuga/__main__.py',
+            base=base,
+            targetName='Pytuga.exe' if sys.platform == 'win32' else 'pytuga',
+            shortcutName='Pytuga',
+            shortcutDir='DesktopFolder',
+        )
+    ]
+    setup_kwargs['options'] = {'build_exe': build_options}
 
 # Warn user about missing PyQt libraries. These cannot go into REQUIRES list
 # since PyQt is not instalable via pip
@@ -72,8 +105,8 @@ def wrapped_cmd(cmd):
     class Command(cmd):
         def run(self):
             cmd.run(self)
-            #from pytuga.ipytuga.setup import setup_assets
-            #setup_assets(True)
+            # from pytuga.ipytuga.setup import setup_assets
+            # setup_assets(True)
 
     return Command
 
@@ -143,20 +176,5 @@ distribution = setup(
     },
     data_files=DATA_FILES,
     zip_safe=False,
+    **setup_kwargs
 )
-
-# Adds a symbolic link from executables in $HOME/.local/bin to $HOME/bin, if it
-# exists and if it is installed with the --user option.
-binfolder = os.path.join(os.path.expanduser('~'), 'bin')
-pytuga = os.path.join(binfolder, 'pytuga')
-if ('user' in distribution.get_option_dict('install') and
-        os.path.exists(binfolder) and not os.path.exists(pytuga)):
-
-    try:
-        for file in ['tugalinhas', 'pytuga']:
-            local_bin = os.path.expanduser(
-                os.path.join('~', '.local', 'bin', file))
-            home_bin = os.path.expanduser(os.path.join('~', 'bin', file))
-            os.symlink(local_bin, home_bin)
-    except FileNotFoundError:
-        pass
