@@ -3,7 +3,7 @@ import sys
 from glob import glob
 
 from setuptools import find_packages, setup
-from setuptools.command.develop import deveglop as _develop
+from setuptools.command.develop import develop as _develop
 from setuptools.command.install import install as _install
 
 NAME = 'pytuga'
