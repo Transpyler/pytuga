@@ -27,6 +27,7 @@ install:
   - "%PYTHON%\\python.exe -m pip install tox wheel cx_Freeze pynsist PyQt5 --user"
   - "%PYTHON%\\python.exe -m pip install pytugacore --user"
   - "%PYTHON%\\python.exe -m pip install qturtle --user"
+  - "%PYTHON%\\python.exe -m pip install pygments --user"
   - "%PYTHON%\\python.exe -m pip install -e . --user"
 
 build_script:
