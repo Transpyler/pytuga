@@ -38,8 +38,8 @@ test_script:
   #- "%PYTHON%\\python.exe -m tox"
 
 after_test:
-  - 'cmd /C "set CX_FREEZE=on" && %PYTHON%\\python.exe setup.py build_exe'
-  - 'cmd /C "set CX_FREEZE=on" && %PYTHON%\\python.exe setup.py bdist_msi'
+  - '%PYTHON%\\python.exe setup.py build_exe --cx-freeze'
+  - '%PYTHON%\\python.exe setup.py bdist_msi --cx-freeze'
   - ps: "mv build/exe* build/pytuga"
   - "%PYTHON%\\python.exe -m zipfile -c pytuga.zip build/pytuga/"
   - ps: "mv pytuga.zip dist/"

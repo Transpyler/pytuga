@@ -13,7 +13,7 @@ DIRNAME = os.path.dirname(__file__)
 # cx_Freeze: dependencies are automatically detected, but it might need
 # fine tuning.
 setup_kwargs = {}
-if 'CX_FREEZE' in os.environ:
+if '--cx-freeze' in sys.argv:
     from cx_Freeze import setup, Executable
 
     build_options = {
@@ -41,6 +41,8 @@ if 'CX_FREEZE' in os.environ:
         )
     ]
     setup_kwargs['options'] = {'build_exe': build_options}
+    sys.argv.remove('--cx-freeze')
+
 
 # Warn user about missing PyQt libraries. These cannot go into REQUIRES list
 # since PyQt is not instalable via pip
