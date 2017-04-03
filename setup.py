@@ -2,7 +2,7 @@ import os
 import sys
 from glob import glob
 
-from setuptools import setup, find_packages
+from setuptools import find_packages
 from setuptools.command.develop import develop as _develop
 from setuptools.command.install import install as _install
 
@@ -13,11 +13,9 @@ DIRNAME = os.path.dirname(__file__)
 # cx_Freeze: dependencies are automatically detected, but it might need
 # fine tuning.
 setup_kwargs = {}
-try:
+if 'CX_FREEZE' in os.environ:
     from cx_Freeze import setup, Executable
-except:
-    pass
-else:
+
     build_options = {
         'include_files': [],
         'packages': ['os', 'pytuga', 'pygments'],
