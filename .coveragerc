@@ -1,8 +1,7 @@
 [run]
 include = src/*
 branch = True
-omit =
-    */examples/*
+
 
 [report]
 # Regexes for lines to exclude from consideration

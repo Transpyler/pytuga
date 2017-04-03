@@ -36,13 +36,6 @@ except UnicodeDecodeError:
     # versions?
     pass
 
-# Fix possible bug in Windows which does not generate the gui script
-console_scripts = ['pytuga = pytuga.__main__:main']
-gui_scripts = ['tugalinhas = tugalinhas.__main__:main']
-if sys.platform.startswith('win'):
-    gui_scripts = ['tugalinhas_window = tugalinhas.__main__:main']
-    console_scripts.append('tugalinhas = tugalinhas.__main__:main')
-
 # Collect data files
 if sys.platform.startswith('win'):
     # TODO: figure out where these files should be in Windows
@@ -79,8 +72,8 @@ def wrapped_cmd(cmd):
     class Command(cmd):
         def run(self):
             cmd.run(self)
-            from pytuga.ipytuga.setup import setup_assets
-            setup_assets(True)
+            #from pytuga.ipytuga.setup import setup_assets
+            #setup_assets(True)
 
     return Command
 
@@ -96,22 +89,14 @@ distribution = setup(
     long_description=('''
     Pytuguês é uma linguagem de programação que modifica a sintaxe do
     Python para aceitar comandos em português. A linguagem foi desenvolvida
-    como um superconjunto do Python, mas que aceita comandos em português que
-    permitem expressar programas de maneira natural na forma de pseudocódigo.
-    programa
+    como uma extens~ao do Python que aceita comandos em português.
+
     O único objetivo do Pytuguês é facilitar o aprendizado de programação. Uma
     vez que os conceitos básicos forem apreendidos, a transição para uma
-    linguagem real (no caso o Python) torna-se bem gradual e natural.
-
-    Este pacote possui alguns programas:
-
-        * pytuga: o interpretador de Pytuguês.
-        * tugalinhas: programa educativo que permite ensinar programação
-          visualmente, controlando o movimento de um personagem no espírito da
-          linguagem LOGO.
+    linguagem real (no caso o Python) torna-se gradual e natural.
     '''),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: POSIX',
@@ -123,12 +108,9 @@ distribution = setup(
     package_dir={'': 'src'},
     packages=find_packages('src'),
     install_requires=[
-        'unidecode',
-        'metakernel-python',
-        'ipykernel',
-        'jupyter-client>4.1',
-        'qtconsole',
-    ],  # 'PyQt5' is not supported in PyPI,
+        'pytugacore',
+        'qturtle',
+    ],
 
     # Wrapped commands (for ipytuga)
     cmdclass={
@@ -139,8 +121,9 @@ distribution = setup(
     # Scripts
     entry_points={
         # Stand alone tugalinhas?
-        'console_scripts': console_scripts,
-        'gui_scripts': gui_scripts,
+        'console_scripts': [
+            'pytuga = pytuga.__main__:main',
+        ],
     },
 
     # Data files

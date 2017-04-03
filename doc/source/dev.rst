@@ -40,12 +40,12 @@ aumentar um pouco a curva de dificuldade de um programador iniciante.
 than complex"*, etc. Dado o foco do Pytuguês, devemos acrescentar algumas
 prioridades no topo::
 
-    Você não precisa aprender uma linguagem nova para começar a programar.
+    É possível programar sem saber inglês.
     Programar é divertido.
     Até uma criança consegue fazer.
-    O usuário não gosta de surpresas.
-    O usuário não gosta de erros, mas a linguagem deve destacar e não esconder
-    os erros de um programa.
+    Programadores não gostam de surpresas.
+    Programadores não gostam de erros, mas devemos destacar e não esconder os
+    erros de um programa.
 
 Sendo assim, as vezes desviamos de uma linguagem puramente "pythonica" para para
 priorizar estes novos elementos.
@@ -74,7 +74,7 @@ Tempos verbais:
     O inglês muitas vezes não diferencia o infinitivo do imperativo (a não ser
     pelo "to", como em "to eat" vs. "eat"). O Português conjuga o imperativo
     como em "comer" vs "coma" e ambas as formas parecem maneiras válidas de
-    expressar uma ação em um programa. O modo imperativo talvez se baseia na
+    expressar uma ação em um programa. O modo imperativo se baseia na
     idéia que um programa é uma sequência de comandos transmitidos para o
     computador executar, como em ``mostre('olá, mundo!')``.
     Já o modo infinitivo concebe um programa como uma idéia abstrata e impessoal,
@@ -93,7 +93,7 @@ Argumentos de funções:
 Estensões sintáticas para o Python
 ==================================
 
-Além da tradução (e algumas vezes adição de palavras chaves reduntantes, apenas
+Além da tradução (e algumas vezes adição de palavras chaves redundantes, apenas
 para enfatizar o contexto), o Pytuguês possui algumas estensões sintáticas
 com relação ao Python.
 
@@ -168,9 +168,10 @@ Problemas abertos
   ``x [é] idêntico [a] y``?
 * Keywords com espaços: Pytuguês possui alguns comandos que funcionam como
   "keywords" com espaços (Ex.: para x de 1 até 10 *a cada* 2: ...). O
-  identificador "a" deve ser tratado como keyword ou é tratado assim somente
-  quando aparecer em "a cada". Se "a" for promovido a uma keyword, podemos ter
-  várias colisões de nomes.
+  identificador "a" poderia ser tratado como keyword incodicional ou poderia
+  ser tratado assim somente quando aparecer em "a cada". Escolhemos a segunda
+  opção pois se "a" for promovido a uma keyword, podemos ter várias colisões de
+  nomes.
 * Dois pontos são necessários para delimitar o início de um bloco? O uso de ":"
   para delimitar o início de um bloco é redundante em Python (já que a
   indentação sozinha já é capaz de resolver esta questão), mas aumenta a
@@ -179,5 +180,5 @@ Problemas abertos
   os dois pontos e se frustram quando o código não funciona. Devemos ignorar a
   ausência dos mesmos ou simplesmente mostrar uma mensagem de erro mais clara,
   explicando que o usuário deve inserir o ":" em uma linha específica?
-  Esta ausência deve ser tolerada apenas em sintaxe Pytuguês ou também em
-  sintaxe Python?
+  Esta ausência deve ser tolerada apenas em sintaxe específica do Pytuguês ou
+  também em sintaxe Python?

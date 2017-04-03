@@ -38,7 +38,7 @@ portugueses, angolanos, etc.
 Esta seção vai percorrer os principais recursos do Pytuguês para que você possa
 começar a programar em poucos minutos. Normalmente a primeira interação com o
 Pytuguês se dá por meio da programação gráfica, onde controlamos a trajetória de
-um pequeno "robô" que desenha figuras geométricas na tela. Inicie o PytugaMainWindow
+um pequeno "robô" que desenha figuras geométricas na tela. Inicie o TurtleMainWindow
 ou o pytuga. Os comandos básicos para interagir com o cursor na tela são::
 
     >>> frente(100)   # avança 100 pixels
@@ -516,7 +516,7 @@ Pense numa função como um pedaço de código reutilizável. Vamos voltar ao ex
 Se quisermos fazer algum tipo de arte (ou um programa) que envolva a criação de vários quadrados, copiar e colar este
 código pode se tornar repetitivo. Para evitar muitas repetições, podemos colocar este código dentro de uma função::
 
-    definir função quadrado():
+    função quadrado():
         repetir 4 vezes:
             frente(100)
             esquerda(90)
@@ -552,7 +552,7 @@ da função a cada chamada passando parâmetros adicionas. No exemplo dos quadra
 controlar o tamanho do quadrado desenhado em cada chamada passando o mesmo como argumento para a função. O Pytuguês
 suporta este recurso simplesmente escrevendo os parâmetros adicionais na definição da função::
 
-    definir função quadrado(lado):
+    função quadrado(lado):
         repetir 4 vezes:
             frente(lado)
             esquerda(90)
@@ -564,7 +564,7 @@ Neste caso, ela aparece na linha ``frente(lado)`` que comanda o cursor a andar p
 Uma função pode possuir qualquer número de parâmetros de entrada, que são passados na mesma ordem de chamada. Considere
 a função que desenha um polígono regular::
 
-    definir função polígono_regular(N, lado):
+    função polígono_regular(N, lado):
         ângulo = 360 / N
         repetir N vezes:
             frente(lado)

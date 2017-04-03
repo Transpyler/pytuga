@@ -1,0 +1,51 @@
+# We are using Appveyor.io to build our Windows Python packages. Check
+# instructions at https://packaging.python.org/appveyor
+environment:
+  global:
+    TEST_QT: false
+  matrix:
+    #- PYTHON: "C:\\Python34"
+    #  TOXENV: 'py34'
+
+    #- PYTHON: "C:\\Python34-x64"
+    #  TOXENV: 'py34'
+
+    #- PYTHON: "C:\\Python35"
+    #  TOXENV: 'py35'
+
+    #- PYTHON: "C:\\Python35-x64"
+    #  TOXENV: 'py35'
+
+    - PYTHON: "C:\\Python36"
+      TOXENV: 'py36'
+
+    - PYTHON: "C:\\Python36-x64"
+      TOXENV: 'py36'
+
+install:
+  - "%PYTHON%\\python.exe -m pip install tox wheel cx_Freeze pynsist PyQt5"
+  - "%PYTHON%\\python.exe -m pip install -e . --user"
+
+build_script:
+  - ECHO "skip build"
+  #- "%PYTHON%\\python.exe setup.py build"
+
+test_script:
+  - ECHO "skip test"
+  #- "%PYTHON%\\python.exe -m tox"
+
+after_test:
+  - "%PYTHON%\\python.exe setup.py build_exe"
+  - "%PYTHON%\\python.exe setup.py bdist_msi"
+  - ps: "mv build/exe* build/qturtle"
+  - "%PYTHON%\\python.exe -m zipfile -c qturtle.zip build/qturtle/"
+  - ps: "mv qturtle.zip dist/"
+  #- "%PYTHON%\\python.exe -m nsist installer.cfg"
+  #- "%PYTHON%\\python.exe setup.py bdist_wininst"
+  #- "%PYTHON%\\python.exe setup.py bdist_wheel"
+
+artifacts:
+  - path: dist\*
+
+#on_success:
+#  - TODO: upload the content of dist/*.whl to a public wheelhouse

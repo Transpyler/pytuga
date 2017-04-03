@@ -7,21 +7,19 @@ __pycache__/
 *.dll
 *.egg
 *.egg-info/
+.cache/
 .coverage
 
 # Build directories
-doc/_build/
+docs/_build/
 build/
 dist/
-src/pytuga.egg-info/
 
-# Other
+# Python-boilerplate auto generated files
+src/transpyler/__meta__.py
+
+# IDEs
 .idea/
-pyinstaller/
-.settings/
-.gitignore
-.project
-.pydevproject
-installed-files.txt
-.cache/
 
+# Testing and temporary files
+.tox/
