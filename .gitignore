@@ -20,6 +20,7 @@ src/transpyler/__meta__.py
 
 # IDEs
 .idea/
+.settings/
 
 # Testing and temporary files
 .tox/
