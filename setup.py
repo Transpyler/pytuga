@@ -142,7 +142,7 @@ distribution = setup(
     packages=find_packages('src'),
     install_requires=[
         'pytugacore',
-        'qturtle',
+        'qturtle>=0.1.3',
     ],
 
     # Wrapped commands (for ipytuga)
