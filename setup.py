@@ -13,7 +13,7 @@ if '--cx-freeze' in sys.argv:
 
     build_options = {
         'include_files': [],
-        'packages': ['os', 'pytuga', 'pygments'],
+        'packages': ['os', 'pytuga', 'pygments', 'pytugacore', 'transpyler'],
         'excludes': [
             'tkinter', 'redis', 'lxml',
             'qturtle.qsci.widgets',
@@ -141,7 +141,7 @@ setup(
     packages=find_packages('src'),
     install_requires=[
         'pytugacore',
-        'qturtle>=0.1.4',
+        'qturtle>=0.1.8',
     ],
 
     # Wrapped commands (for ipytuga)
