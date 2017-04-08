@@ -1,7 +1,6 @@
 language: python
 cache: pip
-sudo: required
-os: trusty
+dist: trusty
 
 # Environment variables
 env:
@@ -17,10 +16,19 @@ matrix:
    #- env: TOXENV=py36
    #  python: 3.6
 
-# Package installation
-install:
+# Prepare installation
+addons:
+  apt:
+    sources:
+      sdfsd
+
+
+before_install:
   - sudo apt-get update
   - sudo apt-get -qq install python3-pyqt5 python3-pyqt5.qsci
+
+# Package installation
+install:
   - apt-get install python3-pyqt5
   - pip install tox codecov
 
