@@ -13,7 +13,7 @@ if '--cx-freeze' in sys.argv:
 
     build_options = {
         'include_files': [],
-        'packages': ['os', 'pytuga', 'pygments', 'pytugacore', 'transpyler'],
+        'packages': ['os', 'pytuga', 'pygments', 'transpyler'],
         'excludes': [
             'tkinter', 'redis', 'lxml',
             'qturtle.qsci.widgets',
@@ -97,17 +97,20 @@ with open(path, 'w') as F:
 #         path = os.path.sep.join(path.split('/'))
 #         files = [os.path.sep.join(f.split('/')) for f in files]
 #         DATA_FILES[i] = (path, files)
-#
-#
-# # Wraps command classes to register ipytuga kernel
-# def wrapped_cmd(cmd):
-#     class Command(cmd):
-#         def run(self):
-#             cmd.run(self)
-#             # from pytuga.ipytuga.setup import setup_assets
-#             # setup_assets(True)
-#
-#     return Command
+
+
+# Wraps command classes to register pytuga kernel during installation
+def wrapped_cmd(cmd):
+    class Command(cmd):
+        def run(self):
+            if 'src' not in sys.path:
+                sys.path.append('src')
+
+            from transpyler.jupyter.setup import setup_assets
+            setup_assets(True)
+            cmd.run(self)
+
+    return Command
 
 
 # Run setup() function
@@ -140,8 +143,8 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages('src'),
     install_requires=[
-        'pytugacore',
-        'qturtle>=0.1.8',
+        'qturtle>=0.2.0',
+        'transpyler>=0.2.0'
     ],
 
     # Wrapped commands (for ipytuga)
@@ -152,27 +155,26 @@ setup(
 
     # Scripts
     entry_points={
-        # Stand alone tugalinhas?
         'console_scripts': [
             'pytuga = pytuga.__main__:main',
         ],
     },
 
     # Data files
-    # package_data={
-    #     'pytuga': [
-    #         '*.*',
-    #         'doc/html/*.*',
-    #         'doc/html/_modules/*.*',
-    #         'doc/html/_modules/tugalib/*.*',
-    #         'doc/html/_sources/*.*',
-    #         'doc/html/_static/*.*',
-    #         'examples/*.pytg'
-    #     ],
-    #     'pytuga': [
-    #         'ipytuga/assets/*.*',
-    #     ],
-    # },
+    package_data={
+        'pytuga': [
+            'assets/*.*',
+            'doc/html/*.*',
+            'doc/html/_modules/*.*',
+            'doc/html/_modules/tugalib/*.*',
+            'doc/html/_sources/*.*',
+            'doc/html/_static/*.*',
+            'examples/*.pytg'
+        ],
+        'pytuga': [
+            'ipytuga/assets/*.*',
+        ],
+    },
     # data_files=DATA_FILES,
     zip_safe=False,
     **setup_kwargs
