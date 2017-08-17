@@ -1,6 +1,5 @@
 import os
 import sys
-from glob import glob
 from setuptools import setup, find_packages
 
 
@@ -143,8 +142,8 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages('src'),
     install_requires=[
-        'qturtle>=0.2.0',
-        'transpyler>=0.2.0'
+        'qturtle>=0.3',
+        'transpyler>=0.3.1'
     ],
 
     # Wrapped commands (for ipytuga)

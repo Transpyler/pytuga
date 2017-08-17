@@ -18,7 +18,7 @@ class PytugaTranspyler(Transpyler):
     translations = dict(TRANSLATIONS)
     translations.update(SEQUENCE_TRANSLATIONS)
     error_dict = ERROR_GROUPS
-    builtin_modules = ['pytuga.lib']
+    lang = 'pt_BR'
 
     def apply_curses(self):
         from pytuga.lib.curses import apply_curses

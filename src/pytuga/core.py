@@ -249,9 +249,9 @@ submodules = _filtering_out(
     [name for (name, value) in _names.items() if isinstance(value, _Module)]
 )
 
-# Builtins
+# NamespaceManager
 py_builtins = py_types + py_functions
 builtins = types + functions
 
-# Builtins dictionary
+# NamespaceManager dictionary
 _original_builtins = vars(_builtins)
