@@ -2,7 +2,7 @@
     :target: https://travis-ci.org/pwener/pytuga
 
 .. image:: https://codecov.io/gh/transpyler-mes/pytuga/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/transpyler-mes/pytuga
+    :target: https://codecov.io/gh/transpyler-mes/pytuga
 
 ========
 Pytuguês
