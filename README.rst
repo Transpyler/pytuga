@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/pwener/pytuga.svg?branch=master
     :target: https://travis-ci.org/pwener/pytuga
 
+.. image:: https://codecov.io/gh/transpyler-mes/pytuga/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/transpyler-mes/pytuga
+
 ========
 Pytuguês
 ========
