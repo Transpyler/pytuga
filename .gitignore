@@ -24,3 +24,9 @@ src/transpyler/__meta__.py
 
 # Testing and temporary files
 .tox/
+
+# MAC OS files
+.DS_Store
+
+# Coverage
+htmlcov/
