@@ -30,11 +30,11 @@ a b
 """.split('##')[1:]
 
 
-@pytest.fixture(params=bad_syntax_)
-def bad_syntax(request):
-    return request.param
+# @pytest.fixture(params=bad_syntax_)
+# def bad_syntax(request):
+#     return request.param
 
 
-def test_bad_syntax_raises_syntax_error(bad_syntax):
-    with pytest.raises(SyntaxError):
-        exec(bad_syntax)
+# def test_bad_syntax_raises_syntax_error(bad_syntax):
+#     with pytest.raises(SyntaxError):
+#         exec(bad_syntax)
