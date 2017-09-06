@@ -14,22 +14,20 @@ Linux
 
 Você precisa do Python3 e do PyQt5. Existe uma chance razoável que ambos
 estejam instalados. Se sua distribuição for baseada no Debian/Ubuntu,
-o comando abaixo garante que todas as bibliotecas necessárias serão 
-instaladas
+basta fazer download do arquivo dependencies.txt e executar o comando abaixo
+para que todas as bibliotecas necessárias sejam instaladas::
 
-::
+$ sudo apt-get install $(cat dependencies.txt)
 
-    sudo apt-get install python3-all python3-pyqt5 python3-pyqt5.qsci python3-pyqt5.qtsvg python3-pyqt5.qtwebkit python3-pip
-        
 Se quiser apenas fazer a instalação local, o comando fica::
 
-    pip3 install pytuga --user
+$ pip3 install pytuga --user
 
 (Ignore a opção --user, caso queira instalar para todos os usuários. Neste caso
 é necessário executar o comando como *sudo*.). Uma vez instalado, você pode
-atualizar a versão do Pytuguês executando::
-    
-    $ pip3 install pytuga -U --user 
+atualizar a versão do Pytuguês executando:: 
+
+$ pip3 install pytuga -U --user
 
 O script de instalação salva os arquivos executáveis na pasta ``~/.local/bin.``
 e na pasta ``~/bin/``, se a mesma existir.
@@ -81,7 +79,7 @@ está no caminho padrão de procura do Windows. Se este for o caso, é necessár
 mudar para o diretório onde o Python estiver instalado. Digite::
 
     cd c:\Python34\
-    
+
 Agora repita os comandos anteriores. Se você decidiu instalar o Python em
 outro caminho, modifique o comando acima para indicar o caminho correto.
 
@@ -89,3 +87,37 @@ Para executar em modo gráfico, aperte Win+R e digite "pytuga" no prompt. Caso
 isto não funcione (especialmente nas versões mais novas do Windows), procure
 o executável do tugalinhas na pasta ``c:\Python34\Scripts\`` ou execute o
 comando ``python -m pytuga`` do terminal.
+
+==========
+Configurando Ambiente de Desenvolvimento
+==========
+
+Para contribuir deve-se usar git clone e fork nos projetos transpyler, qturtle e pytuga no link 
+oficial do repositório https://github.com/Transpyler:: 
+
+$ git clone url_your_fork.git
+
+Em cada um você pode adicionar o remote do repositório oficial, para manter seu fork sempre 
+atualizado:: 
+
+$ git remote add upstream url_oficial_repo.git
+
+Uma vez clonado os três repositórios, na ordem transpyler qturtle pytuga, 
+execute o seguinte comando:: 
+
+$ pip3 install -e . --user
+
+Atenção: A sequência de instalação *transpyler - qturtle - pytuga* deve ser obedecida, 
+pois garante a integridade das dependencias.
+
+Caso queira desinstalar, basta:: 
+
+pip3 uninstall pytuga transpyler qturtle
+
+Então você pode executar usando:: 
+
+$ pytuga
+
+Ou como módulo do python:: 
+
+$ python3 -m pytuga
