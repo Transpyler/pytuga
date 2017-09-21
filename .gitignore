@@ -9,6 +9,7 @@ __pycache__/
 *.egg-info/
 .cache/
 .coverage
+.coverage.xml
 
 # Build directories
 docs/_build/
