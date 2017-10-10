@@ -45,6 +45,8 @@ def test_modulo():
 def test_sinal():
 
 	assert(math.sinal(-32.0) == -1)
+	assert(math.sinal(0) == 0)
+	assert(math.sinal(42) == 1)
 
 def test_arredondar():
 
