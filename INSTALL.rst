@@ -105,7 +105,7 @@ $ git remote add upstream url_oficial_repo.git
 Uma vez clonado os três repositórios, na ordem transpyler qturtle pytuga, 
 execute o seguinte comando:: 
 
-$ pip3 install -e . --user
+$ python3 setup.py develop --user
 
 Atenção: A sequência de instalação *transpyler - qturtle - pytuga* deve ser obedecida, 
 pois garante a integridade das dependencias.
