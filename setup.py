@@ -51,53 +51,6 @@ with open(path, 'w') as F:
     F.write(meta)
 
 
-# FIXME: REFACTOR THOSE CHECKS
-# # Warn user about missing PyQt libraries. These cannot go into REQUIRES list
-# # since PyQt is not instalable via pip
-# try:
-#     import PyQt5.QtSvg
-#     import PyQt5.Qsci
-# except ImportError:
-#     import warnings
-#
-#     warnings.warn(
-#         'Please install PyQt5, PyQt5.QtSvg and PyQt5.Qsci!\n'
-#         'Check your distribution packages or go to the website bellow:\n'
-#         '    https://riverbankcomputing.com/software/pyqt/download5\n')
-#
-#
-# # Collect data files
-# if sys.platform.startswith('win'):
-#     # TODO: figure out where these files should be in Windows
-#     # We need someone with a windows machine! :P
-#     DATA_FILES = []
-# else:
-#     DATA_FILES = [
-#         ('share/icons/hicolor/scalable/apps', ['data/icons/pytuga.svg']),
-#         ('share/icons/hicolor/scalable/mimetypes',
-#          ['data/icons/text-x-pytuga.svg']),
-#         ('share/mime', ['data/pytg.xml']),
-#         ('share/applications', ['data/pytuga.desktop']),
-#         ('share/doc/pytuga', ['README.rst']),
-#         ('share/doc/examples', glob('data/examples/*.pytg')),
-#         ('share/gtksourceview-3.0/language-specs', ['data/pytuga.lang']),
-#     ]
-#
-# # Add documentation files
-# for path, _, files in os.walk('doc/build/html'):
-#     docfiles = []
-#     DATA_FILES.append(('doc/pytuga' + path[14:], docfiles))
-#     for file in files:
-#         docfiles.append('%s/%s' % (path, file))
-#
-# # Fix path separators in windows (necessary?)
-# if os.path.sep != '/':
-#     for i, (path, files) in enumerate(DATA_FILES):
-#         path = os.path.sep.join(path.split('/'))
-#         files = [os.path.sep.join(f.split('/')) for f in files]
-#         DATA_FILES[i] = (path, files)
-
-
 # Wraps command classes to register pytuga kernel during installation
 def wrapped_cmd(cmd):
     class Command(cmd):
@@ -143,7 +96,7 @@ setup(
     packages=find_packages('src'),
     install_requires=[
         'qturtle>=0.3',
-        'transpyler>=0.3.1'
+        'transpyler>=0.4.0',
     ],
 
     # Wrapped commands (for ipytuga)

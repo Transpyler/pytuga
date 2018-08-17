@@ -1,3 +1,12 @@
-from .transpyler import pytuga_transpyler
+from transpyler import get_transpyler
 
-pytuga_transpyler.start_main()
+
+def main():
+    """
+    Pytuga main entry point.
+    """
+    get_transpyler().start_main()
+
+
+if __name__ == '__main__':
+    main()

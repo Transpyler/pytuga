@@ -1,5 +1,7 @@
 import pytest
-from pytuga.core import transpile, tokenize
+from pytuga import transpile, get_transpyler
+
+tokenize = get_transpyler().lexer.tokenize
 
 
 def pytg(src):

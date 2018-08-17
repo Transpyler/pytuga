@@ -1,5 +1,4 @@
-import pytest
-from pytuga.core import exec
+from pytuga import exec
 
 
 # def test_exec_with_locals():

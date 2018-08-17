@@ -34,6 +34,7 @@ class PytugaLexer(Lexer):
 
         matches = [('repetir',), ('repita',), ('vezes',), (NEWLINE,)]
         iterator = token.token_find(tokens, matches)
+
         for idx, match, start, end in iterator:
             # Send tokens to the beginning of the equivalent "for" loop
             starttokens = Token.from_strings(

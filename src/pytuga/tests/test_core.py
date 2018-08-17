@@ -1,10 +1,8 @@
-import pytest
-from pytuga.core import tugalib_namespace
-from pytuga.core import compile, transpile, exec
+from pytuga import namespace, compile, transpile, exec
 
 
 def test_namespace():
-    ns = tugalib_namespace(forbidden=False)
+    ns = namespace()
 
 
 def test_transpile():
@@ -12,19 +10,19 @@ def test_transpile():
     assert py == 'while True or False: pass'
 
 
-# def test_exec():
-#     D = {}
-#     exec('x = raiz(0 ou 1) ', D, forbidden=False)
-#     assert D['x'] == 1
+def test_exec():
+    D = {}
+    exec('x = raiz(0 ou 1) ', D)
+    assert D['x'] == 1
 
 
-# def test_compile():
-#     code = compile('x = raiz(0 ou 1)', '<string>', 'exec')
+def test_compile():
+    code = compile('x = raiz(0 ou 1)', '<string>', 'exec')
 
-#     D = {}
-#     exec(code, D, forbidden=False)
-#     assert D['x'] == 1
+    D = {}
+    exec(code, D)
+    assert D['x'] == 1
 
-#     D = {}
-#     exec(code, D, forbidden=False)
-#     assert D['x'] == 1
+    D = {}
+    exec(code, D)
+    assert D['x'] == 1

@@ -1,11 +1,4 @@
-"""
-Dirty c-level hacks inspired by the forbiddenfruit module.
-"""
-
-from transpyler import curses
 from transpyler.utils import normalize_accented_keywords, synonyms
-
-__all__ = []
 
 
 #
@@ -250,19 +243,3 @@ class Texto(str):
     = str.translate
     = str.zfill
     '''
-
-
-def apply_curses():
-    """
-    Apply all curses.
-    """
-
-    curses.curse_none_repr('Nulo')
-    curses.curse_bool_repr('Verdadeiro', 'Falso')
-    curses.apply_curses({
-        list: Lista,
-        tuple: Tupla,
-        set: Conjunto,
-        dict: Dicionário,
-        str: Texto,
-    })

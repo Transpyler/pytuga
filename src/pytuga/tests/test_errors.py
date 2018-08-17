@@ -1,6 +1,6 @@
 import pytest
 
-from pytuga.core import exec
+from pytuga import exec
 
 # Examples with bad syntax
 bad_syntax_ = """
