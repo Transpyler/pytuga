@@ -1,7 +1,8 @@
 import os
+import re
 import sys
-from setuptools import setup, find_packages
 
+from setuptools import setup, find_packages
 
 # cx_Freeze: we added a undocumented option to enable building frozen versions
 # of our packages. This should be refactored for a more safe approach in the
@@ -15,7 +16,6 @@ if '--cx-freeze' in sys.argv:
         'packages': ['os', 'pytuga', 'pygments', 'transpyler'],
         'excludes': [
             'tkinter', 'redis', 'lxml',
-            'qturtle.qsci.widgets',
             'nltk', 'textblob',
             'matplotlib', 'scipy', 'numpy', 'sklearn',
             'notebook',
@@ -38,17 +38,10 @@ if '--cx-freeze' in sys.argv:
     setup_kwargs['options'] = {'build_exe': build_options}
     sys.argv.remove('--cx-freeze')
 
-
-# Save version and author to __meta__.py
-version = open('VERSION').read().strip()
-dirname = os.path.dirname(__file__)
-path = os.path.join(dirname, 'src', 'pytuga', '__meta__.py')
-meta = '''# Automatically created. Please do not edit.
-__version__ = '%s'
-__author__ = 'F\\xe1bio Mac\\xeado Mendes'
-''' % version
-with open(path, 'w') as F:
-    F.write(meta)
+# Extract version
+init = open(os.path.join('src', 'pytuga', '__init__.py')).read()
+m = re.search(r"__version__ ?= ?'([0-9a-z.]+)'", init)
+version = m.group(1)
 
 
 # Wraps command classes to register pytuga kernel during installation
@@ -95,8 +88,7 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages('src'),
     install_requires=[
-        'qturtle>=0.3',
-        'transpyler>=0.4.0',
+        'qturtle~=0.5.0',
     ],
 
     # Wrapped commands (for ipytuga)

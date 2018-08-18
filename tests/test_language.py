@@ -1,5 +1,7 @@
 import pytest
-from pytuga import transpile, get_transpyler
+
+from pytuga import transpile
+from transpyler import get_transpyler
 
 tokenize = get_transpyler().lexer.tokenize
 
@@ -10,6 +12,7 @@ def pytg(src):
 
 def py(src):
     return [repr(x) for x in tokenize(src)]
+
 
 #
 # Dictionary of translations. Each test case is separated by a line of ='s and

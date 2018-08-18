@@ -1,40 +1,12 @@
 import sys
 
 from transpyler import Transpyler
-from transpyler.utils import pretty_callable
 from transpyler.curses import curse_none_repr, curse_bool_repr, apply_curses
+from transpyler.utils import pretty_callable
 from . import __version__
 from . import curses
-from .lexer import PytugaLexer
 from .keywords import TRANSLATIONS, SEQUENCE_TRANSLATIONS, ERROR_GROUPS
-
-LONG_BANNER = \
-    r'''Pytuga %s
-Python %s
-                 __
-                /\ \__
- _____    __  __\ \ ,_\  __  __     __       __
-/\ '__`\ /\ \/\ \\ \ \/ /\ \/\ \  /'_ `\   /'__`\
-\ \ \L\ \\ \ \_\ \\ \ \_\ \ \_\ \/\ \L\ \ /\ \L\.\_
- \ \ ,__/ \/`____ \\ \__\\ \____/\ \____ \\ \__/.\_\
-  \ \ \/   `/___/> \\/__/ \/___/  \/___L\ \\/__/\/_/
-   \ \_\      /\___/                /\____/
-    \/_/      \/__/                 \/___/
-
-
-Bem-vindo ao Pytuguês, um Python com sotaque lusitano.
-
-digite "ajuda()", "licença()" ou "tutorial()" para maiores informações.''' \
-    % (__version__, sys.version.splitlines()[0])
-
-SHORT_BANNER = \
-    '''Pytuga %s
-Python %s
-
-Bem-vindo ao Pytuguês, um Python com sotaque lusitano.
-
-digite "ajuda()", "licença()" ou "tutorial()" para maiores informações.''' \
-    % (__version__, sys.version.splitlines()[0])
+from .lexer import PytugaLexer
 
 
 class PytugaTranspyler(Transpyler):
@@ -48,8 +20,6 @@ class PytugaTranspyler(Transpyler):
     translations = dict(TRANSLATIONS)
     translations.update(SEQUENCE_TRANSLATIONS)
     error_dict = ERROR_GROUPS
-    banner = LONG_BANNER
-    short_banner = SHORT_BANNER
     lang = 'pt_BR'
 
     def apply_curses(self):
@@ -67,7 +37,7 @@ class PytugaTranspyler(Transpyler):
             str: curses.Texto,
         })
 
-    def make_global_namespace(self):
+    def __make_global_namespace(self):
         ns = super().make_global_namespace()
         exit_function = ns['exit']
 
@@ -93,3 +63,35 @@ class PytugaTranspyler(Transpyler):
             nulo=None,
         )
         return ns
+
+
+# TODO: Add the help string once we implement those functions.
+# # HELP = (
+# #     '\n\n'
+# #     'digite "ajuda()", "licença()" ou "tutorial()" para maiores informações.'
+# )
+HELP = ''
+
+PytugaTranspyler.short_banner = \
+    '''Pytuga %s
+Python %s
+
+Bem-vindo ao Pytuguês, um Python com sotaque lusitano.''' \
+    % (__version__, sys.version.splitlines()[0]) + HELP
+
+PytugaTranspyler.long_banner = \
+    r'''Pytuga %s
+Python %s
+                 __
+                /\ \__
+ _____    __  __\ \ ,_\  __  __     __       __
+/\ '__`\ /\ \/\ \\ \ \/ /\ \/\ \  /'_ `\   /'__`\
+\ \ \L\ \\ \ \_\ \\ \ \_\ \ \_\ \/\ \L\ \ /\ \L\.\_
+ \ \ ,__/ \/`____ \\ \__\\ \____/\ \____ \\ \__/.\_\
+  \ \ \/   `/___/> \\/__/ \/___/  \/___L\ \\/__/\/_/
+   \ \_\      /\___/                /\____/
+    \/_/      \/__/                 \/___/
+
+
+Bem-vindo ao Pytuguês, um Python com sotaque lusitano.''' \
+    % (__version__, sys.version.splitlines()[0]) + HELP

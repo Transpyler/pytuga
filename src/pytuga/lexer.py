@@ -1,8 +1,8 @@
 from tokenize import NEWLINE
 
 from transpyler import token
-from transpyler.token import Token
 from transpyler.lexer import Lexer
+from transpyler.token import Token
 
 __all__ = ['PytugaLexer']
 

@@ -25,6 +25,7 @@ src/transpyler/__meta__.py
 
 # Testing and temporary files
 .tox/
+.pytest_cache/
 
 # MAC OS files
 .DS_Store

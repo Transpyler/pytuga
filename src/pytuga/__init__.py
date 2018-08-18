@@ -1,7 +1,7 @@
-from .__meta__ import __author__, __version__
-from .transpyler import PytugaTranspyler
-from transpyler import get_transpyler
+__version__ = '0.13.0'
+__author__ = 'F\xe1bio Mac\xeado Mendes'
 
+from .transpyler import PytugaTranspyler
 
 # Update core functions (we do not update globals() to make static analysis
 # tools happy).
